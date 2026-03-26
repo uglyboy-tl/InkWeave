@@ -1,0 +1,54 @@
+import { memo, useState } from 'react';
+import { ChoiceParser } from '../core/ChoiceParser';
+import { Patches } from '../core/Patches';
+import type { ChoiceProps } from '../core/ChoiceParser';
+
+const CooldownChoice: React.FC<ChoiceProps> = ({
+	val,
+	onClick,
+	className = '',
+	children,
+}) => {
+	const [isDisabled, setIsDisabled] = useState(false);
+	let cd = parseFloat(val || '0');
+	
+	const handleClick = () => {
+		if (isDisabled) return;
+
+		if (onClick) {
+			onClick();
+			setIsDisabled(true);
+		}
+
+		setTimeout(() => {
+			setIsDisabled(false);
+		}, cd * 1000);
+	};
+
+	return (
+		<a
+			className={`btn ${className} ${isDisabled ? 'disabled' : ''}`}
+			onClick={handleClick}
+		>
+			{children}
+		</a>
+	);
+};
+
+const options = {
+	linedelay: 0,
+};
+
+const load = () => {
+	ChoiceParser.add(
+		'cd',
+		(new_choice, val) => {
+			new_choice.type = 'cd';
+			new_choice.val = val;
+		},
+		memo(CooldownChoice)
+	);
+	Patches.add(null, options);
+};
+
+export default load;
