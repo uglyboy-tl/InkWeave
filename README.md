@@ -1,166 +1,119 @@
-# ink-player
+# InkWeave
 
-一个用于 ink 交互式小说的播放器，支持 Hugo 网站和 Obsidian 插件。
+一个用于 ink 交互式小说的播放器，基于 React 和 Zustand，支持插件扩展。
+
+## 项目名称
+
+**InkWeave** = Ink + Weave（编织）
+
+- **Ink**：基于 ink 脚本语言
+- **Weave**：通过插件系统"编织"各种能力
+
+## 包结构
+
+```
+@inkweave/core      → 核心引擎 + 扩展系统
+@inkweave/react     → React 组件
+@inkweave/plugins   → 可选功能模块
+@inkweave/web       → 开箱即用的 IIFE 产物
+```
 
 ## 快速开始
 
 ```bash
 # 安装依赖
-npm install
+bun install
+
+# 构建 core 和 react 包
+bun run build
 
 # 开发模式
-npm run dev
-
-# 构建 Web 版本
-npm run build
+bun run dev
 ```
-
-## 输出产物
-
-| 文件 | 用途 |
-|------|------|
-| `dist/ink-player-web.iife.js` | 浏览器直接引入 |
-| `dist/style.css` | 样式文件 |
-| `dist/lib.js` | ESM 模块 (供其他项目引用) |
-| `dist/lib.cjs` | CommonJS 模块 |
 
 ## 使用方式
 
-### Hugo 集成
-
-1. 构建并复制到 Hugo：
+### 最小化使用
 
 ```bash
-npm run build
-cp dist/ink-player-web.iife.js /path/to/hugo/static/js/
-cp dist/style.css /path/to/hugo/static/css/ink-player.css
+bun add @inkweave/core @inkweave/react
 ```
 
-2. 在文章中指定 layout：
+```tsx
+import { InkStory } from '@inkweave/core';
+import { Story, Contents, Choices } from '@inkweave/react';
+import { Story as InkJsStory } from 'inkjs';
 
-```yaml
----
-layout: ink
-title: "我的互动故事"
----
-```
+const story = new InkJsStory(inkJsonContent);
+const ink = new InkStory(story, 'My Story');
 
-3. 编写 Ink 故事内容
-
-### Obsidian 插件引用
-
-在 `obsidian-ink-player` 中通过相对路径引用本地构建产物：
-
-```typescript
-// 在 tsconfig.json 中添加 paths
-{
-  "compilerOptions": {
-    "paths": {
-      "@ink-player/core": ["../ink-js/src/lib.ts"]
-    }
-  }
+function App() {
+  return (
+    <Story ink={ink}>
+      <Contents />
+      <Choices />
+    </Story>
+  );
 }
 ```
 
-或者直接引用构建后的文件：
-
-```typescript
-import { InkStory, Tags, memory, useContents, useChoices } from '../../ink-js/dist/lib.js';
-```
-
-## API
-
-### Web 初始化
-
-```javascript
-InkPlayer.init({
-  container: '#game-container',
-  story: inkStoryContent,
-  title: 'My Story',
-  lineDelay: 50
-});
-```
-
-### 核心类
-
-#### `InkStory`
-
-```typescript
-const ink = new InkStory(story: Story, title: string);
-
-ink.contents       // 当前显示的内容
-ink.choices        // 当前选项
-ink.continue()     // 继续故事
-ink.choose(index)  // 选择选项
-ink.restart()      // 重新开始
-ink.dispose()      // 销毁实例
-```
-
-### 状态管理
-
-```typescript
-import { useContents, useChoices, useStorage } from '@ink-player/core';
-
-useContents.getState().contents
-useContents.getState().add(['new content'])
-
-useChoices.getState().choices
-useChoices.getState().setChoices(inkChoices)
-
-useStorage.getState().storage
-useStorage.getState().setStorage(title, index, data)
-```
-
-### 功能模块
-
-```typescript
-import { memory, loadImage, loadAudio, loadFadeEffect } from '@ink-player/core';
-
-memory.save(index, ink);
-memory.load(saveData, ink);
-memory.show(title);
-
-loadImage();
-loadAudio();
-loadFadeEffect();
-```
-
-### 标签系统
-
-```typescript
-import { Tags } from '@ink-player/core';
-
-Tags.add('myTag', (value, ink) => {
-  console.log('Tag triggered:', value);
-});
-```
-
-## 支持的标签
-
-| 标签 | 用途 | 示例 |
-|------|------|------|
-| `# image:` | 显示图片 | `# image: images/scene.png` |
-| `# sound:` | 播放音效 | `# sound: audio/click.mp3` |
-| `# music:` | 播放背景音乐 | `# music: audio/bgm.mp3` |
-| `# clear` | 清空内容 | `# clear` |
-| `# restart` | 重新开始 | `# restart` |
-
-## 开发命令
+### 添加存档功能
 
 ```bash
-npm run dev         # 启动开发服务器
-npm run build       # 构建 Web 版本 (IIFE)
-npm run build:lib   # 构建库版本 (ESM + CJS)
-npm run build:all   # 构建所有版本
+bun add @inkweave/plugins
 ```
+
+```tsx
+import { loadMemory, MemoryUI } from '@inkweave/plugins/memory';
+
+loadMemory();
+
+function App() {
+  return (
+    <Story ink={ink}>
+      <Contents />
+      <MemoryUI />
+      <Choices />
+    </Story>
+  );
+}
+```
+
+### 直接在 HTML 使用
+
+```html
+<script src="inkweave-web.iife.js"></script>
+<script>
+InkWeave.init({
+  container: '#game-container',
+  story: inkStoryContent,
+  title: 'My Story'
+});
+</script>
+```
+
+## 扩展系统
+
+InkWeave 提供五层扩展机制：
+
+| 系统 | 方向 | 典型用途 |
+|------|------|----------|
+| **Tags** | ink → JS | 副作用操作：插入元素、清空屏幕 |
+| **Parser** | ink → JS | 文本转换：添加 CSS 类 |
+| **ExternalFunctions** | ink → JS | ink 脚本调用 JS 函数 |
+| **Patches** | JS → Engine | 扩展引擎能力 |
+| **ChoiceComponents** | JS → React | 自定义选项组件 |
+
+详细文档见 [docs/why-this-project.md](./docs/why-this-project.md)。
 
 ## 技术栈
 
 - React 19
 - Zustand 5
-- inkjs 2.4
+- inkjs 2.3
 - TypeScript 5
 - Vite 6
+- Bun
 
 ## License
 
