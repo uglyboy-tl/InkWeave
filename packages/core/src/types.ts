@@ -1,3 +1,7 @@
+import type { ErrorHandler as InkErrorHandler } from 'inkjs/engine/Error';
+
+export type ErrorHandler = InkErrorHandler;
+
 // Constants
 export const CHOICE_SEPARATOR = '\x00ink-divider\x00';
 
@@ -34,6 +38,7 @@ export interface InkStoryOptions {
 	title?: string;
 	debug?: boolean;
 	linedelay?: number;
+	errorHandler?: ErrorHandler;
 	fileHandler?: FileHandler;
 	[key: string]: unknown;
 }

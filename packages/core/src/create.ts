@@ -42,10 +42,17 @@ export function createInkStory(
 		if (isCompiledJson(source)) {
 			story = new Story(source);
 		} else {
+			const errorHandler = options?.errorHandler || null;
 			const inkjsHandler = options?.fileHandler
 				? new InkjsFileHandler(options.fileHandler)
 				: null;
-			const compilerOptions = new CompilerOptions(null, [], false, null, inkjsHandler);
+			const compilerOptions = new CompilerOptions(
+				null,
+				[],
+				false,
+				errorHandler,
+				inkjsHandler
+			);
 			const compiler = new Compiler(source, compilerOptions);
 			story = compiler.Compile();
 		}
