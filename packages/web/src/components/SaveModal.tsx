@@ -21,9 +21,9 @@ const SaveModal: React.FC<SaveModalProps> = ({
 				memory.save(index, ink);
 			} else if (type === 'restore' && saves && saves[index]) {
 				memory.load(saves[index].data, ink);
-				modalRef.current?.close();
-				onClose?.();
 			}
+			modalRef.current?.close();
+			onClose?.();
 		},
 		[ink, type, saves, modalRef, onClose]
 	);
