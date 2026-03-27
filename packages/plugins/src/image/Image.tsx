@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 import { useStoryImage } from './index';
 
 interface ImageProps {
@@ -9,6 +9,10 @@ interface ImageProps {
 const ImageComponent: React.FC<ImageProps> = ({ className = '', fallback = null }) => {
 	const image = useStoryImage((state) => state.image);
 	const [hasError, setHasError] = useState(false);
+
+	useEffect(() => {
+		setHasError(false);
+	}, [image]);
 
 	const handleError = useCallback(() => {
 		setHasError(true);
