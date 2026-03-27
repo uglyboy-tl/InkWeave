@@ -20,7 +20,8 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
-    "test:watch": "bun test --watch"
+    "test:watch": "bun test --watch",
+    "publish:pkg": "NPM_CONFIG_TOKEN=$(pass show npm/token) bun publish --access public"
   },
   "keywords": [
     "ink",
@@ -31,8 +32,8 @@
   "author": "Uglyboy",
   "license": "MIT",
   "peerDependencies": {
-    "@inkweave/core": "workspace:*",
-    "@inkweave/react": "workspace:*"
+    "@inkweave/core": "^1.0.0",
+    "@inkweave/react": "^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

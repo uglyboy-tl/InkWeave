@@ -14,7 +14,11 @@
     "dev": "bun run --filter @inkweave/web dev",
     "test": "bun test packages/core packages/plugins",
     "test:core": "bun test packages/core",
-    "test:plugins": "bun test packages/plugins"
+    "test:plugins": "bun test packages/plugins",
+    "publish:core": "bun run --filter @inkweave/core publish:pkg",
+    "publish:react": "bun run --filter @inkweave/react publish:pkg",
+    "publish:plugins": "bun run --filter @inkweave/plugins publish:pkg",
+    "publish:all": "bun run publish:core && bun run publish:react && bun run publish:plugins"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
