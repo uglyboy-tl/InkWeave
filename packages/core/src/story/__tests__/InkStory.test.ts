@@ -27,7 +27,6 @@ describe('InkStory', () => {
 		ink = new InkStory(mockStory, 'Test');
 
 		contentsStore.getState().setContents([]);
-		contentsStore.setState({ refreshKey: 0 });
 		choicesStore.getState().clear();
 		Tags.clear();
 		Parser.clear();
@@ -235,19 +234,6 @@ describe('InkStory', () => {
 			ink.restart();
 
 			expect(ink.contents).toEqual([]);
-		});
-
-		it('should increment refreshKey', () => {
-			const { refreshKey: initialKey } = contentsStore.getState();
-			Object.defineProperty(mockStory, 'canContinue', {
-				get: () => false,
-				configurable: true,
-			});
-
-			ink.restart();
-
-			const { refreshKey } = contentsStore.getState();
-			expect(refreshKey).toBe(initialKey + 1);
 		});
 	});
 
