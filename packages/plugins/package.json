@@ -1,0 +1,45 @@
+{
+  "name": "@inkweave/plugins",
+  "version": "1.0.0",
+  "description": "Optional plugins for InkWeave",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
+  },
+  "keywords": [
+    "ink",
+    "interactive-fiction",
+    "plugins",
+    "inkweave"
+  ],
+  "author": "Uglyboy",
+  "license": "MIT",
+  "peerDependencies": {
+    "@inkweave/core": "workspace:*",
+    "@inkweave/react": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "jsdom": "^26.1.0",
+    "react": "^19.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}
