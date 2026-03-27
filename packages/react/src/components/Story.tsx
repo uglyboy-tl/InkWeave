@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, createContext, useContext } from 'react';
-import type { InkStory } from '@inkweave/core';
+import { contentsStore, type InkStory } from '@inkweave/core';
 
 const StoryContext = createContext<InkStory | null>(null);
 
@@ -42,6 +42,7 @@ const StoryComponent: React.FC<StoryProps> = ({
 }) => {
 	const onInitRef = useRef(onInit);
 	onInitRef.current = onInit;
+	const refreshKey = contentsStore((state) => state.refreshKey);
 
 	useEffect(() => {
 		ink.restart();
@@ -50,7 +51,7 @@ const StoryComponent: React.FC<StoryProps> = ({
 
 	return (
 		<StoryProvider ink={ink}>
-			<div id="inkweave-story" className={className}>
+			<div id="inkweave-story" className={className} key={refreshKey}>
 				{children}
 			</div>
 		</StoryProvider>

@@ -108,6 +108,7 @@ export class InkStory implements InkStoryContext {
 	restart() {
 		this.story.ResetState();
 		this.clear();
+		contentsStore.getState().refresh();
 		this.continue();
 	}
 
