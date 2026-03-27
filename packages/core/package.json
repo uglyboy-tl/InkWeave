@@ -1,0 +1,44 @@
+{
+  "name": "@inkweave/core",
+  "version": "1.0.0",
+  "description": "Core engine for InkWeave - ink story runtime with extension system",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
+  },
+  "keywords": [
+    "ink",
+    "interactive-fiction",
+    "game-engine",
+    "inkweave"
+  ],
+  "author": "Uglyboy",
+  "license": "MIT",
+  "peerDependencies": {
+    "inkjs": "^2.3.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "inkjs": "^2.3.1",
+    "zustand": "^5.0.3",
+    "typescript": "^5.0.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}

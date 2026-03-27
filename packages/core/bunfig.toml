@@ -1,0 +1,6 @@
+[test]
+preload = ["../plugins/test/globals.ts"]
+
+[coverage]
+include = ["src/**/*.ts"]
+exclude = ["src/**/__tests__/**"]
