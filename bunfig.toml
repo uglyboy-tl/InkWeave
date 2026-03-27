@@ -1,2 +1,7 @@
 [test]
-preload = ["./test/globals.ts", "./test/setup.ts"]
+preload = ["./packages/plugins/test/globals.ts"]
+exclude = ["e2e/**", "packages/*/dist/**"]
+
+[coverage]
+include = ["packages/**/*.ts", "packages/**/*.tsx"]
+exclude = ["**/__tests__/**", "**/test/**", "**/dist/**"]
