@@ -7,7 +7,6 @@ dist/
 *.js.map
 *.cjs
 *.cjs.map
-!vite.config.ts
 !esbuild.config.mjs
 
 # IDE
