@@ -10,39 +10,50 @@ interface ChoiceItemProps {
 	className: string;
 }
 
-const ChoiceItem: React.FC<ChoiceItemProps> = memo(({ choice, index, onClick, className }) => {
-	const handleClick = useCallback(() => {
-		if (choice.type !== 'unclickable') {
-			onClick(choice.index);
-		}
-	}, [choice.index, choice.type, onClick]);
+const ChoiceItem: React.FC<ChoiceItemProps> = memo(
+  ({ choice, index, onClick, className }) => {
+    const handleClick = useCallback(() => {
+      if (choice.type !== 'unclickable') {
+        onClick(choice.index);
+      }
+    }, [choice.index, choice.type, onClick]);
 
-	const Component = ChoiceComponents.get(choice.type);
-	if (Component) {
-		return (
-			<li style={{ '--index': index } as React.CSSProperties}>
-				{createElement(Component, {
-					onClick: handleClick,
-					className,
-					val: choice.val,
-					children: choice.text,
-				})}
-			</li>
-		);
-	}
+    const Component = ChoiceComponents.get(choice.type);
+    if (Component) {
+      return (
+        <li style={{ '--index': index } as React.CSSProperties}>
+          {createElement(Component, {
+            onClick: handleClick,
+            className,
+            val: choice.val,
+            children: choice.text,
+          })}
+        </li>
+      );
+    }
 
-	return (
-		<li style={{ '--index': index } as React.CSSProperties}>
-			<a
-				onClick={handleClick}
-				className={`${className} ${choice.type === 'unclickable' ? 'disabled' : ''}`}
-				aria-disabled={choice.type === 'unclickable'}
-			>
-				{choice.text}
-			</a>
-		</li>
-	);
-});
+    return (
+      <li style={{ '--index': index } as React.CSSProperties}>
+        <a
+          onClick={handleClick}
+          className={`${className} ${choice.type === 'unclickable' ? 'disabled' : ''}`}
+          aria-disabled={choice.type === 'unclickable'}
+        >
+          {choice.text}
+        </a>
+      </li>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.choice.index === nextProps.choice.index &&
+      prevProps.choice.type === nextProps.choice.type &&
+      prevProps.choice.text === nextProps.choice.text &&
+      prevProps.choice.val === nextProps.choice.val &&
+      prevProps.className === nextProps.className
+    );
+  }
+);
 ChoiceItem.displayName = 'ChoiceItem';
 
 interface ChoicesProps {
@@ -70,7 +81,7 @@ const ChoicesComponent: React.FC<ChoicesProps> = ({
 	return (
 		<ul
 			id="inkweave-choices"
-			key={canShow.toString()}
+			key={canShow ? 'visible' : 'hidden'}
 			style={{ visibility: canShow ? 'visible' : 'hidden' }}
 		>
 			{choices.map((choice: Choice, index: number) => (
