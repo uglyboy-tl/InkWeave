@@ -13,7 +13,7 @@ const load = () => {
 				) as HTMLElement;
 				if (lastButton) {
 					const element = document.querySelector(
-						'[data-inkweave="content"]'
+						'[data-inkweave="story"]'
 					) as HTMLElement;
 					element?.scrollTo({
 						top: lastButton.offsetTop,
