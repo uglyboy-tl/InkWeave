@@ -25,7 +25,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
           {createElement(Component, {
             choice,
             onClick: handleClick,
-            className: styles.button,
+            className: `inkweave-choice ${styles.button}`,
             children: choice.text,
           })}
         </li>
@@ -36,7 +36,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
       <li className={styles.item} style={{ '--index': index } as React.CSSProperties}>
         <a
           onClick={handleClick}
-          className={`${styles.button} ${choice.type === 'unclickable' ? styles.disabled : ''}`}
+          className={`inkweave-choice ${styles.button} ${choice.type === 'unclickable' ? styles.disabled : ''}`}
           aria-disabled={choice.type === 'unclickable'}
         >
           {choice.text}
@@ -55,13 +55,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
 );
 ChoiceItem.displayName = 'ChoiceItem';
 
-interface ChoicesProps {
-	onClick?: (index: number) => void;
-}
-
-const ChoicesComponent: React.FC<ChoicesProps> = ({
-	onClick,
-}) => {
+const ChoicesComponent = () => {
 	const ink = useStory();
 	const choices = choicesStore((state) => state.choices);
 	const inkRecord = ink as unknown as Record<string, unknown>;
@@ -71,14 +65,13 @@ const ChoicesComponent: React.FC<ChoicesProps> = ({
 			: true;
 
 	const handleClick = useCallback((index: number) => {
-		onClick?.(index);
 		ink.choose(index);
-	}, [ink, onClick]);
+	}, [ink]);
 
 	return (
 		<ul
 			data-inkweave="choices"
-			className={styles.choices}
+			className={`inkweave-choices ${styles.choices}`}
 			key={canShow ? 'visible' : 'hidden'}
 			style={{ visibility: canShow ? 'visible' : 'hidden' }}
 		>

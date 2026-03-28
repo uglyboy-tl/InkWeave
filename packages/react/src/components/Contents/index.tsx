@@ -3,13 +3,7 @@ import { CHOICE_SEPARATOR, contentsStore } from '@inkweave/core';
 import { useStory } from '../Story';
 import styles from './styles.module.css';
 
-interface ContentsProps {
-	className?: string;
-}
-
-const ContentsComponent: React.FC<ContentsProps> = ({
-	className = '',
-}) => {
+const ContentsComponent = () => {
 	const ink = useStory();
 	const contents = contentsStore((state) => state.contents);
 	const inkRecord = ink as unknown as Record<string, unknown>;
@@ -33,21 +27,21 @@ const ContentsComponent: React.FC<ContentsProps> = ({
 			if (isDivider) {
 				return (
 					<div key={key} style={style}>
-						<hr className={styles.divider} />
+						<hr className="inkweave-divider" />
 					</div>
 				);
 			}
 
 			return (
 				<div key={key} style={style}>
-					<p className={className}>{item}</p>
+					<p>{item}</p>
 				</div>
 			);
 		});
-	}, [contents, visibleLines, lineDelay, className]);
+	}, [contents, visibleLines, lineDelay]);
 
 	return (
-		<section className={styles.contents}>
+		<section className={`inkweave-contents ${styles.contents}`}>
 			{renderedContents}
 		</section>
 	);

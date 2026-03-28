@@ -1,5 +1,7 @@
 import { memo, useEffect, useRef, createContext, useContext } from 'react';
 import type { InkStory } from '@inkweave/core';
+import Contents from '../Contents';
+import Choices from '../Choices';
 import styles from './styles.module.css';
 
 const StoryContext = createContext<InkStory | null>(null);
@@ -14,7 +16,7 @@ export const useStory = () => {
 
 interface StoryProviderProps {
 	ink: InkStory;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 }
 
 export const StoryProvider: React.FC<StoryProviderProps> = ({
@@ -51,8 +53,13 @@ const StoryComponent: React.FC<StoryProps> = ({
 
 	return (
 		<StoryProvider ink={ink}>
-			<div className={`${styles.story} ${className}`.trim()}>
+			<div
+				className={`inkweave-story ${styles.story} ${className}`.trim()}
+				data-inkweave="story"
+			>
 				{children}
+				<Contents />
+				<Choices />
 			</div>
 		</StoryProvider>
 	);
