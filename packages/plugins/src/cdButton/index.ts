@@ -1,5 +1,5 @@
 import { ChoiceParser, Patches } from '@inkweave/core';
-import { ChoiceComponents } from '@inkweave/react';
+import { ChoiceRegistry } from '@inkweave/react';
 import CooldownChoice from './CdButton';
 
 const options = {
@@ -11,7 +11,7 @@ const load = () => {
 		new_choice.type = 'cd';
 		new_choice.val = val;
 	});
-	ChoiceComponents.register('cd', CooldownChoice);
+	ChoiceRegistry.register('cd', CooldownChoice);
 	Patches.add(null, options);
 };
 
