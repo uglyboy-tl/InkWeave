@@ -1,24 +1,9 @@
-import { Patches, contentsStore, createSelectors, type InkStoryContext } from '@inkweave/core';
+import { Patches, contentsStore, Tags, createSelectors, type InkStoryContext } from '@inkweave/core';
 import { create } from 'zustand';
 
-const FADE_CSS = `
-#inkweave-contents div,
-#inkweave-choices {
-  opacity: 0;
-  animation: inkFadeIn 0.5s forwards;
-  animation-delay: var(--delay, 0s);
-}
-@keyframes inkFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-`;
-
 const options = {
+	// 控制文字显示延迟速度（秒），可通过初始化时传入 linedelay 参数修改
+	// 或在 Ink 中使用 #linedelay:0.2 动态调整
 	linedelay: 0.05,
 };
 
@@ -43,15 +28,15 @@ const useContentComplete = create<ContentComplete>((set) => ({
 	},
 }));
 
-let styleElement: HTMLStyleElement | null = null;
-
 const load = () => {
-	// Inject CSS only once
-	if (!styleElement) {
-		styleElement = document.createElement('style');
-		styleElement.textContent = FADE_CSS;
-		document.head.appendChild(styleElement);
-	}
+	Tags.add('linedelay', (val: string | null | undefined, ink) => {
+		if (val != null) {
+			const value = parseFloat(val);
+			if (!isNaN(value)) {
+				ink.options.linedelay = value;
+			}
+		}
+	});
 
 	Patches.add(function (this: InkStoryContext) {
 		const originalChoose = this.choose as (index: number) => void;

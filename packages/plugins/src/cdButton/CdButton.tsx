@@ -1,5 +1,6 @@
 import { memo, useState, useCallback, useRef, useEffect } from 'react';
 import type { ChoiceComponentProps } from '@inkweave/react';
+import { choiceStyles } from '@inkweave/react';
 
 const CooldownChoice: React.FC<ChoiceComponentProps> = ({
 	val,
@@ -36,9 +37,11 @@ const CooldownChoice: React.FC<ChoiceComponentProps> = ({
 		}, cd * 1000);
 	}, [isDisabled, cd]);
 
+	const buttonClass = `${choiceStyles?.button || ''} ${className} ${isDisabled ? choiceStyles?.disabled || '' : ''}`.trim();
+
 	return (
 		<a
-			className={`inkweave-btn ${className} ${isDisabled ? 'disabled' : ''}`}
+			className={buttonClass}
 			onClick={handleClick}
 		>
 			{children}

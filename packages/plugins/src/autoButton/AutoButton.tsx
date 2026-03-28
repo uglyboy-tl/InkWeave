@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef } from 'react';
 import type { ChoiceComponentProps } from '@inkweave/react';
+import { choiceStyles } from '@inkweave/react';
 
 const AutoChoice: React.FC<ChoiceComponentProps> = ({
 	val,
@@ -27,8 +28,10 @@ const AutoChoice: React.FC<ChoiceComponentProps> = ({
 		};
 	}, [cd]);
 
+	const buttonClass = `${choiceStyles.button} ${className}`.trim();
+
 	return (
-		<a className={`inkweave-btn ${className}`} style={{ display: 'none' }}>
+		<a className={buttonClass} style={{ display: 'none' }}>
 			{children}
 		</a>
 	);

@@ -1,5 +1,6 @@
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { useStoryImage } from './index';
+import styles from './styles.module.css';
 
 interface ImageProps {
 	className?: string;
@@ -26,20 +27,20 @@ const ImageComponent: React.FC<ImageProps> = ({ className = '', fallback = null 
 		setHasError(false);
 	}, []);
 
-	const containerClassName = className || '';
+	const containerClassName = `${styles.container} ${className}`.trim();
 
 	if (!image) return null;
 
 	if (hasError) {
 		return fallback ? (
-			<div id="inkweave-image" className={containerClassName}>
+			<div className={containerClassName}>
 				{fallback}
 			</div>
 		) : null;
 	}
 
 	return (
-		<div id="inkweave-image" className={containerClassName}>
+		<div className={containerClassName}>
 			<img src={image} alt="" onError={handleError} onLoad={handleLoad} />
 		</div>
 	);

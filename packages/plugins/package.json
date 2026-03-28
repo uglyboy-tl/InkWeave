@@ -11,7 +11,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./plugins.css": "./dist/plugins.css"
   },
   "files": [
     "dist"
