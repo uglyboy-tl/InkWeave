@@ -1,0 +1,13 @@
+# Ignore artifacts:
+build
+coverage
+dist
+
+# Dependencies:
+node_modules
+
+# Ignore all HTML files:
+*.html
+
+# Ink script files (used as .md):
+examples/**/*.md
