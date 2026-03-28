@@ -1,17 +1,17 @@
 import { memo, createElement, useCallback } from 'react';
 import { Choice, choicesStore } from '@inkweave/core';
-import { useStory } from './Story';
-import { ChoiceComponents } from './ChoiceComponents';
+import { useStory } from '../Story';
+import { ChoiceComponents } from '../ChoiceComponents';
+import styles from './styles.module.css';
 
 interface ChoiceItemProps {
 	choice: Choice;
 	index: number;
 	onClick: (index: number) => void;
-	className: string;
 }
 
 const ChoiceItem: React.FC<ChoiceItemProps> = memo(
-  ({ choice, index, onClick, className }) => {
+  ({ choice, index, onClick }) => {
     const handleClick = useCallback(() => {
       if (choice.type !== 'unclickable') {
         onClick(choice.index);
@@ -24,7 +24,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
         <li style={{ '--index': index } as React.CSSProperties}>
           {createElement(Component, {
             onClick: handleClick,
-            className,
+            className: styles.button,
             val: choice.val,
             children: choice.text,
           })}
@@ -33,10 +33,10 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
     }
 
     return (
-      <li style={{ '--index': index } as React.CSSProperties}>
+      <li className={styles.item} style={{ '--index': index } as React.CSSProperties}>
         <a
           onClick={handleClick}
-          className={`${className} ${choice.type === 'unclickable' ? 'disabled' : ''}`}
+          className={`${styles.button} ${choice.type === 'unclickable' ? styles.disabled : ''}`}
           aria-disabled={choice.type === 'unclickable'}
         >
           {choice.text}
@@ -49,8 +49,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
       prevProps.choice.index === nextProps.choice.index &&
       prevProps.choice.type === nextProps.choice.type &&
       prevProps.choice.text === nextProps.choice.text &&
-      prevProps.choice.val === nextProps.choice.val &&
-      prevProps.className === nextProps.className
+      prevProps.choice.val === nextProps.choice.val
     );
   }
 );
@@ -58,12 +57,10 @@ ChoiceItem.displayName = 'ChoiceItem';
 
 interface ChoicesProps {
 	onClick?: (index: number) => void;
-	className?: string;
 }
 
 const ChoicesComponent: React.FC<ChoicesProps> = ({
 	onClick,
-	className = 'inkweave-btn',
 }) => {
 	const ink = useStory();
 	const choices = choicesStore((state) => state.choices);
@@ -80,7 +77,8 @@ const ChoicesComponent: React.FC<ChoicesProps> = ({
 
 	return (
 		<ul
-			id="inkweave-choices"
+			data-inkweave="choices"
+			className={styles.choices}
 			key={canShow ? 'visible' : 'hidden'}
 			style={{ visibility: canShow ? 'visible' : 'hidden' }}
 		>
@@ -90,7 +88,6 @@ const ChoicesComponent: React.FC<ChoicesProps> = ({
 					choice={choice}
 					index={index}
 					onClick={handleClick}
-					className={className}
 				/>
 			))}
 		</ul>

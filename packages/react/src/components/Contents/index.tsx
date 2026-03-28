@@ -1,14 +1,13 @@
 import { memo, useMemo, CSSProperties } from 'react';
 import { CHOICE_SEPARATOR, contentsStore } from '@inkweave/core';
-import { useStory } from './Story';
+import { useStory } from '../Story';
+import styles from './styles.module.css';
 
 interface ContentsProps {
-	lineDelay?: number;
 	className?: string;
 }
 
 const ContentsComponent: React.FC<ContentsProps> = ({
-	lineDelay = 0.05,
 	className = '',
 }) => {
 	const ink = useStory();
@@ -18,6 +17,7 @@ const ContentsComponent: React.FC<ContentsProps> = ({
 		inkRecord?.visibleLines != undefined
 			? (inkRecord.visibleLines as number)
 			: contents.length;
+	const lineDelay = (ink.options.linedelay as number) ?? 0.05;
 
 	const renderedContents = useMemo(() => {
 		return contents.map((item: string, i: number) => {
@@ -33,7 +33,7 @@ const ContentsComponent: React.FC<ContentsProps> = ({
 			if (isDivider) {
 				return (
 					<div key={key} style={style}>
-						<hr className="inkweave-divider" />
+						<hr className={styles.divider} />
 					</div>
 				);
 			}
@@ -47,7 +47,7 @@ const ContentsComponent: React.FC<ContentsProps> = ({
 	}, [contents, visibleLines, lineDelay, className]);
 
 	return (
-		<section id="inkweave-contents">
+		<section className={styles.contents}>
 			{renderedContents}
 		</section>
 	);
