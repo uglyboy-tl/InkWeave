@@ -1,0 +1,43 @@
+.nav {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 0.5rem 1rem;
+	background: rgba(128, 128, 128, 0.08);
+	flex-shrink: 0;
+	border-radius: 12px 12px 0 0;
+	opacity: 0.3;
+	transition: opacity 0.15s ease;
+}
+
+.nav:hover {
+	opacity: 1;
+}
+
+.actions {
+	display: flex;
+	gap: 0.25rem;
+}
+
+.btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: none;
+	border-radius: 6px;
+	background: transparent;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.btn:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.btn:hover {
+	background: rgba(128, 128, 128, 0.15);
+}

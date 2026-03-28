@@ -8,10 +8,8 @@ import {
 	loadLinkopen,
 	loadMemory
 } from '@inkweave/plugins';
-import Container from './components/Container';
+import Container from './components/Container/index';
 import type { InkWeaveOptions } from './types';
-
-import './styles/index.css';
 
 loadImage();
 loadAudio();
@@ -82,7 +80,7 @@ if (typeof window !== 'undefined') {
 }
 
 export { init, version, FetchFileHandler };
-export { default as Container } from './components/Container';
-export { default as Menu } from './components/Menu';
-export { default as SaveModal } from './components/SaveModal';
+export { default as Container } from './components/Container/index';
+export { default as Menu } from './components/Menu/index';
+export { default as SaveModal } from './components/SaveModal/index';
 export type { InkWeaveOptions, SaveSlot, SaveModalProps, MenuProps, ContainerProps } from './types';

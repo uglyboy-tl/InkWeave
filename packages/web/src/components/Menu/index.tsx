@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import type { MenuProps } from '../types';
+import type { MenuProps } from '../../types';
+import styles from './styles.module.css';
 
 const RestoreIcon = memo(() => (
 	<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -25,10 +26,10 @@ RestartIcon.displayName = 'RestartIcon';
 
 const Menu: React.FC<MenuProps> = ({ onSave, onRestore, onRestart }) => {
 	return (
-		<nav className="inkweave-nav">
-			<div className="inkweave-nav-actions">
+		<nav className={styles.nav}>
+			<div className={styles.actions}>
 				<button
-					className="inkweave-nav-btn"
+					className={styles.btn}
 					onClick={onRestore}
 					title="Restore"
 					aria-label="Restore saved game"
@@ -36,7 +37,7 @@ const Menu: React.FC<MenuProps> = ({ onSave, onRestore, onRestart }) => {
 					<RestoreIcon />
 				</button>
 				<button
-					className="inkweave-nav-btn"
+					className={styles.btn}
 					onClick={onSave}
 					title="Save"
 					aria-label="Save game"
@@ -44,7 +45,7 @@ const Menu: React.FC<MenuProps> = ({ onSave, onRestore, onRestart }) => {
 					<SaveIcon />
 				</button>
 				<button
-					className="inkweave-nav-btn"
+					className={styles.btn}
 					onClick={onRestart}
 					title="Restart"
 					aria-label="Restart game"

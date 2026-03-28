@@ -5,7 +5,6 @@ export interface InkWeaveOptions {
 	container: string | HTMLElement;
 	story: string;
 	title?: string;
-	lineDelay?: number;
 	basePath?: string;
 	theme?: 'light' | 'dark';
 }
@@ -28,6 +27,5 @@ export interface MenuProps {
 
 export interface ContainerProps {
 	ink: InkStory;
-	lineDelay?: number;
 	title?: string;
 }
