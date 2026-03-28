@@ -2,7 +2,7 @@
 export { default as Story, useStory, StoryProvider } from './components/Story/index';
 export { default as Contents } from './components/Contents/index';
 export { default as Choices } from './components/Choices/index';
-export { ChoiceComponents, type ChoiceComponentProps } from './components/ChoiceComponents';
+export { ChoiceRegistry, type ChoiceComponentProps } from './components/Choices/registry';
 
 // Styles
 export { default as choiceStyles } from './components/Choices/styles.module.css';

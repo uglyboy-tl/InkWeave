@@ -1,7 +1,7 @@
 import { memo, createElement, useCallback } from 'react';
 import { Choice, choicesStore } from '@inkweave/core';
 import { useStory } from '../Story';
-import { ChoiceComponents } from '../ChoiceComponents';
+import { ChoiceRegistry } from './registry';
 import styles from './styles.module.css';
 
 interface ChoiceItemProps {
@@ -18,7 +18,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
       }
     }, [choice.index, choice.type, onClick]);
 
-    const Component = ChoiceComponents.get(choice.type);
+    const Component = ChoiceRegistry.get(choice.type);
     if (Component) {
       return (
         <li style={{ '--index': index } as React.CSSProperties}>

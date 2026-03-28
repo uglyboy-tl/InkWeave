@@ -10,7 +10,7 @@ export interface ChoiceComponentProps {
 
 type ChoiceComponent = FC<ChoiceComponentProps>;
 
-class ChoiceComponentsClass {
+class ChoiceRegistryClass {
 	private _components: Map<string, ChoiceComponent> = new Map();
 
 	get(type: string): ChoiceComponent | undefined {
@@ -34,4 +34,4 @@ class ChoiceComponentsClass {
 	}
 }
 
-export const ChoiceComponents = new ChoiceComponentsClass();
+export const ChoiceRegistry = new ChoiceRegistryClass();
