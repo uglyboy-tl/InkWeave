@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client';
 import { createInkStory, BaseFileHandler } from '@inkweave/core';
-import { 
-	loadImage, 
-	loadAudio, 
-	loadFadeEffect, 
+import {
+	loadImage,
+	loadAudio,
+	loadFadeEffect,
 	loadScrollafterchoice,
 	loadLinkopen,
 	loadMemory
@@ -52,7 +52,6 @@ const init = (options: InkWeaveOptions) => {
 		const fileHandler = new FetchFileHandler({ basePath: options.basePath || '' });
 		const ink = createInkStory(options.story, {
 			title: options.title || 'Ink Story',
-			linedelay: options.lineDelay || 0.05,
 			fileHandler,
 		});
 
@@ -62,7 +61,6 @@ const init = (options: InkWeaveOptions) => {
 		root.render(
 			<Container
 				ink={ink}
-				lineDelay={options.lineDelay}
 				title={options.title}
 			/>
 		);
