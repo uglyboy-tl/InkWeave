@@ -19,6 +19,7 @@ export default defineConfig({
       formats: ['iife'],
     },
     rollupOptions: {
+      external: [],
       output: {
         globals: {},
         banner: processPolyfill,

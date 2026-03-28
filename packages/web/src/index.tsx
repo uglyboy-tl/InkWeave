@@ -6,7 +6,9 @@ import {
 	loadFadeEffect,
 	loadScrollafterchoice,
 	loadLinkopen,
-	loadMemory
+	loadMemory,
+	loadAutoButton,
+	loadCdButton
 } from '@inkweave/plugins';
 import Container from './components/Container/index';
 import type { InkWeaveOptions } from './types';
@@ -17,6 +19,8 @@ loadFadeEffect();
 loadScrollafterchoice();
 loadLinkopen();
 loadMemory();
+loadAutoButton();
+loadCdButton();
 
 class FetchFileHandler extends BaseFileHandler {
 	loadFile(filename: string): string {
