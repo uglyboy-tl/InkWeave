@@ -23,9 +23,9 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
       return (
         <li style={{ '--index': index } as React.CSSProperties}>
           {createElement(Component, {
+            choice,
             onClick: handleClick,
             className: styles.button,
-            val: choice.val,
             children: choice.text,
           })}
         </li>

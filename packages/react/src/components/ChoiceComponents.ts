@@ -1,7 +1,8 @@
 import type { FC } from 'react';
+import type { Choice } from '@inkweave/core';
 
 export interface ChoiceComponentProps {
-	val?: string;
+	choice: Choice;
 	onClick: () => void;
 	className?: string;
 	children?: React.ReactNode;
