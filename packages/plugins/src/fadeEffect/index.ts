@@ -34,6 +34,9 @@ const load = () => {
 			const value = parseFloat(val);
 			if (!isNaN(value)) {
 				ink.options.linedelay = value;
+				if (value === 0) {
+					useContentComplete.getState().setContentComplete(true);
+				}
 			}
 		}
 	});
@@ -62,8 +65,11 @@ const load = () => {
 
 		let timer: ReturnType<typeof setTimeout> | null = null;
 		const unsub = contentsStore.subscribe(() => {
-			if (self.options.linedelay == 0) return;
 			if (timer) clearTimeout(timer);
+			if (self.options.linedelay == 0) {
+				useContentComplete.getState().setContentComplete(true);
+				return;
+			}
 			timer = setTimeout(() => {
 				useContentComplete.getState().setContentComplete(true);
 			}, ((self.contents as string[]).length - (self.visibleLines as number)) * (self.options.linedelay as number) * 1000);
