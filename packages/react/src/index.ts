@@ -4,6 +4,3 @@ export { ChoiceRegistry, type ChoiceComponentProps } from './components/Choices/
 
 // Styles
 export { default as choiceStyles } from './components/Choices/styles.module.css';
-
-// Hooks (re-export from core)
-export { contentsStore as useContents, choicesStore as useChoices, variablesStore as useVariables } from '@inkweave/core';
