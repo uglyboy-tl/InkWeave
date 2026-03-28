@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react';
 import { memory } from '@inkweave/plugins';
 import type { SaveModalProps, SaveSlot } from '../types';
 
-const SAVE_SLOTS = [0, 1, 2];
+const SAVE_SLOTS = [1, 2, 3, 4, 5];
 
 const SaveModal: React.FC<SaveModalProps> = ({
 	modalRef,
@@ -44,7 +44,7 @@ const SaveModal: React.FC<SaveModalProps> = ({
 					onClick={handleClose}
 					aria-label="Close"
 				>
-					×
+					&times;
 				</button>
 			</div>
 			<div className="inkweave-modal-body">

@@ -26,6 +26,8 @@ const Container: React.FC<ContainerProps> = ({ ink, lineDelay = 0.05, title }) =
 		ink.restart();
 	}, [ink]);
 
+	const storyTitle = ink.title || title || '';
+
 	return (
 		<div className="inkweave-container">
 			<Menu
@@ -43,7 +45,7 @@ const Container: React.FC<ContainerProps> = ({ ink, lineDelay = 0.05, title }) =
 			<SaveModal
 				modalRef={modalRef}
 				type={modalType}
-				title={ink.title || title || ''}
+				title={storyTitle}
 				ink={ink}
 			/>
 		</div>
