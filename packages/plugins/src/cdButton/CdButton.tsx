@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useCallback, useRef, useEffect } from 'react';
 import type { ChoiceComponentProps } from '@inkweave/react';
 
 const CooldownChoice: React.FC<ChoiceComponentProps> = ({
@@ -9,17 +9,32 @@ const CooldownChoice: React.FC<ChoiceComponentProps> = ({
 }) => {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const cd = parseFloat(val || '0');
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const onClickRef = useRef(onClick);
 
-	const handleClick = () => {
+	onClickRef.current = onClick;
+
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
+	}, []);
+
+	const handleClick = useCallback(() => {
 		if (isDisabled) return;
 
-		onClick();
+		onClickRef.current();
 		setIsDisabled(true);
 
-		setTimeout(() => {
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
+		timeoutRef.current = setTimeout(() => {
 			setIsDisabled(false);
 		}, cd * 1000);
-	};
+	}, [isDisabled, cd]);
 
 	return (
 		<a

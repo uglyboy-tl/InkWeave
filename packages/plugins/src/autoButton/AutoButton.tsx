@@ -8,13 +8,16 @@ const AutoChoice: React.FC<ChoiceComponentProps> = ({
 	children,
 }) => {
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const onClickRef = useRef(onClick);
 	const cd = parseFloat(val || '0');
+
+	onClickRef.current = onClick;
 
 	useEffect(() => {
 		if (cd <= 0) return;
 
 		intervalRef.current = setInterval(() => {
-			onClick();
+			onClickRef.current();
 		}, cd * 1000);
 
 		return () => {
@@ -22,7 +25,7 @@ const AutoChoice: React.FC<ChoiceComponentProps> = ({
 				clearInterval(intervalRef.current);
 			}
 		};
-	}, [cd, onClick]);
+	}, [cd]);
 
 	return (
 		<a className={`inkweave-btn ${className}`} style={{ display: 'none' }}>

@@ -9,7 +9,7 @@ const options = {
 const load = () => {
 	Tags.add('autosave', (_: string | null | undefined, ink: InkStory) => {
 		if (ink.options.autosave_enabled) {
-			memory.save(2, ink);
+			memory.save(1, ink);
 		}
 	});
 
