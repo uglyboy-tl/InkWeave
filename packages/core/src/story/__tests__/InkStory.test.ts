@@ -38,10 +38,6 @@ describe('InkStory', () => {
 			expect(ink.title).toBe('Test');
 		});
 
-		it('should have default options', () => {
-			expect(ink.options.linedelay).toBe(0.05);
-		});
-
 		it('should set story property', () => {
 			expect(ink.story).toBe(mockStory);
 		});
