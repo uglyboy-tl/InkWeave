@@ -61,7 +61,7 @@ const SaveModal: React.FC<SaveModalProps> = ({
 							onClick={() => handleSlotClick(slot)}
 							disabled={isDisabled}
 						>
-							<span className={styles['slot-name']}>Slot {slot + 1}</span>
+							<span className={styles['slot-name']}>Slot {slot}</span>
 							<span
 								className={
 									hasData

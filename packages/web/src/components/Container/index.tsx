@@ -1,5 +1,5 @@
 import { memo, useRef, useCallback, useState } from 'react';
-import { Story, Contents, Choices } from '@inkweave/react';
+import { Story } from '@inkweave/react';
 import '@inkweave/react/react.css';
 import { Image } from '@inkweave/plugins';
 import '@inkweave/plugins/plugins.css';
@@ -38,13 +38,9 @@ const Container: React.FC<ContainerProps> = ({ ink, title }) => {
 				onRestore={handleRestore}
 				onRestart={handleRestart}
 			/>
-			<div className={styles.content} data-inkweave="content">
-				<Story ink={ink}>
-					<Image />
-					<Contents />
-					<Choices />
-				</Story>
-			</div>
+			<Story ink={ink}>
+				<Image />
+			</Story>
 			<SaveModal
 				modalRef={modalRef}
 				type={modalType}
