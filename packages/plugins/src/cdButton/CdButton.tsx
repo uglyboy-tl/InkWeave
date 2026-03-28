@@ -1,50 +1,57 @@
-import { memo, useState, useCallback, useRef, useEffect } from 'react';
-import type { ChoiceComponentProps } from '@inkweave/react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useStory } from '@inkweave/react';
 import { choiceStyles } from '@inkweave/react';
+import type { ChoiceComponentProps } from '@inkweave/react';
+import { getCooldownKey, getRemainingSeconds, setCooldown, isCooldownActive } from './cooldownState';
 
 const CooldownChoice: React.FC<ChoiceComponentProps> = ({
-	val,
+	choice,
 	onClick,
 	className = '',
 	children,
 }) => {
-	const [isDisabled, setIsDisabled] = useState(false);
-	const cd = parseFloat(val || '0');
-	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-	const onClickRef = useRef(onClick);
+	const cd = parseFloat(choice.val || '0');
+	const key = getCooldownKey(choice);
+	const ink = useStory();
+	const [, setTick] = useState(0);
+	const isMountedRef = useRef(true);
 
-	onClickRef.current = onClick;
+	const isDisabled = isCooldownActive(key);
+	const remainingSeconds = getRemainingSeconds(key);
 
 	useEffect(() => {
 		return () => {
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
+			isMountedRef.current = false;
 		};
 	}, []);
 
+	useEffect(() => {
+		if (!isDisabled) return;
+		const interval = setInterval(() => {
+			if (isMountedRef.current) {
+				setTick(t => t + 1);
+			}
+		}, 1000);
+		return () => clearInterval(interval);
+	}, [isDisabled]);
+
 	const handleClick = useCallback(() => {
 		if (isDisabled) return;
-
-		onClickRef.current();
-		setIsDisabled(true);
-
-		if (timeoutRef.current) {
-			clearTimeout(timeoutRef.current);
-		}
-		timeoutRef.current = setTimeout(() => {
-			setIsDisabled(false);
-		}, cd * 1000);
-	}, [isDisabled, cd]);
+		onClick();
+		setCooldown(key, cd);
+		setTick(t => t + 1); // 触发重渲染
+	}, [isDisabled, cd, onClick, key]);
 
 	const buttonClass = `${choiceStyles?.button || ''} ${className} ${isDisabled ? choiceStyles?.disabled || '' : ''}`.trim();
 
+	const template = (ink.options.cdTemplate as string) || '{text} ({time})';
+	const displayText = isDisabled && remainingSeconds > 0
+		? template.replace('{text}', String(children)).replace('{time}', String(remainingSeconds))
+		: children;
+
 	return (
-		<a
-			className={buttonClass}
-			onClick={handleClick}
-		>
-			{children}
+		<a className={buttonClass} onClick={handleClick}>
+			{displayText}
 		</a>
 	);
 };
