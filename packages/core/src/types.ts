@@ -7,7 +7,6 @@ export const CHOICE_SEPARATOR = '\x00ink-divider\x00';
 
 export const DEFAULT_STORY_OPTIONS: InkStoryOptions = {
 	debug: false,
-	linedelay: 0.05,
 };
 
 // Types
