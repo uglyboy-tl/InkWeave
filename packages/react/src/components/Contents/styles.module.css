@@ -2,7 +2,7 @@
 	flex: none;
 }
 
-.contents > div {
+.contents>div {
 	opacity: 0;
 	animation: fade-in 0.5s ease-out forwards;
 	animation-delay: var(--delay, 0s);
@@ -20,14 +20,10 @@
 	}
 }
 
-.contents p {
+:global(.inkweave-contents p) {
 	margin: 0 0 0.5rem 0;
 }
 
-.divider {
-	border: none;
-	border-top: 1px dashed;
-	border-color: inherit;
-	margin: 0.75rem 0;
+:global(.inkweave-divider) {
 	opacity: 0.3;
 }
