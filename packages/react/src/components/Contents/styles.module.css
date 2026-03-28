@@ -1,29 +1,29 @@
 .contents {
-	flex: none;
+  flex: none;
 }
 
-.contents>div {
-	opacity: 0;
-	animation: fade-in 0.5s ease-out forwards;
-	animation-delay: var(--delay, 0s);
+.contents > div {
+  opacity: 0;
+  animation: fade-in 0.5s ease-out forwards;
+  animation-delay: var(--delay, 0s);
 }
 
 @keyframes fade-in {
-	from {
-		opacity: 0;
-		transform: translateY(6px);
-	}
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 :global(.inkweave-contents p) {
-	margin: 0 0 0.5rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 :global(.inkweave-divider) {
-	opacity: 0.3;
+  opacity: 0.3;
 }

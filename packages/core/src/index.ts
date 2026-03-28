@@ -18,5 +18,11 @@ export { default as createSelectors } from './state/createSelectors';
 export { createInkStory } from './create';
 
 // Types & Constants (for public API)
-export type { InkStoryOptions, InkStoryContext, SaveData, FileHandler, ErrorHandler } from './types';
+export type {
+  InkStoryOptions,
+  InkStoryContext,
+  SaveData,
+  FileHandler,
+  ErrorHandler,
+} from './types';
 export { Choice, CHOICE_SEPARATOR, BaseFileHandler } from './types';

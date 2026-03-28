@@ -14,6 +14,7 @@ InkWeave 是一个交互式小说播放器，基于 [ink](https://github.com/ink
 ```
 
 按需引入：
+
 - 只需要核心引擎？只安装 `@inkweave/core`
 - 需要 React UI？加上 `@inkweave/react`
 - 需要存档、音频等功能？引入 `@inkweave/plugins`
@@ -21,14 +22,14 @@ InkWeave 是一个交互式小说播放器，基于 [ink](https://github.com/ink
 
 ## 扩展系统
 
-| 系统 | 方向 | 典型用途 |
-|------|------|----------|
-| **Tags** | ink → JS | 副作用操作：插入图片、播放音乐 |
-| **Parser** | ink → JS | 文本转换：添加 CSS 类 |
-| **ExternalFunctions** | ink → JS | ink 脚本调用 JS 函数 |
-| **Patches** | JS → Engine | 扩展引擎能力，注入属性 |
-| **ChoiceParser** | ink → JS | 选项行为定制 |
-| **ChoiceRegistry** | JS → React | 注册自定义选项组件 |
+| 系统                  | 方向        | 典型用途                       |
+| --------------------- | ----------- | ------------------------------ |
+| **Tags**              | ink → JS    | 副作用操作：插入图片、播放音乐 |
+| **Parser**            | ink → JS    | 文本转换：添加 CSS 类          |
+| **ExternalFunctions** | ink → JS    | ink 脚本调用 JS 函数           |
+| **Patches**           | JS → Engine | 扩展引擎能力，注入属性         |
+| **ChoiceParser**      | ink → JS    | 选项行为定制                   |
+| **ChoiceRegistry**    | JS → React  | 注册自定义选项组件             |
 
 详细设计思路见 [docs/why-this-project.md](docs/why-this-project.md)。
 

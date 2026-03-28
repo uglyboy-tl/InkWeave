@@ -5,9 +5,9 @@ import { ChoiceRegistry } from './registry';
 import styles from './styles.module.css';
 
 interface ChoiceItemProps {
-	choice: Choice;
-	index: number;
-	onClick: (index: number) => void;
+  choice: Choice;
+  index: number;
+  onClick: (index: number) => void;
 }
 
 const ChoiceItem: React.FC<ChoiceItemProps> = memo(
@@ -37,8 +37,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
         <a
           onClick={handleClick}
           className={`inkweave-choice ${styles.button} ${choice.type === 'unclickable' ? styles.disabled : ''}`}
-          aria-disabled={choice.type === 'unclickable'}
-        >
+          aria-disabled={choice.type === 'unclickable'}>
           {choice.text}
         </a>
       </li>
@@ -51,40 +50,35 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
       prevProps.choice.text === nextProps.choice.text &&
       prevProps.choice.val === nextProps.choice.val
     );
-  }
+  },
 );
 ChoiceItem.displayName = 'ChoiceItem';
 
 const ChoicesComponent = () => {
-	const ink = useStory();
-	const choices = choicesStore((state) => state.choices);
-	const inkRecord = ink as unknown as Record<string, unknown>;
-	const canShow =
-		inkRecord && 'choicesCanShow' in inkRecord
-			? (inkRecord.choicesCanShow as boolean)
-			: true;
+  const ink = useStory();
+  const choices = choicesStore((state) => state.choices);
+  const inkRecord = ink as unknown as Record<string, unknown>;
+  const canShow =
+    inkRecord && 'choicesCanShow' in inkRecord ? (inkRecord.choicesCanShow as boolean) : true;
 
-	const handleClick = useCallback((index: number) => {
-		ink.choose(index);
-	}, [ink]);
+  const handleClick = useCallback(
+    (index: number) => {
+      ink.choose(index);
+    },
+    [ink],
+  );
 
-	return (
-		<ul
-			data-inkweave="choices"
-			className={`inkweave-choices ${styles.choices}`}
-			key={canShow ? 'visible' : 'hidden'}
-			style={{ visibility: canShow ? 'visible' : 'hidden' }}
-		>
-			{choices.map((choice: Choice, index: number) => (
-				<ChoiceItem
-					key={choice.index}
-					choice={choice}
-					index={index}
-					onClick={handleClick}
-				/>
-			))}
-		</ul>
-	);
+  return (
+    <ul
+      data-inkweave='choices'
+      className={`inkweave-choices ${styles.choices}`}
+      key={canShow ? 'visible' : 'hidden'}
+      style={{ visibility: canShow ? 'visible' : 'hidden' }}>
+      {choices.map((choice: Choice, index: number) => (
+        <ChoiceItem key={choice.index} choice={choice} index={index} onClick={handleClick} />
+      ))}
+    </ul>
+  );
 };
 
 export default memo(ChoicesComponent);

@@ -11,7 +11,13 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
-      external: ['inkjs', 'inkjs/engine/Story', 'inkjs/engine/Choice', 'inkjs/compiler/IFileHandler', 'zustand'],
+      external: [
+        'inkjs',
+        'inkjs/engine/Story',
+        'inkjs/engine/Choice',
+        'inkjs/compiler/IFileHandler',
+        'zustand',
+      ],
       output: {
         globals: {
           inkjs: 'inkjs',

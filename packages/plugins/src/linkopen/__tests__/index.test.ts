@@ -3,76 +3,77 @@ import load from '../index';
 import { Tags } from '@inkweave/core';
 
 describe('linkopen', () => {
-	describe('load', () => {
-		it('should register linkopen tag', () => {
-			load();
-			expect(Tags.functions.has('linkopen')).toBe(true);
-		});
-	});
+  describe('load', () => {
+    it('should register linkopen tag', () => {
+      load();
+      expect(Tags.functions.has('linkopen')).toBe(true);
+    });
+  });
 
-	describe('security', () => {
-		const originalOpen = window.open;
-		const mockOpen = mock(() => null);
-		
-		beforeEach(() => {
-			window.open = mockOpen as unknown as typeof window.open;
-		});
-		
-		afterEach(() => {
-			window.open = originalOpen;
-			mockOpen.mockClear();
-		});
+  describe('security', () => {
+    const originalOpen = window.open;
+    const mockOpen = mock(() => null);
 
-		it('should open http URLs', () => {
-			load();
-			
-			Tags.process({} as unknown as Parameters<typeof Tags.process>[0], 'linkopen: http://example.com');
-			
-			expect(mockOpen).toHaveBeenCalledWith(
-				'http://example.com',
-				'_blank',
-				'noopener,noreferrer'
-			);
-		});
+    beforeEach(() => {
+      window.open = mockOpen as unknown as typeof window.open;
+    });
 
-		it('should open https URLs', () => {
-			load();
-			
-			Tags.process({} as unknown as Parameters<typeof Tags.process>[0], 'linkopen: https://example.com');
-			
-			expect(mockOpen).toHaveBeenCalledWith(
-				'https://example.com',
-				'_blank',
-				'noopener,noreferrer'
-			);
-		});
+    afterEach(() => {
+      window.open = originalOpen;
+      mockOpen.mockClear();
+    });
 
-		it('should block unsafe protocols', () => {
-			load();
-			const warnSpy = mock(() => {});
-			const originalWarn = console.warn;
-			console.warn = warnSpy;
-			
-			Tags.process({} as unknown as Parameters<typeof Tags.process>[0], 'linkopen: javascript:alert(1)');
-			
-			expect(mockOpen).not.toHaveBeenCalled();
-			expect(warnSpy).toHaveBeenCalled();
-			
-			console.warn = originalWarn;
-		});
+    it('should open http URLs', () => {
+      load();
 
-		it('should handle invalid URLs', () => {
-			load();
-			const warnSpy = mock(() => {});
-			const originalWarn = console.warn;
-			console.warn = warnSpy;
-			
-			Tags.process({} as unknown as Parameters<typeof Tags.process>[0], 'linkopen: not a url');
-			
-			expect(mockOpen).not.toHaveBeenCalled();
-			expect(warnSpy).toHaveBeenCalled();
-			
-			console.warn = originalWarn;
-		});
-	});
+      Tags.process(
+        {} as unknown as Parameters<typeof Tags.process>[0],
+        'linkopen: http://example.com',
+      );
+
+      expect(mockOpen).toHaveBeenCalledWith('http://example.com', '_blank', 'noopener,noreferrer');
+    });
+
+    it('should open https URLs', () => {
+      load();
+
+      Tags.process(
+        {} as unknown as Parameters<typeof Tags.process>[0],
+        'linkopen: https://example.com',
+      );
+
+      expect(mockOpen).toHaveBeenCalledWith('https://example.com', '_blank', 'noopener,noreferrer');
+    });
+
+    it('should block unsafe protocols', () => {
+      load();
+      const warnSpy = mock(() => {});
+      const originalWarn = console.warn;
+      console.warn = warnSpy;
+
+      Tags.process(
+        {} as unknown as Parameters<typeof Tags.process>[0],
+        'linkopen: javascript:alert(1)',
+      );
+
+      expect(mockOpen).not.toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalled();
+
+      console.warn = originalWarn;
+    });
+
+    it('should handle invalid URLs', () => {
+      load();
+      const warnSpy = mock(() => {});
+      const originalWarn = console.warn;
+      console.warn = warnSpy;
+
+      Tags.process({} as unknown as Parameters<typeof Tags.process>[0], 'linkopen: not a url');
+
+      expect(mockOpen).not.toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalled();
+
+      console.warn = originalWarn;
+    });
+  });
 });

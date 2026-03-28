@@ -9,46 +9,37 @@ import SaveModal from '../SaveModal';
 import styles from './styles.module.css';
 
 const Container: React.FC<ContainerProps> = ({ ink, title }) => {
-	const [modalType, setModalType] = useState<'save' | 'restore'>('save');
-	const modalRef = useRef<HTMLDialogElement | null>(null);
+  const [modalType, setModalType] = useState<'save' | 'restore'>('save');
+  const modalRef = useRef<HTMLDialogElement | null>(null);
 
-	const openModal = useCallback((type: 'save' | 'restore') => {
-		setModalType(type);
-		modalRef.current?.showModal();
-	}, []);
+  const openModal = useCallback((type: 'save' | 'restore') => {
+    setModalType(type);
+    modalRef.current?.showModal();
+  }, []);
 
-	const handleSave = useCallback(() => {
-		openModal('save');
-	}, [openModal]);
+  const handleSave = useCallback(() => {
+    openModal('save');
+  }, [openModal]);
 
-	const handleRestore = useCallback(() => {
-		openModal('restore');
-	}, [openModal]);
+  const handleRestore = useCallback(() => {
+    openModal('restore');
+  }, [openModal]);
 
-	const handleRestart = useCallback(() => {
-		ink.restart();
-	}, [ink]);
+  const handleRestart = useCallback(() => {
+    ink.restart();
+  }, [ink]);
 
-	const storyTitle = ink.title || title || '';
+  const storyTitle = ink.title || title || '';
 
-	return (
-		<div className={styles.container}>
-			<Menu
-				onSave={handleSave}
-				onRestore={handleRestore}
-				onRestart={handleRestart}
-			/>
-			<Story ink={ink}>
-				<Image />
-			</Story>
-			<SaveModal
-				modalRef={modalRef}
-				type={modalType}
-				title={storyTitle}
-				ink={ink}
-			/>
-		</div>
-	);
+  return (
+    <div className={styles.container}>
+      <Menu onSave={handleSave} onRestore={handleRestore} onRestart={handleRestart} />
+      <Story ink={ink}>
+        <Image />
+      </Story>
+      <SaveModal modalRef={modalRef} type={modalType} title={storyTitle} ink={ink} />
+    </div>
+  );
 };
 
 export default memo(Container);

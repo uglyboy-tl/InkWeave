@@ -7,62 +7,47 @@ import styles from './styles.module.css';
 const StoryContext = createContext<InkStory | null>(null);
 
 export const useStory = () => {
-	const ink = useContext(StoryContext);
-	if (!ink) {
-		throw new Error('useStory must be used within StoryProvider');
-	}
-	return ink;
+  const ink = useContext(StoryContext);
+  if (!ink) {
+    throw new Error('useStory must be used within StoryProvider');
+  }
+  return ink;
 };
 
 interface StoryProviderProps {
-	ink: InkStory;
-	children?: React.ReactNode;
+  ink: InkStory;
+  children?: React.ReactNode;
 }
 
-export const StoryProvider: React.FC<StoryProviderProps> = ({
-	ink,
-	children,
-}) => {
-	return (
-		<StoryContext.Provider value={ink}>
-			{children}
-		</StoryContext.Provider>
-	);
+export const StoryProvider: React.FC<StoryProviderProps> = ({ ink, children }) => {
+  return <StoryContext.Provider value={ink}>{children}</StoryContext.Provider>;
 };
 
 interface StoryProps {
-	ink: InkStory;
-	children?: React.ReactNode;
-	className?: string;
-	onInit?: (ink: InkStory) => void;
+  ink: InkStory;
+  children?: React.ReactNode;
+  className?: string;
+  onInit?: (ink: InkStory) => void;
 }
 
-const StoryComponent: React.FC<StoryProps> = ({
-	ink,
-	children,
-	className = '',
-	onInit,
-}) => {
-	const onInitRef = useRef(onInit);
-	onInitRef.current = onInit;
+const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = '', onInit }) => {
+  const onInitRef = useRef(onInit);
+  onInitRef.current = onInit;
 
-	useEffect(() => {
-		ink.restart();
-		onInitRef.current?.(ink);
-	}, [ink]);
+  useEffect(() => {
+    ink.restart();
+    onInitRef.current?.(ink);
+  }, [ink]);
 
-	return (
-		<StoryProvider ink={ink}>
-			<div
-				className={`inkweave-story ${styles.story} ${className}`.trim()}
-				data-inkweave="story"
-			>
-				{children}
-				<Contents />
-				<Choices />
-			</div>
-		</StoryProvider>
-	);
+  return (
+    <StoryProvider ink={ink}>
+      <div className={`inkweave-story ${styles.story} ${className}`.trim()} data-inkweave='story'>
+        {children}
+        <Contents />
+        <Choices />
+      </div>
+    </StoryProvider>
+  );
 };
 
 export default memo(StoryComponent);

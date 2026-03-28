@@ -11,7 +11,7 @@
     "build:plugins": "bun run --filter @inkweave/plugins build",
     "build:web": "bun run --filter @inkweave/web build",
     "build": "bun run build:core && bun run build:react && bun run build:plugins && bun run build:web",
-    "dev": "bun run --filter @inkweave/web dev",
+    "dev": "vite --config examples/vite.config.ts",
     "test": "bun test packages/core packages/plugins",
     "test:core": "bun test packages/core",
     "test:plugins": "bun test packages/plugins",
