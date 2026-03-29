@@ -16,7 +16,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
+    "types": ["bun-types"]
   },
-  "include": ["src"]
+  "include": ["src", "src/__tests__", "test"]
 }

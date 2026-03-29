@@ -13,8 +13,8 @@
     "jsx": "react-jsx",
     "strict": true,
     "declaration": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
+    "types": ["bun-types"]
   },
-  "include": ["src"],
-  "exclude": ["src/**/__tests__/**"]
+  "include": ["src", "src/**/__tests__/**"]
 }
