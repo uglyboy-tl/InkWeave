@@ -60,6 +60,7 @@ const load = () => {
     Object.defineProperty(this, 'visibleLines', {
       get() {
         const last_content = useContentComplete.getState().last_content;
+        if (!last_content) return -1;
         return (self.contents as string[]).lastIndexOf(last_content);
       },
     });
@@ -80,9 +81,12 @@ const load = () => {
         () => {
           useContentComplete.getState().setContentComplete(true);
         },
-        ((self.contents as string[]).length - (self.visibleLines as number)) *
-          (self.options.linedelay as number) *
-          1000,
+        Math.max(
+          0,
+          ((self.contents as string[]).length - (self.visibleLines as number)) *
+            (self.options.linedelay as number) *
+            1000,
+        ),
       );
     });
 
