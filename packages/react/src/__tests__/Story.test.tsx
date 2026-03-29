@@ -1,0 +1,84 @@
+import { describe, it, expect, vi, beforeEach } from 'bun:test';
+import { render, screen, cleanup } from '@testing-library/react';
+import { useStory, StoryProvider } from '../components/Story';
+
+const Story = require('../components/Story').default;
+
+describe('Story', () => {
+  beforeEach(() => {
+    cleanup();
+  });
+
+  it('should render StoryProvider with ink story', () => {
+    const mockInk = {
+      restart: vi.fn(),
+      choose: vi.fn(),
+      options: {},
+    };
+
+    const TestComponent = () => {
+      const ink = useStory();
+      return <div data-testid='story-context'>{ink ? 'has-story' : 'no-story'}</div>;
+    };
+
+    render(
+      <StoryProvider ink={mockInk as any}>
+        <TestComponent />
+      </StoryProvider>,
+    );
+
+    expect(screen.getByTestId('story-context').textContent).toBe('has-story');
+  });
+
+  it('should throw error when useStory is used outside StoryProvider', () => {
+    const TestComponent = () => {
+      useStory();
+      return <div>test</div>;
+    };
+
+    expect(() => render(<TestComponent />)).toThrow('useStory must be used within StoryProvider');
+  });
+
+  it('should call onInit callback on mount', () => {
+    const onInit = vi.fn();
+    const mockInk = {
+      restart: vi.fn(),
+      choose: vi.fn(),
+      options: {},
+    };
+
+    render(<Story ink={mockInk as any} onInit={onInit} />);
+
+    expect(mockInk.restart).toHaveBeenCalled();
+    expect(onInit).toHaveBeenCalledWith(mockInk);
+  });
+
+  it('should render children', () => {
+    const mockInk = {
+      restart: vi.fn(),
+      choose: vi.fn(),
+      options: {},
+    };
+
+    render(
+      <Story ink={mockInk as any}>
+        <div data-testid='custom-child'>Custom Content</div>
+      </Story>,
+    );
+
+    expect(screen.getByTestId('custom-child')).toBeInTheDocument();
+  });
+
+  it('should apply className prop', () => {
+    const mockInk = {
+      restart: vi.fn(),
+      choose: vi.fn(),
+      options: {},
+    };
+
+    render(<Story ink={mockInk as any} className='custom-class' />);
+
+    const storyElement = document.querySelector('.inkweave-story');
+    expect(storyElement).toHaveClass('custom-class');
+  });
+});
