@@ -6,22 +6,27 @@
     "packages/*"
   ],
   "scripts": {
+    "format": "bunx prettier --write .",
     "build:core": "bun run --filter @inkweave/core build",
     "build:react": "bun run --filter @inkweave/react build",
     "build:plugins": "bun run --filter @inkweave/plugins build",
     "build:web": "bun run --filter @inkweave/web build",
     "build": "bun run build:core && bun run build:react && bun run build:plugins && bun run build:web",
     "dev": "vite --config examples/vite.config.ts",
-    "test": "bun test packages/core packages/plugins",
+    "typecheck": "bunx tsc --noEmit",
+    "test": "bun test packages/core packages/plugins packages/react",
     "test:core": "bun test packages/core",
     "test:plugins": "bun test packages/plugins",
+    "test:react": "bun test packages/react",
     "publish:core": "bun run --filter @inkweave/core publish:pkg",
     "publish:react": "bun run --filter @inkweave/react publish:pkg",
     "publish:plugins": "bun run --filter @inkweave/plugins publish:pkg",
     "publish:all": "bun run publish:core && bun run publish:react && bun run publish:plugins"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^20.8.9",
     "@types/node": "^25.5.0",
+    "bun-types": "^1.3.11",
     "typescript": "^5.0.0",
     "vite": "^6.0.0",
     "vite-plugin-dts": "^4.5.4"

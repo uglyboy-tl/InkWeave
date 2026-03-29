@@ -1,5 +1,8 @@
 [test]
-preload = ["./packages/plugins/test/globals.ts"]
+preload = [
+  "./test/happydom.ts",
+  "./packages/react/test/testing-library.ts"
+]
 exclude = ["e2e/**", "packages/*/dist/**"]
 
 [coverage]
