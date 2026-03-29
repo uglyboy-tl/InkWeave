@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'bun:test';
 import { InkStory } from '../InkStory';
 import type { Story } from 'inkjs/engine/Story';
 import contentsStore from '../../state/contents';

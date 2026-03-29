@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'bun:test';
 import choicesStore from '../choices';
 import type { Choice as InkChoice } from 'inkjs/engine/Choice';
 

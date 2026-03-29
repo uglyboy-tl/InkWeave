@@ -1,9 +1,14 @@
-import { describe, it, expect, mock } from 'bun:test';
+import { describe, it, expect, mock, beforeEach } from 'bun:test';
 import load from '../index';
 import { Tags, Patches } from '@inkweave/core';
 import { AudioController } from '../AudioController';
 
 describe('audio', () => {
+  beforeEach(() => {
+    AudioController.cleanupSound();
+    AudioController.cleanupMusic();
+  });
+
   describe('load', () => {
     it('should register sound tag', () => {
       load();
@@ -28,6 +33,14 @@ describe('audio', () => {
 
     it('should have null music initially', () => {
       expect(AudioController.music).toBeNull();
+    });
+
+    it('should have null sound_handler initially', () => {
+      expect(AudioController.sound_handler).toBeDefined();
+    });
+
+    it('should have null music_handler initially', () => {
+      expect(AudioController.music_handler).toBeDefined();
     });
 
     it('should set sound and create Audio instance', () => {
