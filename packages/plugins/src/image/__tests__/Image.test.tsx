@@ -24,7 +24,7 @@ describe('Image', () => {
 
   it('should apply className', () => {
     useStoryImage.getState().setImage('test.png');
-    const { container } = render(<Image className="custom-class" />);
+    const { container } = render(<Image className='custom-class' />);
     const div = container.querySelector('div');
     expect(div).toHaveClass('custom-class');
   });

@@ -16,5 +16,5 @@
     "declarationDir": "./dist",
     "types": ["bun-types"]
   },
-  "include": ["src", "src/**/__tests__/**"]
+  "include": ["src", "src/**/__tests__"]
 }
