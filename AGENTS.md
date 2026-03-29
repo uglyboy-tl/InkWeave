@@ -9,8 +9,9 @@ bun run format
 ```
 
 配置文件：
+
 - `.prettierrc.json` - Prettier 配置
-- `.prettierignore` - 忽略文件（已配置排除 examples/*.md）
+- `.prettierignore` - 忽略文件（已配置排除 examples/\*.md）
 
 ### 2. 语法检查 (TypeScript)
 
@@ -26,6 +27,7 @@ bun test --coverage
 ```
 
 配置：
+
 - `bunfig.toml` - 根目录统一配置
 - `test/happydom.ts` - DOM 环境（所有包共享）
 - `packages/react/test/testing-library.ts` - React Testing Library 配置
@@ -38,6 +40,7 @@ bun run build
 ```
 
 或单独构建：
+
 ```bash
 bun run build:core
 bun run build:react
