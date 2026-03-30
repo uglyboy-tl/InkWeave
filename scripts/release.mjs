@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+
 /**
  * Version bump script for InkWeave
  *
@@ -8,8 +9,8 @@
  *   bun scripts/release.mjs major    # Bump major
  */
 
-import { readFileSync, writeFileSync } from "fs";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const input = process.argv[2] || "patch";
 
@@ -31,7 +32,12 @@ function getBaseVersion(pkg) {
 }
 
 function getNewVersion(baseVersion, bumpType) {
-  const [major, minor, patch] = baseVersion.split(".").map(Number);
+  const parts = baseVersion.split(".").map(Number);
+  if (parts.length !== 3 || parts.some(Number.isNaN)) {
+    console.error(`Invalid version format: ${baseVersion}`);
+    process.exit(1);
+  }
+  const [major, minor, patch] = parts;
   switch (bumpType) {
     case "major":
       return `${major + 1}.0.0`;
@@ -53,7 +59,7 @@ function updateVersions(newVersion) {
     const json = JSON.parse(content);
 
     json.version = newVersion;
-    writeFileSync(pkg, JSON.stringify(json, null, 2) + "\n");
+    writeFileSync(pkg, `${JSON.stringify(json, null, 2)}\n`);
 
     const pkgName = pkg.replace("packages/", "").replace("/package.json", "");
     versionMap[pkgName] = newVersion;
@@ -81,7 +87,7 @@ function updateVersions(newVersion) {
     updateDeps(json.dependencies);
     updateDeps(json.peerDependencies);
 
-    writeFileSync(pkg, JSON.stringify(json, null, 2) + "\n");
+    writeFileSync(pkg, `${JSON.stringify(json, null, 2)}\n`);
   }
 }
 
@@ -103,15 +109,16 @@ function main() {
   console.log(`Updating to version: ${version}\n`);
   updateVersions(version);
 
+  console.log("\nGenerating changelog...");
+  run(`bun run scripts/changelog.mjs v${version}`);
+
   console.log("\nCommitting...");
   run("git add .");
-  run(`git commit -m "chore(release): v${version}"`);
+  run(`git commit --author "InkWeave Bot <bot@inkweave.dev>" -m "chore(release): v${version}"`);
   run(`git tag v${version}`);
 
   console.log("\nPushing...");
-  run("git push origin main");
-  run(`git push origin v${version}`);
-  run("git push origin --tags");
+  run(`git push origin main v${version}`);
 
   console.log(`\n✅ Released v${version}`);
 }
