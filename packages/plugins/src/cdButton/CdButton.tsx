@@ -1,21 +1,20 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useStory } from '@inkweave/react';
-import { choiceStyles } from '@inkweave/react';
-import type { ChoiceComponentProps } from '@inkweave/react';
+import type { ChoiceComponentProps } from "@inkweave/react";
+import { choiceStyles, useStory } from "@inkweave/react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import {
   getCooldownKey,
   getRemainingSeconds,
-  setCooldown,
   isCooldownActive,
-} from './cooldownState';
+  setCooldown,
+} from "./cooldownState";
 
 const CooldownChoice: React.FC<ChoiceComponentProps> = ({
   choice,
   onClick,
-  className = '',
+  className = "",
   children,
 }) => {
-  const cd = parseFloat(choice.val || '0');
+  const cd = parseFloat(choice.val || "0");
   const key = getCooldownKey(choice);
   const ink = useStory();
   const [, setTick] = useState(0);
@@ -48,12 +47,12 @@ const CooldownChoice: React.FC<ChoiceComponentProps> = ({
   }, [isDisabled, cd, onClick, key]);
 
   const buttonClass =
-    `${choiceStyles?.button || ''} ${className} ${isDisabled ? choiceStyles?.disabled || '' : ''}`.trim();
+    `${choiceStyles?.button || ""} ${className} ${isDisabled ? choiceStyles?.disabled || "" : ""}`.trim();
 
-  const template = (ink.options.cdTemplate as string) || '{text} ({time})';
+  const template = (ink.options.cdTemplate as string) || "{text} ({time})";
   const displayText =
     isDisabled && remainingSeconds > 0
-      ? template.replace('{text}', String(children)).replace('{time}', String(remainingSeconds))
+      ? template.replace("{text}", String(children)).replace("{time}", String(remainingSeconds))
       : children;
 
   return (

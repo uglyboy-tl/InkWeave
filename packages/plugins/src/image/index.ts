@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { Tags, Patches, type InkStory, type FileHandler } from '@inkweave/core';
+import { type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
+import { create } from "zustand";
 
-declare module '@inkweave/core' {
+declare module "@inkweave/core" {
   interface InkStory {
     image: string;
   }
@@ -13,28 +13,28 @@ type StoryImage = {
 };
 
 export const useStoryImage = create<StoryImage>((set) => ({
-  image: '',
+  image: "",
   setImage: (image) => set({ image }),
 }));
 
 const getPath = (path: string, fileHandler?: FileHandler) => {
-  if (fileHandler && 'resolveFilename' in fileHandler) {
+  if (fileHandler && "resolveFilename" in fileHandler) {
     return (fileHandler as { resolveFilename: (f: string) => string }).resolveFilename(path);
   }
   return path;
 };
 
 const load = () => {
-  Tags.add('image', (val: string | null | undefined, ink: InkStory) => {
+  Tags.add("image", (val: string | null | undefined, ink: InkStory) => {
     if (val) {
       useStoryImage.getState().setImage(getPath(val, ink.options.fileHandler));
     } else {
-      useStoryImage.getState().setImage('');
+      useStoryImage.getState().setImage("");
     }
   });
 
   Patches.add(function () {
-    Object.defineProperty(this, 'image', {
+    Object.defineProperty(this, "image", {
       get() {
         return useStoryImage.getState().image;
       },
@@ -43,12 +43,12 @@ const load = () => {
         useStoryImage.getState().setImage(path);
       },
     });
-    this.save_label.push('image');
+    this.save_label.push("image");
     this.clears.push(() => {
-      this.image = '';
+      this.image = "";
     });
   }, {});
 };
 
 export default load;
-export { default as Image } from './Image';
+export { default as Image } from "./Image";

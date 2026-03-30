@@ -1,4 +1,4 @@
-import { Patches, choicesStore } from '@inkweave/core';
+import { choicesStore, Patches } from "@inkweave/core";
 
 const load = () => {
   Patches.add(function () {
@@ -15,7 +15,7 @@ const load = () => {
           const element = document.querySelector('[data-inkweave="story"]') as HTMLElement;
           element?.scrollTo({
             top: lastButton.offsetTop,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
         }
       }, 0);

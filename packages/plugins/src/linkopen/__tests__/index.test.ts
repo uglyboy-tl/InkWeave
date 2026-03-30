@@ -1,16 +1,16 @@
-import { describe, it, expect, mock, beforeEach, afterEach } from 'bun:test';
-import load from '../index';
-import { Tags } from '@inkweave/core';
+import { afterEach, beforeEach, describe, expect, it, mock } from "bun:test";
+import { Tags } from "@inkweave/core";
+import load from "../index";
 
-describe('linkopen', () => {
-  describe('load', () => {
-    it('should register linkopen tag', () => {
+describe("linkopen", () => {
+  describe("load", () => {
+    it("should register linkopen tag", () => {
       load();
-      expect(Tags.functions.has('linkopen')).toBe(true);
+      expect(Tags.functions.has("linkopen")).toBe(true);
     });
   });
 
-  describe('security', () => {
+  describe("security", () => {
     const originalOpen = window.open;
     const mockOpen = mock(() => null);
 
@@ -23,29 +23,29 @@ describe('linkopen', () => {
       mockOpen.mockClear();
     });
 
-    it('should open http URLs', () => {
+    it("should open http URLs", () => {
       load();
 
       Tags.process(
         {} as unknown as Parameters<typeof Tags.process>[0],
-        'linkopen: http://example.com',
+        "linkopen: http://example.com",
       );
 
-      expect(mockOpen).toHaveBeenCalledWith('http://example.com', '_blank', 'noopener,noreferrer');
+      expect(mockOpen).toHaveBeenCalledWith("http://example.com", "_blank", "noopener,noreferrer");
     });
 
-    it('should open https URLs', () => {
+    it("should open https URLs", () => {
       load();
 
       Tags.process(
         {} as unknown as Parameters<typeof Tags.process>[0],
-        'linkopen: https://example.com',
+        "linkopen: https://example.com",
       );
 
-      expect(mockOpen).toHaveBeenCalledWith('https://example.com', '_blank', 'noopener,noreferrer');
+      expect(mockOpen).toHaveBeenCalledWith("https://example.com", "_blank", "noopener,noreferrer");
     });
 
-    it('should block unsafe protocols', () => {
+    it("should block unsafe protocols", () => {
       load();
       const warnSpy = mock(() => {});
       const originalWarn = console.warn;
@@ -53,7 +53,7 @@ describe('linkopen', () => {
 
       Tags.process(
         {} as unknown as Parameters<typeof Tags.process>[0],
-        'linkopen: javascript:alert(1)',
+        "linkopen: javascript:alert(1)",
       );
 
       expect(mockOpen).not.toHaveBeenCalled();
@@ -62,13 +62,13 @@ describe('linkopen', () => {
       console.warn = originalWarn;
     });
 
-    it('should handle invalid URLs', () => {
+    it("should handle invalid URLs", () => {
       load();
       const warnSpy = mock(() => {});
       const originalWarn = console.warn;
       console.warn = warnSpy;
 
-      Tags.process({} as unknown as Parameters<typeof Tags.process>[0], 'linkopen: not a url');
+      Tags.process({} as unknown as Parameters<typeof Tags.process>[0], "linkopen: not a url");
 
       expect(mockOpen).not.toHaveBeenCalled();
       expect(warnSpy).toHaveBeenCalled();

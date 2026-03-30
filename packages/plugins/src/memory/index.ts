@@ -1,15 +1,15 @@
-import type { InkStory } from '@inkweave/core';
-import { Patches } from '@inkweave/core';
-import useStorage from './storage';
-import type { SaveSlot } from './storage';
+import type { InkStory } from "@inkweave/core";
+import { Patches } from "@inkweave/core";
+import type { SaveSlot } from "./storage";
+import useStorage from "./storage";
 
 interface MemorySaveData {
   state: string;
   [key: string]: string | number | boolean | string[] | undefined;
 }
 
-let options = {
-  memory_format: 'local',
+const options = {
+  memory_format: "local",
 };
 
 const show = (title: string): SaveSlot[] | null => {
@@ -24,9 +24,9 @@ const save = (index: number, ink: InkStory) => {
     const value = ink[label as keyof InkStory];
     if (label in ink && value !== undefined) {
       if (
-        typeof value === 'string' ||
-        typeof value === 'number' ||
-        typeof value === 'boolean' ||
+        typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean" ||
         Array.isArray(value)
       ) {
         saveData[label] = value as string | number | boolean | string[];
@@ -41,14 +41,14 @@ const load = (save_data: string, ink: InkStory) => {
   try {
     save = JSON.parse(save_data);
   } catch (e) {
-    console.error('InkWeave: Failed to parse save data:', e);
+    console.error("InkWeave: Failed to parse save data:", e);
     return;
   }
   if (save) {
     ink.story.state.LoadJson(save.state);
     ink.clear();
     ink.save_label.forEach((label) => {
-      if (label in ink && typeof ink[label as keyof InkStory] !== 'undefined' && label in save)
+      if (label in ink && typeof ink[label as keyof InkStory] !== "undefined" && label in save)
         (ink as Record<string, unknown>)[label] = save[label];
     });
     ink.continue();
@@ -56,7 +56,7 @@ const load = (save_data: string, ink: InkStory) => {
 };
 
 const loadMemory = () => {
-  Patches.add(function () {
+  Patches.add(() => {
     useStorage.getState().changeFormat(options.memory_format);
   }, options);
 };

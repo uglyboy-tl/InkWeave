@@ -2,7 +2,7 @@
 const cooldownStates = new Map<string, number>();
 
 export function getCooldownKey(choice: { type: string; text: string; val?: string }): string {
-  return `${choice.type}_${choice.text}_${choice.val || ''}`;
+  return `${choice.type}_${choice.text}_${choice.val || ""}`;
 }
 
 export function isCooldownActive(key: string): boolean {

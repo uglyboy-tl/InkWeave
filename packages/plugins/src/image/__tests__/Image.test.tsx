@@ -1,31 +1,31 @@
-import { describe, it, expect, beforeEach } from 'bun:test';
-import { render, cleanup } from '@testing-library/react';
-import Image from '../Image';
-import { useStoryImage } from '../index';
+import { beforeEach, describe, expect, it } from "bun:test";
+import { cleanup, render } from "@testing-library/react";
+import Image from "../Image";
+import { useStoryImage } from "../index";
 
-describe('Image', () => {
+describe("Image", () => {
   beforeEach(() => {
     cleanup();
-    useStoryImage.getState().setImage('');
+    useStoryImage.getState().setImage("");
   });
 
-  it('should return null when no image', () => {
+  it("should return null when no image", () => {
     const { container } = render(<Image />);
     expect(container.firstChild).toBeNull();
   });
 
-  it('should render image when image is set', () => {
-    useStoryImage.getState().setImage('test.png');
+  it("should render image when image is set", () => {
+    useStoryImage.getState().setImage("test.png");
     const { container } = render(<Image />);
-    const img = container.querySelector('img');
+    const img = container.querySelector("img");
     expect(img).toBeInTheDocument();
-    expect(img?.getAttribute('src')).toBe('test.png');
+    expect(img?.getAttribute("src")).toBe("test.png");
   });
 
-  it('should apply className', () => {
-    useStoryImage.getState().setImage('test.png');
-    const { container } = render(<Image className='custom-class' />);
-    const div = container.querySelector('div');
-    expect(div).toHaveClass('custom-class');
+  it("should apply className", () => {
+    useStoryImage.getState().setImage("test.png");
+    const { container } = render(<Image className="custom-class" />);
+    const div = container.querySelector("div");
+    expect(div).toHaveClass("custom-class");
   });
 });

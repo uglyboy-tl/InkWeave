@@ -1,13 +1,13 @@
-import { memo, useState, useCallback, useEffect, useRef } from 'react';
-import { useStoryImage } from './index';
-import styles from './styles.module.css';
+import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { useStoryImage } from "./index";
+import styles from "./styles.module.css";
 
 interface ImageProps {
   className?: string;
   fallback?: React.ReactNode;
 }
 
-const ImageComponent: React.FC<ImageProps> = ({ className = '', fallback = null }) => {
+const ImageComponent: React.FC<ImageProps> = ({ className = "", fallback = null }) => {
   const image = useStoryImage((state) => state.image);
   const [hasError, setHasError] = useState(false);
 
@@ -37,7 +37,7 @@ const ImageComponent: React.FC<ImageProps> = ({ className = '', fallback = null 
 
   return (
     <div className={containerClassName}>
-      <img src={image} alt='' onError={handleError} onLoad={handleLoad} />
+      <img src={image} alt="" onError={handleError} onLoad={handleLoad} />
     </div>
   );
 };
