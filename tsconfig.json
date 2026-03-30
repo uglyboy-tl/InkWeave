@@ -1,20 +1,10 @@
 {
+  "extends": "./tsconfig.common.json",
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ES2020"],
-    "jsx": "react-jsx",
-    "strict": true,
-    "noImplicitThis": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "noEmit": true,
-    "types": ["bun-types"]
+    "noImplicitThis": false,
+    "noUnusedLocals": true
   },
-  "exclude": ["node_modules", "dist", "**/__tests__/**", "**/*.test.ts", "**/vite.config.ts"]
+  "include": ["packages/*/src"],
+  "exclude": ["node_modules", "dist", "**/vite.config.*"]
 }
