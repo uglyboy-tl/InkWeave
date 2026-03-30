@@ -1,6 +1,6 @@
 {
   "name": "@inkweave/plugins",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Optional plugins for InkWeave",
   "type": "module",
   "main": "./dist/index.cjs",
