@@ -40,10 +40,20 @@ jobs:
           npm publish --workspace @inkweave/react --access public
           npm publish --workspace @inkweave/plugins --access public
 
+      - name: Extract release notes
+        run: |
+          VERSION=${{ github.ref_name }}
+          sed -n "/^## ${VERSION}/,/^## /p" CHANGELOG.md | sed '1d;$d' > RELEASE_NOTES.md
+          if [ ! -s RELEASE_NOTES.md ]; then
+            echo "::warning::No release notes found for ${VERSION}"
+            echo "No release notes available." > RELEASE_NOTES.md
+          fi
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
           name: ${{ github.ref_name }}
+          body_path: RELEASE_NOTES.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
