@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc --noEmit -p tsconfig.build.json && vite build",
     "test": "bun test",
-    "publish:pkg": "NPM_CONFIG_TOKEN=$(pass show npm/token) bun publish --access public"
+    "publish": "bun publish --access public"
   },
   "keywords": [
     "ink",

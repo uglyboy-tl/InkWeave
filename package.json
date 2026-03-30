@@ -23,11 +23,15 @@
     }
   },
   "scripts": {
-    "build": "bun run --filter @inkweave/* build",
+    "build": "bun run build:pkg && bun run build:web",
+    "build:pkg": "bun --cwd packages/core build && bun --cwd packages/react build && bun --cwd packages/plugins build",
+    "build:web": "bun --cwd packages/web build",
     "format": "bunx @biomejs/biome format --write .",
     "check": "bunx @biomejs/biome check --write --error-on-warnings . && bunx tsc --noEmit",
     "test": "bun test packages/core packages/plugins packages/react",
-    "serve": "vite"
+    "serve": "vite",
+    "release": "bun run scripts/release.mjs",
+    "publish": "bun run --filter @inkweave/* publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
