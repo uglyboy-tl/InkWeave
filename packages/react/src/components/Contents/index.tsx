@@ -1,21 +1,21 @@
-import { memo, useMemo, CSSProperties } from 'react';
-import { CHOICE_SEPARATOR, contentsStore } from '@inkweave/core';
-import { useStory } from '../Story';
-import styles from './styles.module.css';
+import { CHOICE_SEPARATOR, contentsStore } from "@inkweave/core";
+import { type CSSProperties, memo, useMemo } from "react";
+import { useStory } from "../Story";
+import styles from "./styles.module.css";
 
 const ContentsComponent = () => {
   const ink = useStory();
   const contents = contentsStore((state) => state.contents);
   const inkRecord = ink as unknown as Record<string, unknown>;
   const visibleLines =
-    inkRecord?.visibleLines != undefined ? (inkRecord.visibleLines as number) : contents.length;
+    inkRecord?.visibleLines !== undefined ? (inkRecord.visibleLines as number) : contents.length;
   const lineDelay = (ink.options.linedelay as number) ?? 0.05;
 
   const renderedContents = useMemo(() => {
     return contents.map((item: string, i: number) => {
       const style: CSSProperties = {
-        '--delay': `${(i > visibleLines ? i - visibleLines : 0) * lineDelay}s`,
-      } as CSSProperties & { '--delay': string };
+        "--delay": `${(i > visibleLines ? i - visibleLines : 0) * lineDelay}s`,
+      } as CSSProperties & { "--delay": string };
 
       const isDivider = item === CHOICE_SEPARATOR;
       const key = isDivider ? `divider_${i}` : `line_${i}_${item.slice(0, 20)}`;
@@ -23,7 +23,7 @@ const ContentsComponent = () => {
       if (isDivider) {
         return (
           <div key={key} style={style}>
-            <hr className='inkweave-divider' />
+            <hr className="inkweave-divider" />
           </div>
         );
       }

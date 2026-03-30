@@ -1,15 +1,15 @@
-import { memo, useEffect, useRef, createContext, useContext } from 'react';
-import type { InkStory } from '@inkweave/core';
-import Contents from '../Contents';
-import Choices from '../Choices';
-import styles from './styles.module.css';
+import type { InkStory } from "@inkweave/core";
+import { createContext, memo, useContext, useEffect, useRef } from "react";
+import Choices from "../Choices";
+import Contents from "../Contents";
+import styles from "./styles.module.css";
 
 const StoryContext = createContext<InkStory | null>(null);
 
 export const useStory = () => {
   const ink = useContext(StoryContext);
   if (!ink) {
-    throw new Error('useStory must be used within StoryProvider');
+    throw new Error("useStory must be used within StoryProvider");
   }
   return ink;
 };
@@ -30,7 +30,7 @@ interface StoryProps {
   onInit?: (ink: InkStory) => void;
 }
 
-const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = '', onInit }) => {
+const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = "", onInit }) => {
   const onInitRef = useRef(onInit);
   onInitRef.current = onInit;
 
@@ -41,7 +41,7 @@ const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = '', o
 
   return (
     <StoryProvider ink={ink}>
-      <div className={`inkweave-story ${styles.story} ${className}`.trim()} data-inkweave='story'>
+      <div className={`inkweave-story ${styles.story} ${className}`.trim()} data-inkweave="story">
         {children}
         <Contents />
         <Choices />

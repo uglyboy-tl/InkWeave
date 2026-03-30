@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import type { Choice } from '@inkweave/core';
+import type { Choice } from "@inkweave/core";
+import type { FC } from "react";
 
 export interface ChoiceComponentProps {
   choice: Choice;
