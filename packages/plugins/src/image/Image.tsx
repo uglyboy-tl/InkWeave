@@ -13,7 +13,7 @@ const ImageComponent: React.FC<ImageProps> = ({ className = "", fallback = null 
 
   useEffect(() => {
     setHasError(false);
-  }, [image]);
+  }, []);
 
   const imageRef = useRef(image);
   imageRef.current = image;
