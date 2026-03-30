@@ -20,6 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Update npm
         run: npm install -g npm@latest
@@ -34,7 +35,10 @@ jobs:
         run: bun run check
 
       - name: Publish packages
-        run: bun run publish
+        run: |
+          npm publish --workspace @inkweave/core --access public
+          npm publish --workspace @inkweave/react --access public
+          npm publish --workspace @inkweave/plugins --access public
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
