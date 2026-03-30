@@ -2,7 +2,7 @@
 
 ## 开发四件套
 
-### 1. 格式化 (Prettier)
+### 1. 格式化 (Biome)
 
 ```bash
 bun run format
@@ -10,14 +10,15 @@ bun run format
 
 配置文件：
 
-- `.prettierrc.json` - Prettier 配置
-- `.prettierignore` - 忽略文件（已配置排除 examples/\*.md）
+- `biome.json` - Biome 配置（格式化 + lint）
 
 ### 2. 语法检查 (TypeScript)
 
 ```bash
-bun run typecheck
+bun check
 ```
+
+包含 Biome lint 检查和 TypeScript 类型检查。
 
 ### 3. 测试 (Bun Test)
 
@@ -39,14 +40,11 @@ bun test --coverage
 bun run build
 ```
 
-或单独构建：
+## TypeScript 配置架构
 
-```bash
-bun run build:core
-bun run build:react
-bun run build:plugins
-bun run build:web
-```
+- `tsconfig.common.json` - 共享基础配置
+- `tsconfig.json` - 根目录配置，用于类型检查（VSCode 使用）
+- `packages/*/tsconfig.build.json` - 各包构建配置，生成声明文件
 
 ## 测试配置
 
@@ -59,15 +57,10 @@ bun run build:web
   - `test/happydom.ts` - 初始化 Happy DOM
   - `packages/react/test/testing-library.ts` - React 测试工具
 
-### TypeScript 类型
-
-- 根目录 `tsconfig.json` 配置 `types: ["bun-types"]`
-- 各包 `tsconfig.json` 也需配置 `types: ["bun-types"]`
-
 ### 注意事项
 
 - 使用 `bun:test` 而非 `vitest`
-- 测试文件导入：`import { describe, it, expect } from 'bun:test'`
+- 测试文件导入：`import { describe, it, expect } from "bun:test"`
 - 不需要各包独立的 `bunfig.toml`
 
 ## 包结构
