@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc --noEmit -p tsconfig.build.json && vite build",
     "test": "bun test",
-    "publish": "npm publish --access public --provenance"
+    "publish": "npm publish --access public"
   },
   "keywords": [
     "ink",
