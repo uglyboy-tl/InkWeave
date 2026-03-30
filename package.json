@@ -30,8 +30,7 @@
     "check": "bunx @biomejs/biome check --write --error-on-warnings . && bunx tsc --noEmit",
     "test": "bun test packages/core packages/plugins packages/react",
     "serve": "vite",
-    "release": "bun run scripts/release.mjs",
-    "publish": "bun run --filter @inkweave/* publish"
+    "release": "bun run scripts/release.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
