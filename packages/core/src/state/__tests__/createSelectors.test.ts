@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'bun:test';
-import createSelectors from '../createSelectors';
-import { create } from 'zustand';
+import { describe, expect, it } from "bun:test";
+import { create } from "zustand";
+import createSelectors from "../createSelectors";
 
-describe('createSelectors', () => {
-  it('should add use property to store', () => {
+describe("createSelectors", () => {
+  it("should add use property to store", () => {
     const store = create<{ count: number }>(() => ({
       count: 0,
     }));
@@ -11,7 +11,7 @@ describe('createSelectors', () => {
     expect(withSelectors.use).toBeDefined();
   });
 
-  it('should allow accessing state via use', () => {
+  it("should allow accessing state via use", () => {
     const store = create<{ count: number; increment: () => void }>((set) => ({
       count: 0,
       increment: () => set((state) => ({ count: state.count + 1 })),

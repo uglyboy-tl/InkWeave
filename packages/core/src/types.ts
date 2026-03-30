@@ -1,9 +1,9 @@
-import type { ErrorHandler as InkErrorHandler } from 'inkjs/engine/Error';
+import type { ErrorHandler as InkErrorHandler } from "inkjs/engine/Error";
 
 export type ErrorHandler = InkErrorHandler;
 
 // Constants
-export const CHOICE_SEPARATOR = '\x00ink-divider\x00';
+export const CHOICE_SEPARATOR = "\x00ink-divider\x00";
 
 export const DEFAULT_STORY_OPTIONS: InkStoryOptions = {
   debug: false,
@@ -18,18 +18,18 @@ export class BaseFileHandler implements FileHandler {
   protected basePath: string;
 
   constructor(options?: { basePath?: string }) {
-    this.basePath = options?.basePath || '';
+    this.basePath = options?.basePath || "";
   }
 
   resolveFilename(filename: string): string {
     if (this.basePath) {
-      return this.basePath + '/' + filename;
+      return `${this.basePath.replace(/\/$/, "")}/${filename}`;
     }
     return filename;
   }
 
   loadFile(_filename: string): string {
-    throw new Error('loadFile must be implemented by subclass');
+    throw new Error("loadFile must be implemented by subclass");
   }
 }
 
@@ -63,8 +63,8 @@ export class Choice {
   index: number;
   type: string;
   val?: string;
-  constructor(text: string, index: number, type: string = 'default') {
-    this.text = text || '';
+  constructor(text: string, index: number, type: string = "default") {
+    this.text = text || "";
     this.index = index;
     this.type = type;
   }

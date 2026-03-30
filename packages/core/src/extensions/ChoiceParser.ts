@@ -1,10 +1,10 @@
-import { Choice } from '../types';
-import { splitAtCharacter } from './Tags';
-import type { Choice as InkChoice } from 'inkjs/engine/Choice';
+import type { Choice as InkChoice } from "inkjs/engine/Choice";
+import type { Choice } from "../types";
+import { splitAtCharacter } from "./Tags";
 
 export class ChoiceParser {
   private static _tags: Map<string, (choice: Choice, val?: string) => void> = new Map();
-  private static readonly excludeKeys: Set<string> = new Set(['unclickable']);
+  private static readonly excludeKeys: Set<string> = new Set(["unclickable"]);
 
   static get tags() {
     return ChoiceParser._tags;
@@ -25,9 +25,9 @@ export class ChoiceParser {
   static process = (item: InkChoice, choice: Choice) => {
     if (!item.text) return choice;
 
-    if (item.tags && item.tags.length && ChoiceParser.tags.size) {
-      item.tags.forEach(function (tag) {
-        let splitTag = splitAtCharacter(tag, ':');
+    if (item.tags?.length && ChoiceParser.tags.size) {
+      item.tags.forEach((tag) => {
+        const splitTag = splitAtCharacter(tag, ":");
 
         if (splitTag && ChoiceParser.tags.has(splitTag.before)) {
           ChoiceParser.tags.get(splitTag.before)?.(choice, splitTag.after);
@@ -37,6 +37,6 @@ export class ChoiceParser {
   };
 }
 
-ChoiceParser.add('unclickable', (new_choice) => {
-  new_choice.type = 'unclickable';
+ChoiceParser.add("unclickable", (new_choice) => {
+  new_choice.type = "unclickable";
 });

@@ -1,13 +1,13 @@
-import { Story } from 'inkjs/engine/Story';
-import contentsStore from '../state/contents';
-import choicesStore from '../state/choices';
-import variablesStore from '../state/variables';
-import { Patches } from '../extensions/Patches';
-import { Tags } from '../extensions/Tags';
-import { Parser } from '../extensions/Parser';
-import { ExternalFunctions } from '../extensions/ExternalFunctions';
-import type { InkStoryOptions, InkStoryContext } from '../types';
-import { DEFAULT_STORY_OPTIONS, CHOICE_SEPARATOR } from '../types';
+import type { Story } from "inkjs/engine/Story";
+import { ExternalFunctions } from "../extensions/ExternalFunctions";
+import { Parser } from "../extensions/Parser";
+import { Patches } from "../extensions/Patches";
+import { Tags } from "../extensions/Tags";
+import choicesStore from "../state/choices";
+import contentsStore from "../state/contents";
+import variablesStore from "../state/variables";
+import type { InkStoryContext, InkStoryOptions } from "../types";
+import { CHOICE_SEPARATOR, DEFAULT_STORY_OPTIONS } from "../types";
 
 type CleanupFunction = () => void;
 type SideEffectFunction = () => void;
@@ -20,14 +20,14 @@ export class InkStory implements InkStoryContext {
   _side_effects: SideEffectFunction[] = [];
   _cleanups: CleanupFunction[] = [];
   _clears: ClearFunction[] = [];
-  _save_label: string[] = ['contents'];
+  _save_label: string[] = ["contents"];
   [key: string]: unknown;
 
   constructor(story: Story, title: string, options?: InkStoryOptions) {
     this.options = { ...DEFAULT_STORY_OPTIONS, ...options };
     this.story = story;
     this.title = title;
-    const content = this.story.ToJson() || '';
+    const content = this.story.ToJson() || "";
     bindFunctions(this);
     Patches.apply(this, content);
     this.bindExternalFunctions(content);
@@ -68,11 +68,11 @@ export class InkStory implements InkStoryContext {
     const newContent: string[] = [];
 
     while (this.story.canContinue) {
-      let current_text = this.story.Continue() || '';
+      let current_text = this.story.Continue() || "";
       if (this.story.currentTags) {
         this.story.currentTags.forEach((tag) => {
           Tags.process(this, tag);
-          if (tag === 'clear' || tag === 'restart') {
+          if (tag === "clear" || tag === "restart") {
             newContent.length = 0;
           }
         });
@@ -97,7 +97,7 @@ export class InkStory implements InkStoryContext {
   }
 
   clear() {
-    this.clears.map((clear) => {
+    this.clears.forEach((clear) => {
       clear();
     });
   }
@@ -109,7 +109,7 @@ export class InkStory implements InkStoryContext {
   }
 
   useEffect() {
-    this.effects.map((effect) => {
+    this.effects.forEach((effect) => {
       if (effect) {
         effect();
       }
@@ -117,7 +117,7 @@ export class InkStory implements InkStoryContext {
   }
 
   dispose() {
-    this.cleanups.map((cleanup) => {
+    this.cleanups.forEach((cleanup) => {
       if (cleanup) {
         cleanup();
       }
@@ -125,7 +125,7 @@ export class InkStory implements InkStoryContext {
   }
 
   bindExternalFunctions = (content: string) => {
-    new Set(Array.from(content.matchAll(/\"x\(\)\":\"(\w+)/gi), (m) => m['1'])).forEach((match) => {
+    new Set(Array.from(content.matchAll(/"x\(\)":"(\w+)/gi), (m) => m["1"])).forEach((match) => {
       ExternalFunctions.bind(this, match);
     });
   };
@@ -134,10 +134,10 @@ export class InkStory implements InkStoryContext {
 function bindFunctions(target: object) {
   const prototype = Object.getPrototypeOf(target);
 
-  Object.getOwnPropertyNames(prototype).forEach(function (property) {
+  Object.getOwnPropertyNames(prototype).forEach((property) => {
     if (
-      property !== 'constructor' &&
-      typeof Object.getOwnPropertyDescriptor(prototype, property)?.value === 'function'
+      property !== "constructor" &&
+      typeof Object.getOwnPropertyDescriptor(prototype, property)?.value === "function"
     ) {
       const targetRecord = target as Record<string, (...args: unknown[]) => unknown>;
       targetRecord[property] = targetRecord[property].bind(target);

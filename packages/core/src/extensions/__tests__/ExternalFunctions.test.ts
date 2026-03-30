@@ -1,43 +1,43 @@
-import { describe, it, expect, vi, beforeEach } from 'bun:test';
-import { ExternalFunctions } from '../ExternalFunctions';
+import { beforeEach, describe, expect, it, vi } from "bun:test";
+import { ExternalFunctions } from "../ExternalFunctions";
 
-describe('ExternalFunctions', () => {
+describe("ExternalFunctions", () => {
   beforeEach(() => {
     ExternalFunctions.clear();
   });
 
-  describe('add', () => {
-    it('should register function', () => {
-      const fn = () => 'result';
-      ExternalFunctions.add('test', fn);
-      expect(ExternalFunctions.get('test')).toBe(fn);
+  describe("add", () => {
+    it("should register function", () => {
+      const fn = () => "result";
+      ExternalFunctions.add("test", fn);
+      expect(ExternalFunctions.get("test")).toBe(fn);
     });
 
-    it('should register multiple functions', () => {
+    it("should register multiple functions", () => {
       const fn1 = () => 1;
       const fn2 = () => 2;
-      ExternalFunctions.add('fn1', fn1);
-      ExternalFunctions.add('fn2', fn2);
+      ExternalFunctions.add("fn1", fn1);
+      ExternalFunctions.add("fn2", fn2);
       expect(ExternalFunctions.functions.size).toBe(2);
     });
   });
 
-  describe('get', () => {
-    it('should return registered function', () => {
-      const fn = () => 'result';
-      ExternalFunctions.add('test', fn);
-      expect(ExternalFunctions.get('test')).toBe(fn);
+  describe("get", () => {
+    it("should return registered function", () => {
+      const fn = () => "result";
+      ExternalFunctions.add("test", fn);
+      expect(ExternalFunctions.get("test")).toBe(fn);
     });
 
-    it('should return undefined for non-existent', () => {
-      expect(ExternalFunctions.get('nonexistent')).toBeUndefined();
+    it("should return undefined for non-existent", () => {
+      expect(ExternalFunctions.get("nonexistent")).toBeUndefined();
     });
   });
 
-  describe('bind', () => {
-    it('should bind function to story', () => {
+  describe("bind", () => {
+    it("should bind function to story", () => {
       const fn = vi.fn();
-      ExternalFunctions.add('test', fn);
+      ExternalFunctions.add("test", fn);
       const ink = {
         story: {
           BindExternalFunction: vi.fn(),
@@ -45,12 +45,12 @@ describe('ExternalFunctions', () => {
       };
       ExternalFunctions.bind(
         ink as unknown as Parameters<typeof ExternalFunctions.bind>[0],
-        'test',
+        "test",
       );
       expect(ink.story.BindExternalFunction).toHaveBeenCalled();
     });
 
-    it('should handle undefined function', () => {
+    it("should handle undefined function", () => {
       const ink = {
         story: {
           BindExternalFunction: vi.fn(),
@@ -58,26 +58,26 @@ describe('ExternalFunctions', () => {
       };
       ExternalFunctions.bind(
         ink as unknown as Parameters<typeof ExternalFunctions.bind>[0],
-        'nonexistent',
+        "nonexistent",
       );
       expect(ink.story.BindExternalFunction).not.toHaveBeenCalled();
     });
   });
 
-  describe('clear', () => {
-    it('should clear all functions', () => {
-      ExternalFunctions.add('fn1', () => {});
-      ExternalFunctions.add('fn2', () => {});
+  describe("clear", () => {
+    it("should clear all functions", () => {
+      ExternalFunctions.add("fn1", () => {});
+      ExternalFunctions.add("fn2", () => {});
       ExternalFunctions.clear();
       expect(ExternalFunctions.functions.size).toBe(0);
     });
   });
 
-  describe('functions getter', () => {
-    it('should return functions map', () => {
+  describe("functions getter", () => {
+    it("should return functions map", () => {
       const fn = () => {};
-      ExternalFunctions.add('test', fn);
-      expect(ExternalFunctions.functions.has('test')).toBe(true);
+      ExternalFunctions.add("test", fn);
+      expect(ExternalFunctions.functions.has("test")).toBe(true);
     });
   });
 });

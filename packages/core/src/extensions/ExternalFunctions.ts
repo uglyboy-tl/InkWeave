@@ -1,4 +1,4 @@
-import type { InkStory } from '../story/InkStory';
+import type { InkStory } from "../story/InkStory";
 
 export class ExternalFunctions {
   private static _functions: Map<string, Function> = new Map();
@@ -22,7 +22,7 @@ export class ExternalFunctions {
   static bind(ink: InkStory, id: string) {
     const externalFunction =
       ExternalFunctions.get(id) ||
-      (typeof window !== 'undefined'
+      (typeof window !== "undefined"
         ? (window as unknown as Record<string, Function>)[id]
         : undefined);
     if (externalFunction) {

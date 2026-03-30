@@ -1,19 +1,19 @@
-import type { InkStory } from '../story/InkStory';
+import type { InkStory } from "../story/InkStory";
 
 type TagFunction = (val: string | null | undefined, ink: InkStory) => void;
 
 export class Tags {
   private static _functions: Map<string, TagFunction> = new Map();
-  private static readonly excludeKeys: Set<string> = new Set(['clear', 'restart']);
+  private static readonly excludeKeys: Set<string> = new Set(["clear", "restart"]);
 
   static get functions() {
     return Tags._functions;
   }
 
   static clear() {
-    for (const [key, _] of this._functions.entries()) {
-      if (!this.excludeKeys.has(key)) {
-        this._functions.delete(key);
+    for (const [key, _] of Tags._functions.entries()) {
+      if (!Tags.excludeKeys.has(key)) {
+        Tags._functions.delete(key);
       }
     }
   }
@@ -23,26 +23,26 @@ export class Tags {
   }
 
   static process = (ink: InkStory, inputString: string) => {
-    const splitTag = splitAtCharacter(inputString, ':');
+    const splitTag = splitAtCharacter(inputString, ":");
     if (splitTag) {
       if (Tags.functions.has(splitTag.before)) {
         Tags.functions.get(splitTag.before)?.(splitTag.after, ink);
       } else {
         const options = ink.options as Record<string, unknown>;
-        if (options[splitTag.before] != undefined) {
+        if (options[splitTag.before] !== undefined) {
           let newValue: string | number | boolean | undefined = splitTag.after;
           const optionType = typeof options[splitTag.before];
           switch (optionType) {
-            case 'string':
+            case "string":
               break;
-            case 'number':
-              if (typeof newValue === 'string') {
+            case "number":
+              if (typeof newValue === "string") {
                 newValue = parseFloat(newValue);
               } else {
                 newValue = undefined;
               }
               break;
-            case 'boolean':
+            case "boolean":
               newValue = !!newValue;
               break;
             default:
@@ -62,9 +62,9 @@ export const splitAtCharacter = (text: string, character: string) => {
     return;
   }
 
-  let splitIndex = text.indexOf(character);
+  const splitIndex = text.indexOf(character);
 
-  if (splitIndex == -1) {
+  if (splitIndex === -1) {
     return {
       before: text.trim().toLowerCase(),
     };
@@ -76,10 +76,10 @@ export const splitAtCharacter = (text: string, character: string) => {
   }
 };
 
-Tags.add('clear', (_: string | null | undefined, ink: InkStory) => {
+Tags.add("clear", (_: string | null | undefined, ink: InkStory) => {
   ink.clear();
 });
 
-Tags.add('restart', (_: string | null | undefined, ink: InkStory) => {
+Tags.add("restart", (_: string | null | undefined, ink: InkStory) => {
   ink.restart();
 });

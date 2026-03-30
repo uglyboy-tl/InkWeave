@@ -1,4 +1,4 @@
-import { splitAtCharacter } from './Tags';
+import { splitAtCharacter } from "./Tags";
 
 export interface ParserLine {
   text: string;
@@ -35,13 +35,13 @@ export class Parser {
   }
 
   static process = (text: string, tags: string[] = []): string => {
-    if (!text) return '';
+    if (!text) return "";
 
-    let line: ParserLine = { text: text, tags: tags, classes: [] };
+    const line: ParserLine = { text: text, tags: tags, classes: [] };
 
     if (line.tags.length && Object.keys(Parser.tags).length) {
-      line.tags.forEach(function (tag) {
-        let splitTag = splitAtCharacter(tag, ':');
+      line.tags.forEach((tag) => {
+        const splitTag = splitAtCharacter(tag, ":");
 
         if (splitTag && splitTag.before in Parser.tags) {
           Parser.tags[splitTag.before](line, splitTag.before, splitTag.after);
@@ -50,9 +50,9 @@ export class Parser {
     }
 
     if (line.text && Parser.patterns.length) {
-      Parser.patterns.forEach(function (pattern) {
+      Parser.patterns.forEach((pattern) => {
         if (
-          (typeof pattern.matcher === 'string' && line.text.includes(pattern.matcher)) ||
+          (typeof pattern.matcher === "string" && line.text.includes(pattern.matcher)) ||
           (pattern.matcher instanceof RegExp && line.text.match(pattern.matcher))
         ) {
           pattern.callback(line);

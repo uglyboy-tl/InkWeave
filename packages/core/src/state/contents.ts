@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import createSelectors from './createSelectors';
+import { create } from "zustand";
+import createSelectors from "./createSelectors";
 
 type StoryContent = {
   contents: string[];

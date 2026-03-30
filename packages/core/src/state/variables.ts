@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import createSelectors from './createSelectors';
-import type { VariablesState } from 'inkjs/engine/VariablesState';
+import type { VariablesState } from "inkjs/engine/VariablesState";
+import { create } from "zustand";
+import createSelectors from "./createSelectors";
 
 type StoryVariables = {
   variables: Map<string, unknown>;

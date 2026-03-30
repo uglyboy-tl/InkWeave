@@ -1,4 +1,4 @@
-import type { InkStoryContext } from '../types';
+import type { InkStoryContext } from "../types";
 
 export type PatchFunction = (this: InkStoryContext, content: string) => void;
 
@@ -15,7 +15,7 @@ export class Patches {
   }
 
   static add(callback: PatchFunction | null, patchOptions: Record<string, unknown> = {}) {
-    Object.assign(this._options, patchOptions);
+    Object.assign(Patches._options, patchOptions);
     if (callback) Patches._patches.push(callback);
   }
 

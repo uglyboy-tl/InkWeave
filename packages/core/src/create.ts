@@ -1,9 +1,9 @@
-import { Story } from 'inkjs/engine/Story';
-import { Compiler } from 'inkjs/compiler/Compiler';
-import { CompilerOptions } from 'inkjs/compiler/CompilerOptions';
-import { InkStory } from './story/InkStory';
-import type { FileHandler, InkStoryOptions } from './types';
-import { BaseFileHandler } from './types';
+import { Compiler } from "inkjs/compiler/Compiler";
+import { CompilerOptions } from "inkjs/compiler/CompilerOptions";
+import { Story } from "inkjs/engine/Story";
+import { InkStory } from "./story/InkStory";
+import type { FileHandler, InkStoryOptions } from "./types";
+import { BaseFileHandler } from "./types";
 
 class InkjsFileHandler {
   private handler: FileHandler;
@@ -28,7 +28,7 @@ class InkjsFileHandler {
 
 function isCompiledJson(input: string): boolean {
   const trimmed = input.trim();
-  return trimmed.startsWith('{') && trimmed.endsWith('}');
+  return trimmed.startsWith("{") && trimmed.endsWith("}");
 }
 
 export function createInkStory(source: string | Story, options?: InkStoryOptions): InkStory {
@@ -36,7 +36,7 @@ export function createInkStory(source: string | Story, options?: InkStoryOptions
 
   if (source instanceof Story) {
     story = source;
-  } else if (typeof source === 'string') {
+  } else if (typeof source === "string") {
     if (isCompiledJson(source)) {
       story = new Story(source);
     } else {
@@ -47,8 +47,8 @@ export function createInkStory(source: string | Story, options?: InkStoryOptions
       story = compiler.Compile();
     }
   } else {
-    throw new Error('Invalid source type: expected string or Story');
+    throw new Error("Invalid source type: expected string or Story");
   }
 
-  return new InkStory(story, options?.title || 'Ink Story', options);
+  return new InkStory(story, options?.title || "Ink Story", options);
 }
