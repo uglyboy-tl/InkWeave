@@ -1,19 +1,19 @@
-import type { InkStory } from '@inkweave/core';
-import type { SaveSlot as PluginSaveSlot } from '@inkweave/plugins';
+import type { InkStory } from "@inkweave/core";
+import type { SaveSlot as PluginSaveSlot } from "@inkweave/plugins";
 
 export interface InkWeaveOptions {
   container: string | HTMLElement;
   story: string;
   title?: string;
   basePath?: string;
-  theme?: 'light' | 'dark';
+  theme?: "light" | "dark";
 }
 
 export type SaveSlot = PluginSaveSlot;
 
 export interface SaveModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
-  type: 'save' | 'restore';
+  type: "save" | "restore";
   title: string;
   ink: InkStory | null;
   onClose?: () => void;
