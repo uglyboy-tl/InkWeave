@@ -36,6 +36,7 @@ coverage/
 .cache/
 .parcel-cache/
 .vite/
+.biome/
 
 # TypeScript
 *.tsbuildinfo
