@@ -29,15 +29,13 @@ const ImageComponent: React.FC<ImageProps> = ({ className = "", fallback = null 
 
   const containerClassName = `${styles.container} ${className}`.trim();
 
-  if (!image) return null;
-
   if (hasError) {
     return fallback ? <div className={containerClassName}>{fallback}</div> : null;
   }
 
   return (
     <div className={containerClassName}>
-      <img src={image} alt="" onError={handleError} onLoad={handleLoad} />
+      <img src={image ?? ""} alt="" onError={handleError} onLoad={handleLoad} />
     </div>
   );
 };
