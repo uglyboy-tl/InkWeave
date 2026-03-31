@@ -46,8 +46,18 @@ function isReleaseCommit(commit) {
   );
 }
 
+async function tagExists(tag) {
+  try {
+    await $`git rev-parse --verify ${tag}`.quiet();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function getCommitsBetween(fromTag, toTag = "HEAD") {
-  const range = fromTag ? `${fromTag}..${toTag}` : toTag;
+  const effectiveToTag = (await tagExists(toTag)) ? toTag : "HEAD";
+  const range = fromTag ? `${fromTag}..${effectiveToTag}` : effectiveToTag;
   const result = await $`git log ${range} --pretty=format:%s%n%b%n---COMMIT_END---`.quiet();
   const output = result.text();
 
@@ -68,16 +78,21 @@ async function getCommitsBetween(fromTag, toTag = "HEAD") {
 }
 
 async function getPreviousTag(currentTag) {
-  try {
-    const result = await $`git describe --tags --abbrev=0 ${currentTag}^`.quiet();
-    return result.text().trim() || null;
-  } catch {
-    return null;
+  const exists = await tagExists(currentTag);
+  if (exists) {
+    try {
+      const result = await $`git describe --tags --abbrev=0 ${currentTag}^`.quiet();
+      return result.text().trim() || null;
+    } catch {
+      return null;
+    }
   }
+  const result = await $`git describe --tags --abbrev=0 HEAD`.quiet();
+  return result.text().trim() || null;
 }
 
 async function getTagDate(tag) {
-  if (!tag) return formatDate();
+  if (!tag || !(await tagExists(tag))) return formatDate();
   const result = await $`git log -1 --format=%ci ${tag}`.quiet();
   const dateStr = result.text().trim().split(" ")[0];
   return dateStr || formatDate();
