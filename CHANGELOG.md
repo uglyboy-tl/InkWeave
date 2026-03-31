@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.2.0 (2026-03-31)
+
+### Features
+- **e2e**: add playwright end-to-end testing infrastructure
+
+### Bug Fixes
+- **changelog**: handle unreleased tag correctly
+- **image**: render img element even when no image
+
+### Refactoring
+- **image**: handle null image with empty string fallback
+
+### Documentation
+- **config**: add changelog and update biome config
+
+### CI/CD
+- **publish**: include changelog in GitHub releases
+
+### Chores
+- **deps**: add playwright and serve dependencies with config updates
+- **release**: add automated changelog generation
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.1.6...v1.2.0
+
 ## v1.1.6 (2026-03-30)
 
 ### Chores
