@@ -9,9 +9,10 @@ describe("Image", () => {
     useStoryImage.getState().setImage("");
   });
 
-  it("should return null when no image", () => {
+  it("should render img element even when no image", () => {
     const { container } = render(<Image />);
-    expect(container.firstChild).toBeNull();
+    const img = container.querySelector("img");
+    expect(img).toBeInTheDocument();
   });
 
   it("should render image when image is set", () => {
