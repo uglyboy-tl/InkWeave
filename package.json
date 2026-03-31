@@ -26,17 +26,21 @@
     "build": "bun run build:pkg && bun run build:web",
     "build:pkg": "bun --cwd packages/core build && bun --cwd packages/react build && bun --cwd packages/plugins build",
     "build:web": "bun --cwd packages/web build",
-    "format": "bunx @biomejs/biome format --write .",
-    "check": "bunx @biomejs/biome check --write --error-on-warnings . && bunx tsc --noEmit",
+    "format": "biome format --write .",
+    "check": "biome check --write --error-on-warnings . && tsc --noEmit",
     "test": "bun test packages/core packages/plugins packages/react",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "serve": "vite",
     "release": "bun run scripts/release.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
     "@happy-dom/global-registrator": "^20.8.9",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
     "bun-types": "catalog:",
+    "serve": "^14.2.0",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:"

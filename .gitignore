@@ -32,6 +32,12 @@ npm-debug.log*
 coverage/
 .nyc_output/
 
+# Playwright
+test-results/
+playwright-report/
+.auth/
+playwright/.cache/
+
 # Cache
 .cache/
 .parcel-cache/
