@@ -19,7 +19,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --noEmit -p tsconfig.build.json && vite build",
+    "check": "biome check --write --error-on-warnings . && tsgo -b",
+    "build": "vite build",
     "test": "bun test"
   },
   "keywords": [
@@ -32,18 +33,12 @@
   "license": "MIT",
   "peerDependencies": {
     "@inkweave/core": "^1.0.0",
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "catalog:",
-    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:"
   }

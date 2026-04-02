@@ -18,7 +18,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --noEmit -p tsconfig.build.json && vite build",
+    "check": "biome check --write --error-on-warnings . && tsgo -b",
+    "build": "vite build",
     "test": "bun test"
   },
   "keywords": [
@@ -31,13 +32,10 @@
   "license": "MIT",
   "peerDependencies": {
     "inkjs": "^2.3.0",
-    "zustand": "^5.0.0"
+    "zustand": "catalog:"
   },
   "devDependencies": {
-    "inkjs": "catalog:",
-    "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:",
-    "zustand": "catalog:"
+    "vite-plugin-dts": "catalog:"
   }
 }

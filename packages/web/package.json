@@ -8,8 +8,9 @@
     "dist"
   ],
   "scripts": {
+    "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
-    "build": "tsc --noEmit -p tsconfig.build.json && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "keywords": [
@@ -29,11 +30,9 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
-    "inkjs": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "typescript": "catalog:",
     "vite": "catalog:",
-    "zustand": "catalog:"
+    "vite-plugin-dts": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }
