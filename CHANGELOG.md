@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.3.0 (2026-04-02)
+
+### Refactoring
+- **web**: add override modifier to loadFile method
+- **core**: improve type safety and add null checks
+- **test**: move testing utilities to root directory
+- **config**: migrate to per-package TypeScript configuration
+
+### Chores
+- **config**: remove tencent npm registry mirror
+- **ci**: remove unnecessary npm update step
+- **misc**: various code improvements and fixes
+- **config**: update build and development tool configurations
+- **deps**: update dependencies and prepare v1.2.0 release
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.2.0...v1.3.0
+
 ## v1.2.0 (2026-03-31)
 
 ### Features
