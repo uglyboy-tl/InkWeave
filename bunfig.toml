@@ -1,6 +1,5 @@
 [install]
 linker = "isolated"
-registry = "https://mirrors.cloud.tencent.com/npm/"
 
 [test]
 root = "packages"
