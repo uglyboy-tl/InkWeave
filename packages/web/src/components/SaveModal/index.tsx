@@ -32,8 +32,8 @@ const SaveModal: React.FC<SaveModalProps> = ({ modalRef, type, title, ink, onClo
     <dialog ref={modalRef} className={styles.modal}>
       <div className={styles.header}>
         <div className={styles.title}>{type === "save" ? "Save Game" : "Restore Game"}</div>
-        <button className={styles.close} onClick={handleClose} aria-label="Close">
-          &times;
+        <button type="button" className={styles.close} onClick={handleClose} aria-label="Close">
+          ×
         </button>
       </div>
       <div className={styles.body}>
@@ -44,6 +44,7 @@ const SaveModal: React.FC<SaveModalProps> = ({ modalRef, type, title, ink, onClo
 
           return (
             <button
+              type="button"
               key={slot}
               className={styles.slot}
               onClick={() => handleSlotClick(slot)}

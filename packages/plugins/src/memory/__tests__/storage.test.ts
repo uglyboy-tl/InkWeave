@@ -17,14 +17,14 @@ describe("storage", () => {
       expect(storage.has("test")).toBe(true);
       const saves = storage.get("test");
       expect(saves?.[0]).toBeDefined();
-      expect(saves?.[0].data).toBe('{"state":"test"}');
+      expect(saves?.[0]?.data).toBe('{"state":"test"}');
     });
 
     it("should create Save object with timestamp", () => {
       useStorage.getState().setStorage("test", 0, { state: "test" });
       const { storage } = useStorage.getState();
       const saves = storage.get("test");
-      expect(saves?.[0].timestamp).toBeDefined();
+      expect(saves?.[0]?.timestamp).toBeDefined();
     });
   });
 

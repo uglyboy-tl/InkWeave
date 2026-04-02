@@ -19,8 +19,8 @@ describe("choicesStore", () => {
       choicesStore.getState().setChoices(inkChoices);
       const { choices } = choicesStore.getState();
       expect(choices.length).toBe(2);
-      expect(choices[0].text).toBe("Choice 1");
-      expect(choices[1].text).toBe("Choice 2");
+      expect(choices[0]?.text).toBe("Choice 1");
+      expect(choices[1]?.text).toBe("Choice 2");
     });
 
     it("should handle choices with tags", () => {
@@ -29,7 +29,7 @@ describe("choicesStore", () => {
       ] as unknown as InkChoice[];
       choicesStore.getState().setChoices(inkChoices);
       const { choices } = choicesStore.getState();
-      expect(choices[0].type).toBe("unclickable");
+      expect(choices[0]?.type).toBe("unclickable");
     });
   });
 });

@@ -125,8 +125,12 @@ export class InkStory implements InkStoryContext {
   }
 
   bindExternalFunctions = (content: string) => {
-    new Set(Array.from(content.matchAll(/"x\(\)":"(\w+)/gi), (m) => m["1"])).forEach((match) => {
-      ExternalFunctions.bind(this, match);
+    const matches = Array.from(content.matchAll(/"x\(\)":"(\w+)/gi));
+    const externalIds = new Set(
+      matches.map((m) => m[1]).filter((id): id is string => id !== undefined),
+    );
+    externalIds.forEach((id) => {
+      ExternalFunctions.bind(this, id);
     });
   };
 }
@@ -140,7 +144,10 @@ function bindFunctions(target: object) {
       typeof Object.getOwnPropertyDescriptor(prototype, property)?.value === "function"
     ) {
       const targetRecord = target as Record<string, (...args: unknown[]) => unknown>;
-      targetRecord[property] = targetRecord[property].bind(target);
+      const method = targetRecord[property];
+      if (method) {
+        targetRecord[property] = method.bind(target);
+      }
     }
   });
 }

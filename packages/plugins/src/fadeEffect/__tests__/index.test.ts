@@ -77,7 +77,7 @@ describe("fadeEffect", () => {
         choose: () => {},
       };
       const patch = Patches.patches[0];
-      patch.call(mockStory as never, "");
+      patch?.call(mockStory as never, "");
       expect(mockStory).toHaveProperty("visibleLines");
     });
 
@@ -92,8 +92,8 @@ describe("fadeEffect", () => {
         choose: () => {},
       };
       const patch = Patches.patches[0];
-      patch.call(mockStory as never, "");
-      mockStory.clears[0]();
+      patch?.call(mockStory as never, "");
+      mockStory.clears[0]?.();
     });
   });
 

@@ -7,8 +7,13 @@ const StorageType: { [key: string]: Storage } = {
 };
 
 let type = "local";
-const getStorage = () => {
-  return StorageType[type];
+const getStorage = (): Storage => {
+  const storage = StorageType[type];
+  if (!storage) {
+    const validTypes = Object.keys(StorageType).join(", ");
+    throw new Error(`Invalid storage type: "${type}". Valid types: ${validTypes}`);
+  }
+  return storage;
 };
 
 export interface SaveSlot {

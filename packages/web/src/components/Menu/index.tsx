@@ -29,6 +29,7 @@ const Menu: React.FC<MenuProps> = ({ onSave, onRestore, onRestart }) => {
     <nav className={styles.nav}>
       <div className={styles.actions}>
         <button
+          type="button"
           className={styles.btn}
           onClick={onRestore}
           title="Restore"
@@ -36,10 +37,17 @@ const Menu: React.FC<MenuProps> = ({ onSave, onRestore, onRestart }) => {
         >
           <RestoreIcon />
         </button>
-        <button className={styles.btn} onClick={onSave} title="Save" aria-label="Save game">
+        <button
+          type="button"
+          className={styles.btn}
+          onClick={onSave}
+          title="Save"
+          aria-label="Save game"
+        >
           <SaveIcon />
         </button>
         <button
+          type="button"
           className={styles.btn}
           onClick={onRestart}
           title="Restart"
