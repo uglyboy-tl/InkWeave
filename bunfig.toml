@@ -1,9 +1,13 @@
+[install]
+linker = "isolated"
+registry = "https://mirrors.cloud.tencent.com/npm/"
+
 [test]
+root = "packages"
 preload = [
   "./test/happydom.ts",
-  "./packages/react/test/testing-library.ts"
+  "./test/testing-library.ts"
 ]
-exclude = ["e2e/**", "packages/*/dist/**"]
 
 [coverage]
 include = ["packages/**/*.ts", "packages/**/*.tsx"]
