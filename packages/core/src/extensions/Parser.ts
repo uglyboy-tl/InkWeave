@@ -6,11 +6,13 @@ export interface ParserLine {
   classes: string[];
 }
 
+type ParserCallback = (line: ParserLine, ...args: unknown[]) => unknown;
+
 export class Parser {
-  private static _tags: { [key: string]: Function } = {};
+  private static _tags: { [key: string]: ParserCallback } = {};
   private static _patterns: {
     matcher: string | RegExp;
-    callback: Function;
+    callback: (line: ParserLine) => unknown;
   }[] = [];
 
   static get tags() {
@@ -26,11 +28,11 @@ export class Parser {
     Parser._patterns = [];
   };
 
-  static tag(tag: string, callback: Function) {
+  static tag(tag: string, callback: ParserCallback) {
     Parser.tags[tag] = callback;
   }
 
-  static pattern(pattern: string | RegExp, callback: Function) {
+  static pattern(pattern: string | RegExp, callback: (line: ParserLine) => unknown) {
     Parser.patterns.push({ matcher: pattern, callback: callback });
   }
 
@@ -44,7 +46,10 @@ export class Parser {
         const splitTag = splitAtCharacter(tag, ":");
 
         if (splitTag && splitTag.before in Parser.tags) {
-          Parser.tags[splitTag.before](line, splitTag.before, splitTag.after);
+          const handler = Parser.tags[splitTag.before];
+          if (handler) {
+            handler(line, splitTag.before, splitTag.after);
+          }
         }
       });
     }

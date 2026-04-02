@@ -1,17 +1,19 @@
 import type { InkStory } from "../story/InkStory";
 
+type ExternalFunc = (...args: unknown[]) => unknown;
+
 export class ExternalFunctions {
-  private static _functions: Map<string, Function> = new Map();
+  private static _functions: Map<string, ExternalFunc> = new Map();
 
   static get functions() {
     return ExternalFunctions._functions;
   }
 
-  static set functions(value: Map<string, Function>) {
+  static set functions(value: Map<string, ExternalFunc>) {
     ExternalFunctions._functions = value;
   }
 
-  static add(id: string, func: Function) {
+  static add(id: string, func: ExternalFunc) {
     ExternalFunctions.functions.set(id, func);
   }
 
@@ -23,7 +25,7 @@ export class ExternalFunctions {
     const externalFunction =
       ExternalFunctions.get(id) ||
       (typeof window !== "undefined"
-        ? (window as unknown as Record<string, Function>)[id]
+        ? (window as unknown as Record<string, ExternalFunc>)[id]
         : undefined);
     if (externalFunction) {
       ink.story.BindExternalFunction(id, externalFunction.bind(ink));

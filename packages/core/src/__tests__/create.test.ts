@@ -58,7 +58,7 @@ describe("createInkStory", () => {
       const source = "INCLUDE test.ink\nHello World";
 
       class TestHandler extends BaseFileHandler {
-        loadFile(filename: string): string {
+        override loadFile(filename: string): string {
           return `Content of ${filename}`;
         }
       }

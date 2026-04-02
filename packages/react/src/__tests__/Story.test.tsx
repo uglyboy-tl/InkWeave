@@ -22,6 +22,7 @@ describe("Story", () => {
     };
 
     render(
+      // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
       <StoryProvider ink={mockInk as any}>
         <TestComponent />
       </StoryProvider>,
@@ -47,6 +48,7 @@ describe("Story", () => {
       options: {},
     };
 
+    // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
     render(<Story ink={mockInk as any} onInit={onInit} />);
 
     expect(mockInk.restart).toHaveBeenCalled();
@@ -61,6 +63,7 @@ describe("Story", () => {
     };
 
     render(
+      // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
       <Story ink={mockInk as any}>
         <div data-testid="custom-child">Custom Content</div>
       </Story>,
@@ -76,6 +79,7 @@ describe("Story", () => {
       options: {},
     };
 
+    // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
     render(<Story ink={mockInk as any} className="custom-class" />);
 
     const storyElement = document.querySelector(".inkweave-story");
