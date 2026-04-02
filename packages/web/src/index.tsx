@@ -23,7 +23,7 @@ loadAutoButton();
 loadCdButton();
 
 class FetchFileHandler extends BaseFileHandler {
-  loadFile(filename: string): string {
+  override loadFile(filename: string): string {
     const path = this.resolveFilename(filename);
     const xhr = new XMLHttpRequest();
     xhr.open("GET", path, false);
