@@ -1,12 +1,23 @@
 {
   "name": "@inkweave/web",
   "version": "1.0.0",
-  "description": "Pre-built web bundle for InkWeave - ready to use in browsers",
+  "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or script tag",
   "type": "module",
-  "main": "./dist/inkweave-web.iife.js",
+  "main": "./dist/inkweave.min.js",
+  "browser": "./dist/inkweave.min.js",
+  "unpkg": "./dist/inkweave.min.js",
+  "jsdelivr": "./dist/inkweave.min.js",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
+  "exports": {
+    ".": {
+      "browser": "./dist/inkweave-web.iife.js",
+      "default": "./dist/inkweave-web.iife.js"
+    },
+    "./inkweave-web.css": "./dist/inkweave.min.css"
+  },
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
@@ -17,10 +28,17 @@
     "ink",
     "interactive-fiction",
     "web",
+    "cdn",
+    "browser",
     "inkweave"
   ],
   "author": "Uglyboy",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uglyboy-tl/InkWeave.git"
+  },
+  "homepage": "https://github.com/uglyboy-tl/InkWeave#readme",
   "dependencies": {
     "@inkweave/core": "workspace:^",
     "@inkweave/react": "workspace:^",

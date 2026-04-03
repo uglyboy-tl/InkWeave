@@ -15,12 +15,13 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/index.tsx"),
       name: "InkWeave",
-      fileName: "inkweave-web",
       formats: ["iife"],
+      fileName: (format) => `inkweave.min.${format === "iife" ? "js" : format}`,
     },
     rollupOptions: {
       output: {
         banner: processPolyfill,
+        assetFileNames: "inkweave.min.[ext]",
       },
     },
     sourcemap: false,
