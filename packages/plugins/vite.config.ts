@@ -15,8 +15,6 @@ export default defineConfig({
       external: [
         "@inkweave/core",
         "@inkweave/react",
-        "inkjs",
-        /^inkjs\//,
         "react",
         "react/jsx-runtime",
         "zustand",
@@ -26,7 +24,6 @@ export default defineConfig({
         globals: {
           "@inkweave/core": "InkWeaveCore",
           "@inkweave/react": "InkWeaveReact",
-          inkjs: "inkjs",
           react: "React",
           zustand: "zustand",
         },
