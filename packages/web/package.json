@@ -1,6 +1,6 @@
 {
   "name": "@inkweave/web",
-  "version": "1.0.0",
+  "version": "1.3.2",
   "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or script tag",
   "type": "module",
   "main": "./dist/inkweave.min.js",
@@ -13,8 +13,8 @@
   ],
   "exports": {
     ".": {
-      "browser": "./dist/inkweave-web.iife.js",
-      "default": "./dist/inkweave-web.iife.js"
+      "browser": "./dist/inkweave.min.js",
+      "default": "./dist/inkweave.min.js"
     },
     "./inkweave-web.css": "./dist/inkweave.min.css"
   },
