@@ -13,13 +13,13 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "edge",
-      use: { channel: "msedge" },
+      name: 'Microsoft Edge',
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
     },
   ],
   webServer: {
-    command: "serve -l 3141 .",
-    url: "http://localhost:3141/e2e/fixtures/basic.html",
-    reuseExistingServer: true,
+    command: 'vite --port 3141',
+    port: 3141,
+    reuseExistingServer: !process.env.CI,
   },
 });
