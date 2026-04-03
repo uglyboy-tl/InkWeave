@@ -29,7 +29,7 @@ jobs:
         run: bun install
 
       - name: Build packages
-        run: bun run build:pkg
+        run: bun run build
 
       - name: Check
         run: bun run check
@@ -39,6 +39,7 @@ jobs:
           npm publish --workspace @inkweave/core --access public
           npm publish --workspace @inkweave/react --access public
           npm publish --workspace @inkweave/plugins --access public
+          npm publish --workspace @inkweave/web --access public
 
       - name: Extract release notes
         run: |
