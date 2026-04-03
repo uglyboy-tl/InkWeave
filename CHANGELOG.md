@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.3.2 (2026-04-03)
+
+### Chores
+- **test**: update E2E fixture for new web bundle naming
+- **ci**: update publish workflow for web package
+- **plugins**: simplify Vite build configuration
+- **web**: optimize package configuration for CDN usage
+- **test**: update playwright configuration
+- **deps**: update dependencies and add ESM support
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.3.1...v1.3.2
+
 ## v1.3.0 (2026-04-02)
 
 ### Refactoring
