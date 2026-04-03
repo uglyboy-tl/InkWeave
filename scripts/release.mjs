@@ -18,6 +18,7 @@ const packages = [
   "packages/core/package.json",
   "packages/react/package.json",
   "packages/plugins/package.json",
+  "packages/web/package.json",
 ];
 
 function run(cmd) {
