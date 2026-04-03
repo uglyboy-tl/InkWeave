@@ -56,5 +56,8 @@ jobs:
           tag_name: ${{ github.ref }}
           name: ${{ github.ref_name }}
           body_path: RELEASE_NOTES.md
+          files: |
+            packages/web/dist/inkweave.min.js
+            packages/web/dist/inkweave.min.css
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
