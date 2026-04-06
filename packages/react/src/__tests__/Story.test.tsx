@@ -1,8 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
 import { cleanup, render, screen } from "@testing-library/react";
-import { StoryProvider, useStory } from "../components/Story";
-
-const Story = require("../components/Story").default;
+import Story, { StoryProvider, useStory } from "../components/Story";
 
 describe("Story", () => {
   beforeEach(() => {
@@ -84,5 +82,60 @@ describe("Story", () => {
 
     const storyElement = document.querySelector(".inkweave-story");
     expect(storyElement).toHaveClass("custom-class");
+  });
+
+  it("should call onInit when ink prop changes", () => {
+    const onInit = vi.fn();
+    const mockInk1 = {
+      restart: vi.fn(),
+      choose: vi.fn(),
+      options: {},
+    };
+    const mockInk2 = {
+      restart: vi.fn(),
+      choose: vi.fn(),
+      options: {},
+    };
+
+    const { rerender } = render(
+      // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
+      <Story ink={mockInk1 as any} onInit={onInit} />,
+    );
+
+    expect(onInit).toHaveBeenCalledTimes(1);
+    expect(onInit).toHaveBeenCalledWith(mockInk1);
+
+    rerender(
+      // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
+      <Story ink={mockInk2 as any} onInit={onInit} />,
+    );
+
+    expect(onInit).toHaveBeenCalledTimes(2);
+    expect(onInit).toHaveBeenCalledWith(mockInk2);
+    expect(mockInk2.restart).toHaveBeenCalled();
+  });
+
+  it("should update onInit callback reference on subsequent renders", () => {
+    const onInit1 = vi.fn();
+    const onInit2 = vi.fn();
+    const mockInk = {
+      restart: vi.fn(),
+      choose: vi.fn(),
+      options: {},
+    };
+
+    const { rerender } = render(
+      // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
+      <Story ink={mockInk as any} onInit={onInit1} />,
+    );
+
+    expect(onInit1).toHaveBeenCalledTimes(1);
+
+    rerender(
+      // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
+      <Story ink={mockInk as any} onInit={onInit2} />,
+    );
+
+    expect(onInit2).not.toHaveBeenCalled();
   });
 });

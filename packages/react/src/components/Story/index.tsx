@@ -1,5 +1,5 @@
 import type { InkStory } from "@inkweave/core";
-import { createContext, memo, useContext, useEffect, useRef } from "react";
+import { createContext, memo, use, useEffect, useRef } from "react";
 import Choices from "../Choices";
 import Contents from "../Contents";
 import styles from "./styles.module.css";
@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 const StoryContext = createContext<InkStory | null>(null);
 
 export const useStory = () => {
-  const ink = useContext(StoryContext);
+  const ink = use(StoryContext);
   if (!ink) {
     throw new Error("useStory must be used within StoryProvider");
   }
@@ -19,9 +19,11 @@ interface StoryProviderProps {
   children?: React.ReactNode;
 }
 
-export const StoryProvider: React.FC<StoryProviderProps> = ({ ink, children }) => {
+export const StoryProvider = memo(({ ink, children }: StoryProviderProps) => {
   return <StoryContext.Provider value={ink}>{children}</StoryContext.Provider>;
-};
+});
+
+StoryProvider.displayName = "StoryProvider";
 
 interface StoryProps {
   ink: InkStory;
