@@ -36,7 +36,7 @@ bun test --coverage                 # 带覆盖率报告
 测试配置：
 - `bunfig.toml` - 根目录统一配置
 - `test/happydom.ts` - DOM 环境（所有包共享）
-- `packages/react/test/testing-library.ts` - React Testing Library
+- `test/testing-library.ts` - React Testing Library 配置（所有包共享）
 
 ### 4. 编译
 
@@ -47,17 +47,18 @@ bun run --filter @inkweave/core build  # 构建单个包
 
 ## TypeScript 配置架构
 
-- `tsconfig.common.json` - 共享基础配置
-- `tsconfig.json` - 根目录配置，用于类型检查（VSCode 使用）
-- `packages/*/tsconfig.build.json` - 各包构建配置
+- `tsconfig.json` - 根目录配置，extends `@tsconfig/bun/tsconfig.json` 和 `@tsconfig/vite-react/tsconfig.json`
+- `packages/*/tsconfig.json` - 各包独立配置，extends `@tsconfig/bun/tsconfig.json` 或 `@tsconfig/vite-react/tsconfig.json`
 
 ## 包结构
 
 ```
 packages/
+├── cli/        # 命令行工具
 ├── core/       # 核心引擎 (InkStory, state stores, extensions)
-├── react/      # React 组件 (Story, Choices, Contents)
+├── desktop/    # 桌面应用 (Tauri)
 ├── plugins/    # 插件集 (audio, autosave, image, linkopen, etc.)
+├── react/      # React 组件 (Story, Choices, Contents)
 └── web/        # Web 打包 (预构建的浏览器 bundle)
 ```
 

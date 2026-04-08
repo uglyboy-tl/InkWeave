@@ -21,11 +21,12 @@
   },
   "scripts": {
     "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist packages/web/dist",
-    "build": "bun run build:pkg && bun run build:web",
+    "build": "bun run build:pkg && bun run build:web && bun run build:cli",
     "build:core": "bun --cwd packages/core build",
     "build:react": "bun --cwd packages/react build",
     "build:plugins": "bun --cwd packages/plugins build",
     "build:pkg": "bun run build:core && bun run build:react && bun run build:plugins",
+    "build:cli": "bun --cwd packages/cli build",
     "build:web": "bun --cwd packages/web build",
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "test": "bun test && bun run test:e2e",

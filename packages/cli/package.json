@@ -1,0 +1,36 @@
+{
+  "name": "@inkweave/cli",
+  "version": "1.0.0",
+  "description": "CLI tool to run Ink story files",
+  "type": "module",
+  "bin": {
+    "inkweave": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check": "biome check --write --error-on-warnings . && tsgo --noEmit",
+    "build": "vite build",
+    "dev": "bun run src/cli.ts"
+  },
+  "keywords": [
+    "ink",
+    "cli",
+    "interactive-fiction",
+    "inkweave"
+  ],
+  "author": "Uglyboy",
+  "license": "MIT",
+  "dependencies": {
+    "@inkweave/core": "workspace:*",
+    "commander": "^13.0.0",
+    "inkjs": "^2.3.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.0",
+    "@types/prompts": "^2.4.2",
+    "vite": "catalog:"
+  }
+}
