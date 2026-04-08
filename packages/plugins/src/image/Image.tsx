@@ -35,7 +35,7 @@ const ImageComponent: React.FC<ImageProps> = ({ className = "", fallback = null 
 
   return (
     <div className={containerClassName}>
-      <img src={image ?? ""} alt="" onError={handleError} onLoad={handleLoad} />
+      <img src={image || undefined} alt="" onError={handleError} onLoad={handleLoad} />
     </div>
   );
 };
