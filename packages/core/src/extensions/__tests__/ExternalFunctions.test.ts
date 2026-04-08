@@ -80,4 +80,14 @@ describe("ExternalFunctions", () => {
       expect(ExternalFunctions.functions.has("test")).toBe(true);
     });
   });
+
+  describe("functions setter", () => {
+    it("should set functions map", () => {
+      const newMap = new Map();
+      newMap.set("custom", () => "custom");
+      ExternalFunctions.functions = newMap;
+      expect(ExternalFunctions.functions.has("custom")).toBe(true);
+      expect(ExternalFunctions.functions.has("test")).toBe(false);
+    });
+  });
 });
