@@ -34,6 +34,8 @@ const useContentComplete = create<ContentComplete>((set) => ({
   },
 }));
 
+export { useContentComplete };
+
 const load = () => {
   Tags.add("linedelay", (val: string | null | undefined, ink) => {
     if (val != null) {
