@@ -14,95 +14,73 @@ async function typewriter(text: string, delayMs: number): Promise<void> {
   }
 }
 
+/**
+ * 获取自上次分隔符后的新内容
+ * @param contents 完整的内容数组
+ * @returns 从最后出现的分隔符之后的内容，如果没有分隔符则返回全部内容
+ */
+function getNewContents(contents: string[]): string[] {
+  const separatorIndex = contents.lastIndexOf(CHOICE_SEPARATOR);
+  if (separatorIndex === -1) {
+    return contents; // 没有分隔符，返回全部内容
+  }
+  return contents.slice(separatorIndex + 1); // 从分隔符之后的部分开始返回
+}
+
 export async function runStory(story: InkStory): Promise<void> {
-  const getLineDelay = (): number => {
-    const lineDelay = story.options.linedelay;
-    if (typeof lineDelay === "number" && lineDelay > 0) {
-      return lineDelay * 1000;
-    }
-    return 0;
-  };
+  const lineDelay = story.options.linedelay;
+  const lineDelayMs = typeof lineDelay === "number" && lineDelay > 0 ? lineDelay * 1000 : 0;
+  const charDelayMs = 30;
 
   let shouldClearScreen = false;
-  let lastDisplayedIndex = -1;
-
   story.clears.push(() => {
     shouldClearScreen = true;
-    lastDisplayedIndex = -1;
   });
 
-  const displayContent = async () => {
+  const displayNewContent = async () => {
     if (shouldClearScreen) {
       shouldClearScreen = false;
       console.clear();
     }
 
-    const contents = story.contents;
-    if (contents.length === 0) {
-      return;
-    }
-
-    const startIndex = lastDisplayedIndex + 1;
-    if (startIndex >= contents.length) {
-      return;
-    }
-
-    const lineDelayMs = getLineDelay();
-    const charDelayMs = 30;
-
-    for (let i = startIndex; i < contents.length; i++) {
-      const content = contents[i];
-      lastDisplayedIndex = i;
-
-      if (!content) {
-        continue;
-      }
-      if (content.includes(CHOICE_SEPARATOR)) {
-        continue;
-      }
-      if (content.trim()) {
+    for (const content of getNewContents(story.contents)) {
+      if (content?.trim()) {
         await typewriter(content, charDelayMs);
-        if (lineDelayMs > 0) {
-          await sleep(lineDelayMs);
-        }
+        if (lineDelayMs > 0) await sleep(lineDelayMs);
       }
     }
   };
 
-  const handleChoice = async () => {
+  const promptChoice = async (): Promise<boolean> => {
     const choices = story.choices;
     if (choices.length === 0) {
       console.log("\n=== Story End ===");
       return false;
     }
 
-    const choiceItems = choices.map((choice) => ({
-      title: choice.text,
-      value: choice.index,
-      disabled: choice.type === "unclickable",
-    }));
-
-    const response = await prompts({
+    const { choice } = await prompts({
       type: "select",
       name: "choice",
       message: "Choose",
-      choices: choiceItems,
+      choices: choices.map((c) => ({
+        title: c.text,
+        value: c.index,
+        disabled: c.type === "unclickable",
+      })),
     });
 
-    if (response.choice === undefined) {
-      return false;
-    }
+    if (choice === undefined) return false;
 
-    process.stdout.write("\x1B[1A\x1B[2K");
-    story.choose(response.choice);
+    process.stdout.write("\x1B[1A\x1B[2K"); // 清除上一行输出（隐藏选择提示）
+    story.choose(choice);
     return true;
   };
 
   story.clear();
   story.continue();
-  await displayContent();
+  await displayNewContent();
 
-  while (await handleChoice()) {
-    await displayContent();
+  while (await promptChoice()) {
+    await displayNewContent();
   }
 }
