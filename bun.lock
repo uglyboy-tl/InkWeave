@@ -31,10 +31,7 @@
         "prompts": "^2.4.2",
       },
       "devDependencies": {
-        "@types/node": "^25.0.0",
         "@types/prompts": "^2.4.2",
-        "vite": "catalog:",
-        "vite-plugin-dts": "catalog:",
       },
     },
     "packages/core": {

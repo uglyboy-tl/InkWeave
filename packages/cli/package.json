@@ -11,8 +11,8 @@
   ],
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo --noEmit",
-    "build": "vite build",
-    "dev": "bun run src/cli.ts"
+    "build": "bun build --compile --outfile=dist/inkweave src/cli.ts",
+    "test": "bun test"
   },
   "keywords": [
     "ink",
@@ -29,8 +29,6 @@
     "prompts": "^2.4.2"
   },
   "devDependencies": {
-    "@types/node": "^25.0.0",
-    "@types/prompts": "^2.4.2",
-    "vite": "catalog:"
+    "@types/prompts": "^2.4.2"
   }
 }
