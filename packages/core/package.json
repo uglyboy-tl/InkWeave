@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/core",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Core engine for InkWeave - ink story runtime with extension system",
   "type": "module",
   "main": "./dist/index.cjs",

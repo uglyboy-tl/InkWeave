@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.4.1 (2026-04-17)
+
+### Bug Fixes
+- **ci**: resolve promise-retry error in npm installation
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.4.0...v1.4.1
+
 ## v1.4.0 (2026-04-17)
 
 ### Features
