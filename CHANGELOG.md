@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.4.0 (2026-04-17)
+
+### Features
+- **cli**: add CLI tool package
+
+### Bug Fixes
+- **plugins-image**: handle falsy image values properly
+- **plugins-image**: fix img src attribute handling
+- **plugins-fade-effect**: export useContentComplete hook
+
+### Refactoring
+- **cli**: improve runner display logic and choice prompting
+- **react-story**: migrate to React 19 use hook and add onInit tests
+
+### Tests
+- **tests**: add comprehensive test coverage
+- **react-choices**: add comprehensive tests for Choices and Contents components
+
+### Chores
+- **cli**: remove vite config and update dependencies
+- **deps**: add esbuild dependency and update lockfile
+- **ci**: add web bundle artifacts to release files
+- **release**: include web package in release process
+- **web**: update version and export paths for CDN usage
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.3.2...v1.4.0
+
 ## v1.3.2 (2026-04-03)
 
 ### Chores
