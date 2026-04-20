@@ -1,4 +1,4 @@
-import { CHOICE_SEPARATOR, type InkStory } from "@inkweave/core";
+import { CHOICE_SEPARATOR, Events, type InkStory } from "@inkweave/core";
 import prompts from "prompts";
 
 function sleep(ms: number): Promise<void> {
@@ -33,7 +33,7 @@ export async function runStory(story: InkStory): Promise<void> {
   const charDelayMs = 30;
 
   let shouldClearScreen = false;
-  story.clears.push(() => {
+  story.eventEmitter.on(Events.STORY_CLEARED, () => {
     shouldClearScreen = true;
   });
 
