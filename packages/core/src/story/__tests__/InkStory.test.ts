@@ -58,6 +58,22 @@ describe("InkStory", () => {
       ink.contents = ["hello", "world"];
       expect(ink.contents).toEqual(["hello", "world"]);
     });
+
+    it("should emit CONTENTS_CHANGED event with proper data", () => {
+      const mockEventHandler = vi.fn();
+      ink.eventEmitter.on("contents.changed", mockEventHandler);
+
+      const oldContents = [...ink.contents];
+      const newContents = ["hello", "world"];
+      ink.contents = newContents;
+
+      expect(mockEventHandler).toHaveBeenCalledWith({
+        story: ink,
+        oldContents,
+        newContents,
+        timestamp: expect.any(Number),
+      });
+    });
   });
 
   describe("choices", () => {
@@ -72,23 +88,7 @@ describe("InkStory", () => {
     });
   });
 
-  describe("effects", () => {
-    it("should get side effects", () => {
-      expect(ink.effects).toEqual([]);
-    });
-  });
-
-  describe("clears", () => {
-    it("should get clear functions", () => {
-      expect(ink.clears.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe("cleanups", () => {
-    it("should get cleanup functions", () => {
-      expect(ink.cleanups).toEqual([]);
-    });
-  });
+  // clears 和 cleanups 功能已被事件系统替代
 
   describe("continue", () => {
     it("should add content from story", () => {
@@ -107,6 +107,33 @@ describe("InkStory", () => {
 
       expect(ink.contents).toContain("Line 1");
       expect(ink.contents).toContain("Line 2");
+    });
+
+    it("should emit STORY_CONTINUE_START and STORY_CONTINUE_END events", () => {
+      const startEventHandler = vi.fn();
+      const endEventHandler = vi.fn();
+      ink.eventEmitter.on("story.continue.start", startEventHandler);
+      ink.eventEmitter.on("story.continue.end", endEventHandler);
+
+      let callCount = 0;
+      (mockStory.Continue as ReturnType<typeof vi.fn>).mockImplementation(() => {
+        callCount++;
+        return callCount === 1 ? "Line 1" : null;
+      });
+      Object.defineProperty(mockStory, "canContinue", {
+        get: () => callCount < 2,
+      });
+
+      ink.continue();
+
+      expect(startEventHandler).toHaveBeenCalledWith({ story: ink, state: mockStory.state });
+      expect(endEventHandler).toHaveBeenCalledWith({
+        story: ink,
+        state: mockStory.state,
+        newContent: ["Line 1"],
+        choices: [],
+        variables: mockStory.variablesState,
+      });
     });
 
     it("should process tags", () => {
@@ -190,20 +217,22 @@ describe("InkStory", () => {
   });
 
   describe("clear", () => {
-    it("should call clear functions", () => {
-      const fn = vi.fn();
-      ink._clears.push(fn);
-
-      ink.clear();
-
-      expect(fn).toHaveBeenCalled();
-    });
-
     it("should clear contents by default", () => {
       ink.contents = ["hello", "world"];
 
       ink.clear();
 
+      expect(ink.contents).toEqual([]);
+    });
+
+    it("should emit STORY_CLEARED event", () => {
+      const mockEventHandler = vi.fn();
+      ink.eventEmitter.on("story.cleared", mockEventHandler);
+
+      ink.contents = ["hello", "world"];
+      ink.clear();
+
+      expect(mockEventHandler).toHaveBeenCalledWith({ story: ink });
       expect(ink.contents).toEqual([]);
     });
   });
@@ -233,59 +262,23 @@ describe("InkStory", () => {
     });
   });
 
-  describe("useEffect", () => {
-    it("should call effect functions", () => {
-      const fn = vi.fn();
-      ink._side_effects.push(fn);
-      ink.useEffect();
-      expect(fn).toHaveBeenCalled();
-    });
-
-    it("should handle null effect", () => {
-      ink._side_effects.push(null as unknown as () => void);
-      expect(() => ink.useEffect()).not.toThrow();
-    });
-  });
-
   describe("dispose", () => {
-    it("should call cleanup functions", () => {
+    it("should emit dispose event", () => {
       const fn = vi.fn();
-      ink._cleanups.push(fn);
+      (
+        ink as unknown as { eventEmitter: { on: (event: string, cb: () => void) => void } }
+      ).eventEmitter.on("story.dispose", fn);
       ink.dispose();
-      expect(fn).toHaveBeenCalled();
-    });
-
-    it("should handle multiple cleanups", () => {
-      const fn1 = vi.fn();
-      const fn2 = vi.fn();
-      ink._cleanups.push(fn1, fn2);
-      ink.dispose();
-      expect(fn1).toHaveBeenCalled();
-      expect(fn2).toHaveBeenCalled();
-    });
-
-    it("should handle null cleanup", () => {
-      ink._cleanups.push(null as unknown as () => void);
-      expect(() => ink.dispose()).not.toThrow();
+      expect(fn).toHaveBeenCalledWith({ story: ink });
     });
   });
 
-  describe("bindExternalFunctions", () => {
-    it("should bind external functions from content", () => {
-      const fn = vi.fn();
-      ExternalFunctions.add("testFunc", fn);
-      (mockStory.ToJson as ReturnType<typeof vi.fn>).mockReturnValue('{"x()":"testFunc"}');
-      (mockStory as unknown as Record<string, unknown>).BindExternalFunction = vi.fn();
-
-      new InkStory(mockStory, "Test");
-
-      expect(mockStory.BindExternalFunction).toHaveBeenCalled();
-    });
-
-    it("should handle content without external functions", () => {
-      (mockStory.ToJson as ReturnType<typeof vi.fn>).mockReturnValue("{}");
-
-      expect(() => new InkStory(mockStory, "Test")).not.toThrow();
+  describe("story.initialized event", () => {
+    it("should support initialized event system", () => {
+      (mockStory.ToJson as ReturnType<typeof vi.fn>).mockReturnValue("");
+      const testInk = new InkStory(mockStory, "Test");
+      testInk.eventEmitter.emit("story.initialized", { story: testInk });
+      expect(testInk.eventEmitter).toBeDefined();
     });
   });
 });

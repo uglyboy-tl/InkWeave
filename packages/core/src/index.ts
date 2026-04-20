@@ -3,6 +3,7 @@
 // Create
 export { createInkStory } from "./create";
 export { ChoiceParser } from "./extensions/ChoiceParser";
+export { EventEmitter } from "./extensions/EventEmitter";
 export { ExternalFunctions } from "./extensions/ExternalFunctions";
 export { Parser, type ParserLine } from "./extensions/Parser";
 export { Patches } from "./extensions/Patches";
@@ -18,9 +19,10 @@ export { InkStory } from "./story/InkStory";
 // Types & Constants (for public API)
 export type {
   ErrorHandler,
+  EventData,
   FileHandler,
   InkStoryContext,
   InkStoryOptions,
   SaveData,
 } from "./types";
-export { BaseFileHandler, CHOICE_SEPARATOR, Choice } from "./types";
+export { BaseFileHandler, CHOICE_SEPARATOR, Choice, Events } from "./types";

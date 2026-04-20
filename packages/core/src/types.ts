@@ -2,6 +2,22 @@ import type { ErrorHandler as InkErrorHandler } from "inkjs/engine/Error";
 
 export type ErrorHandler = InkErrorHandler;
 
+export type EventHandler<T = unknown> = (data: T) => void;
+
+export interface EventData {
+  story?: InkStoryContext;
+  [key: string]: unknown;
+}
+
+export interface EventEmitterInterface {
+  on<T extends EventData = EventData>(eventName: string, handler: EventHandler<T>): () => void;
+  off<T extends EventData = EventData>(eventName: string, handler: EventHandler<T>): void;
+  emit<T extends EventData = EventData>(eventName: string, data?: T): void;
+  once<T extends EventData = EventData>(eventName: string, handler: EventHandler<T>): () => void;
+  listenerCount(eventName: string): number;
+  clear(): void;
+}
+
 // Constants
 export const CHOICE_SEPARATOR = "\x00ink-divider\x00";
 
@@ -45,9 +61,7 @@ export interface InkStoryOptions {
 export interface InkStoryContext {
   options: InkStoryOptions;
   save_label: string[];
-  clears: Array<() => void>;
-  cleanups: Array<() => void>;
-  _side_effects: Array<() => void>;
+  eventEmitter: EventEmitterInterface;
   [key: string]: unknown;
 }
 
@@ -57,6 +71,19 @@ export interface SaveData {
   image?: string;
   [key: string]: unknown;
 }
+
+export const Events = {
+  STORY_INITIALIZED: "story.initialized",
+  STORY_CLEARED: "story.cleared",
+  STORY_DISPOSE: "story.dispose",
+  STORY_RESTART_START: "story.restart.start",
+  STORY_RESTART_END: "story.restart.end",
+  STORY_CONTINUE_START: "story.continue.start",
+  STORY_CONTINUE_END: "story.continue.end",
+  CHOICE_SELECTING: "choice.selecting",
+  CHOICE_SELECTED: "choice.selected",
+  CONTENTS_CHANGED: "contents.changed",
+} as const;
 
 export class Choice {
   text: string;
