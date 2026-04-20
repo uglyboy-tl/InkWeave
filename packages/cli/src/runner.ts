@@ -1,4 +1,4 @@
-import { CHOICE_SEPARATOR, Events, type InkStory } from "@inkweave/core";
+import { CHOICE_SEPARATOR, type ContentItem, Events, type InkStory } from "@inkweave/core";
 import prompts from "prompts";
 
 function sleep(ms: number): Promise<void> {
@@ -19,8 +19,8 @@ async function typewriter(text: string, delayMs: number): Promise<void> {
  * @param contents 完整的内容数组
  * @returns 从最后出现的分隔符之后的内容，如果没有分隔符则返回全部内容
  */
-function getNewContents(contents: string[]): string[] {
-  const separatorIndex = contents.lastIndexOf(CHOICE_SEPARATOR);
+function getNewContents(contents: ContentItem[]): ContentItem[] {
+  const separatorIndex = contents.findIndex((item) => item.text === CHOICE_SEPARATOR);
   if (separatorIndex === -1) {
     return contents; // 没有分隔符，返回全部内容
   }
@@ -43,7 +43,8 @@ export async function runStory(story: InkStory): Promise<void> {
       console.clear();
     }
 
-    for (const content of getNewContents(story.contents)) {
+    for (const contentItem of getNewContents(story.contents)) {
+      const content = contentItem.text;
       if (content?.trim()) {
         await typewriter(content, charDelayMs);
         if (lineDelayMs > 0) await sleep(lineDelayMs);
