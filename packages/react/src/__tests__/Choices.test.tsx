@@ -159,7 +159,7 @@ describe("Contents", () => {
   it("should render content lines from store", () => {
     const mockInk = createMockInk();
 
-    contentsStore.getState().setContents(["Hello world", "Second line"]);
+    contentsStore.getState().setContents([{ text: "Hello world" }, { text: "Second line" }]);
 
     render(
       // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
@@ -175,7 +175,9 @@ describe("Contents", () => {
   it("should render divider for CHOICE_SEPARATOR", () => {
     const mockInk = createMockInk();
 
-    contentsStore.getState().setContents(["Before", CHOICE_SEPARATOR, "After"]);
+    contentsStore
+      .getState()
+      .setContents([{ text: "Before" }, { text: CHOICE_SEPARATOR }, { text: "After" }]);
 
     render(
       // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
@@ -209,7 +211,7 @@ describe("Contents", () => {
       options: { linedelay: 0.1 },
     });
 
-    contentsStore.getState().setContents(["Line 1", "Line 2"]);
+    contentsStore.getState().setContents([{ text: "Line 1" }, { text: "Line 2" }]);
 
     render(
       // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
@@ -225,7 +227,7 @@ describe("Contents", () => {
   it("should use default lineDelay when not specified", () => {
     const mockInk = createMockInk();
 
-    contentsStore.getState().setContents(["Line 1"]);
+    contentsStore.getState().setContents([{ text: "Line 1" }]);
 
     render(
       // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
