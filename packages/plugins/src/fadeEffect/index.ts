@@ -1,6 +1,7 @@
 import {
   contentsStore,
   createSelectors,
+  Events,
   type InkStoryContext,
   Patches,
   Tags,
@@ -92,11 +93,12 @@ const load = () => {
       );
     });
 
-    this.cleanups.push(() => {
+    this.eventEmitter.on(Events.STORY_DISPOSE, () => {
       unsub();
       if (timer) clearTimeout(timer);
     });
-    this.clears.push(() => {
+
+    this.eventEmitter.on(Events.STORY_CLEARED, () => {
       if (self.options.linedelay !== 0) useContentComplete.getState().setContentComplete(false);
       useContentComplete.getState().setLastContent([]);
     });

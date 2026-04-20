@@ -1,6 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
-import { contentsStore, Patches, Tags } from "@inkweave/core";
+import { contentsStore, EventEmitter, Patches, Tags } from "@inkweave/core";
 import load, { useContentComplete } from "../index";
+
+function createMockStory(overrides = {}) {
+  return {
+    eventEmitter: new EventEmitter(),
+    options: {} as Record<string, unknown>,
+    save_label: [] as string[],
+    contents: [] as string[],
+    saves: {},
+    choose: () => {},
+    ...overrides,
+  };
+}
 
 describe("fadeEffect", () => {
   beforeEach(() => {
@@ -23,44 +35,28 @@ describe("fadeEffect", () => {
   describe("linedelay tag", () => {
     it("should set linedelay option from tag value", () => {
       load();
-      const mockStory = {
-        options: {} as Record<string, unknown>,
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-      };
+      const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay: 0.1");
       expect(mockStory.options.linedelay).toBe(0.1);
     });
 
     it("should handle linedelay 0", () => {
       load();
-      const mockStory = {
-        options: {} as Record<string, unknown>,
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-      };
+      const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay: 0");
       expect(mockStory.options.linedelay).toBe(0);
     });
 
     it("should handle invalid linedelay value", () => {
       load();
-      const mockStory = {
-        options: {} as Record<string, unknown>,
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-      };
+      const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay: invalid");
       expect(mockStory.options.linedelay).toBeUndefined();
     });
 
     it("should handle null linedelay value", () => {
       load();
-      const mockStory = {
-        options: {} as Record<string, unknown>,
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-      };
+      const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay:");
       expect(mockStory.options.linedelay).toBeUndefined();
     });
@@ -69,14 +65,10 @@ describe("fadeEffect", () => {
   describe("Patches", () => {
     it("should add visibleLines property", () => {
       load();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1", "line2"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       expect(mockStory).toHaveProperty("visibleLines");
@@ -85,14 +77,10 @@ describe("fadeEffect", () => {
     it("should return -1 for visibleLines when no last_content", () => {
       load();
       useContentComplete.getState().setLastContent([]);
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1", "line2"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       expect((mockStory as unknown as { visibleLines: number }).visibleLines).toBe(-1);
@@ -101,14 +89,10 @@ describe("fadeEffect", () => {
     it("should return correct index for visibleLines", () => {
       load();
       useContentComplete.getState().setLastContent(["line1", "line2"]);
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1", "line2", "line3"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       expect((mockStory as unknown as { visibleLines: number }).visibleLines).toBe(1);
@@ -116,14 +100,10 @@ describe("fadeEffect", () => {
 
     it("should add choicesCanShow property", () => {
       load();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       const descriptor = Object.getOwnPropertyDescriptor(mockStory, "choicesCanShow");
@@ -133,62 +113,46 @@ describe("fadeEffect", () => {
 
     it("should call clear function", () => {
       load();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1", "line2"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
-      mockStory.clears[0]?.();
+      mockStory.eventEmitter.emit("story.cleared");
     });
 
     it("should set contentComplete false on clear with linedelay", () => {
       load();
       useContentComplete.getState().setContentComplete(true);
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: [],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
-      mockStory.clears[0]?.();
+      mockStory.eventEmitter.emit("story.cleared");
       expect(useContentComplete.getState().contentComplete).toBe(false);
     });
 
     it("should call cleanup function", () => {
       load();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
-      mockStory.cleanups[0]?.();
+      mockStory.eventEmitter.emit("story.cleared");
     });
 
     it("should wrap choose function", () => {
       load();
       const mockChoose = vi.fn();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
         choose: mockChoose,
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       (mockStory as unknown as { choose: (i: number) => void }).choose(0);
@@ -198,15 +162,10 @@ describe("fadeEffect", () => {
     it("should set contentComplete false on choose with linedelay", () => {
       load();
       useContentComplete.getState().setContentComplete(true);
-      const mockChoose = vi.fn();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1", "line2"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: mockChoose,
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       (mockStory as unknown as { choose: (i: number) => void }).choose(0);
@@ -216,15 +175,10 @@ describe("fadeEffect", () => {
     it("should set lastContent on choose", () => {
       load();
       useContentComplete.getState().setLastContent([]);
-      const mockChoose = vi.fn();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: ["line1", "line2"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: mockChoose,
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       (mockStory as unknown as { choose: (i: number) => void }).choose(0);
@@ -234,15 +188,10 @@ describe("fadeEffect", () => {
     it("should not set contentComplete false on choose with zero linedelay", () => {
       load();
       useContentComplete.getState().setContentComplete(true);
-      const mockChoose = vi.fn();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0 },
         contents: ["line1"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: mockChoose,
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       (mockStory as unknown as { choose: (i: number) => void }).choose(0);
@@ -254,14 +203,9 @@ describe("fadeEffect", () => {
     it("should set contentComplete true on contents update with zero linedelay", async () => {
       load();
       useContentComplete.getState().setContentComplete(false);
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0 },
-        contents: [],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
 
@@ -274,14 +218,10 @@ describe("fadeEffect", () => {
     it("should schedule timer on contents update with linedelay", async () => {
       load();
       useContentComplete.getState().setContentComplete(false);
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.01 },
         contents: ["line1"],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
 
@@ -293,18 +233,13 @@ describe("fadeEffect", () => {
 
     it("should unsubscribe on cleanup", () => {
       load();
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: [],
-        save_label: [] as string[],
-        clears: [] as (() => void)[],
-        cleanups: [] as (() => void)[],
-        choose: () => {},
-      };
+      });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
 
-      mockStory.cleanups[0]?.();
+      mockStory.eventEmitter.emit("story.cleared");
       contentsStore.setState({ contents: ["new"] });
 
       expect(useContentComplete.getState().contentComplete).toBe(true);
