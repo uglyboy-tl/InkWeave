@@ -1,4 +1,4 @@
-import { type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
+import { Events, type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
 import { AudioController } from "./AudioController";
 
 const getPath = (path: string, fileHandler?: FileHandler) => {
@@ -29,10 +29,13 @@ const load = () => {
 
   Patches.add(function () {
     this.audio = AudioController;
-    this.cleanups.push(() => {
+    const cleanupAudio = () => {
       AudioController.cleanupSound();
       AudioController.cleanupMusic();
-    });
+    };
+
+    this.eventEmitter.on(Events.STORY_DISPOSE, cleanupAudio);
+    this.eventEmitter.on(Events.STORY_RESTART_START, cleanupAudio);
   }, {});
 };
 

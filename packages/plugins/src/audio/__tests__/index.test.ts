@@ -1,7 +1,18 @@
 import { beforeEach, describe, expect, it, mock, vi } from "bun:test";
-import { Patches, Tags } from "@inkweave/core";
+import type { InkStoryContext } from "@inkweave/core";
+import { EventEmitter, Patches, Tags } from "@inkweave/core";
 import { AudioController } from "../AudioController";
 import load from "../index";
+
+function createMockStory(overrides = {}): InkStoryContext {
+  return {
+    eventEmitter: new EventEmitter(),
+    options: {} as Record<string, unknown>,
+
+    save_label: [],
+    ...overrides,
+  };
+}
 
 describe("audio", () => {
   beforeEach(() => {
@@ -107,13 +118,13 @@ describe("audio", () => {
 
     it("should process sound tag with null", () => {
       load();
-      const mockStory = { options: {}, cleanups: [] };
+      const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound");
     });
 
     it("should process music tag with null", () => {
       load();
-      const mockStory = { options: {}, cleanups: [] };
+      const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "music");
     });
   });
@@ -125,10 +136,9 @@ describe("audio", () => {
         resolveFilename: mock((path: string) => `/base/${path}`),
         loadFile: mock(() => ""),
       };
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { fileHandler: mockFileHandler },
-        cleanups: [],
-      };
+      });
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound: click.mp3");
       expect(mockFileHandler.resolveFilename).toHaveBeenCalledWith("click.mp3");
     });
@@ -139,20 +149,16 @@ describe("audio", () => {
         resolveFilename: mock((path: string) => `/base/${path}`),
         loadFile: mock(() => ""),
       };
-      const mockStory = {
+      const mockStory = createMockStory({
         options: { fileHandler: mockFileHandler },
-        cleanups: [],
-      };
+      });
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "music: bgm.mp3");
       expect(mockFileHandler.resolveFilename).toHaveBeenCalledWith("bgm.mp3");
     });
 
     it("should handle path without fileHandler", () => {
       load();
-      const mockStory = {
-        options: {},
-        cleanups: [],
-      };
+      const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound: click.mp3");
     });
   });
@@ -160,37 +166,33 @@ describe("audio", () => {
   describe("Patches", () => {
     it("should add audio property", () => {
       load();
-      const mockStory = {
-        options: {},
-        cleanups: [] as (() => void)[],
-      };
+      const mockStory = createMockStory();
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       expect(mockStory).toHaveProperty("audio");
     });
 
-    it("should push cleanup to cleanups array", () => {
+    it("should register dispose listener", () => {
       load();
-      const mockStory = {
-        options: {},
-        cleanups: [] as (() => void)[],
-      };
+      const fn = vi.fn();
+      const mockStory = createMockStory();
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
-      expect(mockStory.cleanups.length).toBe(1);
+      mockStory.eventEmitter.on("story.dispose", fn);
+      // biome-ignore lint/suspicious/noExplicitAny: test requires compatibility with InkStory type
+      mockStory.eventEmitter.emit("story.dispose", { story: mockStory as any });
+      expect(fn).toHaveBeenCalled();
     });
 
-    it("should cleanup sound and music on cleanup callback", () => {
+    it("should cleanup sound and music on dispose event", () => {
       load();
       AudioController.set_sound("test.mp3");
       AudioController.set_music("bgm.mp3");
-      const mockStory = {
-        options: {},
-        cleanups: [] as (() => void)[],
-      };
+      const mockStory = createMockStory();
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
-      mockStory.cleanups[0]?.();
+      // biome-ignore lint/suspicious/noExplicitAny: test requires compatibility with InkStory type
+      mockStory.eventEmitter.emit("story.dispose", { story: mockStory as any });
       expect(AudioController.sound).toBeNull();
       expect(AudioController.music).toBeNull();
     });
