@@ -14,9 +14,9 @@ const load = () => {
   // Register the class tag handler with the Parser
   // This handler will add classes to the ParserLine object when processing
   Parser.tag("class", (line, _, value) => {
-    if (value && typeof value === 'string') {
+    if (value && typeof value === "string") {
       // Split the value by spaces to allow multiple classes
-      const classes = value.split(/\s+/).filter(cls => cls.length > 0);
+      const classes = value.split(/\s+/).filter((cls) => cls.length > 0);
       line.classes.push(...classes);
     }
   });
