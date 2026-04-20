@@ -14,10 +14,10 @@ describe("Image", () => {
     vi.restoreAllMocks();
   });
 
-  it("should render img element when no image", () => {
+  it("should render nothing when no image", () => {
     const { container } = render(<Image />);
     const img = container.querySelector("img");
-    expect(img).toBeInTheDocument();
+    expect(img).not.toBeInTheDocument();
   });
 
   it("should render image when image is set", () => {

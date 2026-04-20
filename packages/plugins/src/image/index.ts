@@ -1,4 +1,4 @@
-import { type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
+import { Events, type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
 import { create } from "zustand";
 
 declare module "@inkweave/core" {
@@ -44,7 +44,7 @@ const load = () => {
       },
     });
     this.save_label.push("image");
-    this.clears.push(() => {
+    this.eventEmitter.on(Events.STORY_CLEARED, () => {
       this.image = "";
     });
   }, {});
