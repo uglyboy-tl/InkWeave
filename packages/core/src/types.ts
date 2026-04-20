@@ -65,9 +65,14 @@ export interface InkStoryContext {
   [key: string]: unknown;
 }
 
+export interface ContentItem {
+  text: string;
+  classes?: string[];
+}
+
 export interface SaveData {
   state: string;
-  contents?: string[];
+  contents?: ContentItem[];
   image?: string;
   [key: string]: unknown;
 }

@@ -1,3 +1,4 @@
+import type { ContentItem } from "../types";
 import { splitAtCharacter } from "./Tags";
 
 export interface ParserLine {
@@ -36,8 +37,8 @@ export class Parser {
     Parser.patterns.push({ matcher: pattern, callback: callback });
   }
 
-  static process = (text: string, tags: string[] = []): string => {
-    if (!text) return "";
+  static process = (text: string, tags: string[] = []): ContentItem => {
+    if (!text) return { text: "", classes: [] };
 
     const line: ParserLine = { text: text, tags: tags, classes: [] };
 
@@ -64,6 +65,6 @@ export class Parser {
         }
       });
     }
-    return line.text;
+    return { text: line.text, classes: line.classes };
   };
 }

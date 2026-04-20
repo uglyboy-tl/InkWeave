@@ -18,6 +18,7 @@ export { InkStory } from "./story/InkStory";
 
 // Types & Constants (for public API)
 export type {
+  ContentItem,
   ErrorHandler,
   EventData,
   FileHandler,
