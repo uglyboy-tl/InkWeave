@@ -12,19 +12,19 @@ describe("contentsStore", () => {
 
   describe("setContents", () => {
     it("should set contents", () => {
-      contentsStore.getState().setContents(["hello", "world"]);
+      contentsStore.getState().setContents([{ text: "hello" }, { text: "world" }]);
       const { contents } = contentsStore.getState();
-      expect(contents).toEqual(["hello", "world"]);
+      expect(contents).toEqual([{ text: "hello" }, { text: "world" }]);
     });
   });
 
   describe("add", () => {
     it("should add content", () => {
       contentsStore.getState().setContents([]);
-      contentsStore.getState().add(["hello"]);
-      contentsStore.getState().add(["world"]);
+      contentsStore.getState().add([{ text: "hello" }]);
+      contentsStore.getState().add([{ text: "world" }]);
       const { contents } = contentsStore.getState();
-      expect(contents).toEqual(["hello", "world"]);
+      expect(contents).toEqual([{ text: "hello" }, { text: "world" }]);
     });
   });
 

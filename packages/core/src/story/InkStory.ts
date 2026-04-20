@@ -7,7 +7,12 @@ import { Tags } from "../extensions/Tags";
 import choicesStore from "../state/choices";
 import contentsStore from "../state/contents";
 import variablesStore from "../state/variables";
-import type { EventEmitterInterface, InkStoryContext, InkStoryOptions } from "../types";
+import type {
+  ContentItem,
+  EventEmitterInterface,
+  InkStoryContext,
+  InkStoryOptions,
+} from "../types";
 import { CHOICE_SEPARATOR, DEFAULT_STORY_OPTIONS, Events } from "../types";
 
 export class InkStory implements InkStoryContext {
@@ -30,7 +35,7 @@ export class InkStory implements InkStoryContext {
 
     // 使用事件系统来清除内容
     const unsubscribeClear = this.eventEmitter.on(Events.STORY_CLEARED, () => {
-      this.contents.length = 0;
+      contentsStore.getState().clear();
     });
 
     /**
@@ -51,7 +56,7 @@ export class InkStory implements InkStoryContext {
     return contentsStore.getState().contents;
   }
 
-  set contents(newContent: string[]) {
+  set contents(newContent: ContentItem[]) {
     const oldContents = this.contents.length > 0 ? [...this.contents] : [];
     contentsStore.getState().setContents(newContent);
 
@@ -76,10 +81,10 @@ export class InkStory implements InkStoryContext {
     // 发射故事继续前事件
     this.eventEmitter.emit(Events.STORY_CONTINUE_START, { story: this, state: this.story.state });
 
-    const newContent: string[] = [];
+    const newContent: ContentItem[] = [];
 
     while (this.story.canContinue) {
-      let current_text = this.story.Continue() || "";
+      let current_content: ContentItem = { text: this.story.Continue() || "" };
       if (this.story.currentTags) {
         this.story.currentTags.forEach((tag) => {
           Tags.process(this, tag);
@@ -87,12 +92,12 @@ export class InkStory implements InkStoryContext {
             newContent.length = 0;
           }
         });
-        if (current_text && this.story.currentTags.length) {
-          current_text = Parser.process(current_text, this.story.currentTags);
+        if (current_content.text && this.story.currentTags.length) {
+          current_content = Parser.process(current_content.text, this.story.currentTags);
         }
       }
 
-      if (current_text.trim()) newContent.push(current_text);
+      if (current_content.text.trim()) newContent.push(current_content);
     }
     contentsStore.getState().add(newContent);
 
@@ -120,7 +125,7 @@ export class InkStory implements InkStoryContext {
     });
 
     this.story.ChooseChoiceIndex(index);
-    contentsStore.getState().add([CHOICE_SEPARATOR]);
+    contentsStore.getState().add([{ text: CHOICE_SEPARATOR }]);
     this.continue();
 
     // 发射选择后事件

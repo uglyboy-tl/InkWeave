@@ -209,7 +209,7 @@ describe("fadeEffect", () => {
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
 
-      contentsStore.setState({ contents: ["new content"] });
+      contentsStore.setState({ contents: [{ text: "new content" }] });
       await new Promise((r) => setTimeout(r, 0));
 
       expect(useContentComplete.getState().contentComplete).toBe(true);
@@ -225,7 +225,7 @@ describe("fadeEffect", () => {
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
 
-      contentsStore.setState({ contents: ["line1", "line2"] });
+      contentsStore.setState({ contents: [{ text: "line1" }, { text: "line2" }] });
       await new Promise((r) => setTimeout(r, 50));
 
       expect(useContentComplete.getState().contentComplete).toBe(true);
@@ -240,7 +240,7 @@ describe("fadeEffect", () => {
       patch?.call(mockStory as never, "");
 
       mockStory.eventEmitter.emit("story.cleared");
-      contentsStore.setState({ contents: ["new"] });
+      contentsStore.setState({ contents: [{ text: "new" }] });
 
       expect(useContentComplete.getState().contentComplete).toBe(true);
     });

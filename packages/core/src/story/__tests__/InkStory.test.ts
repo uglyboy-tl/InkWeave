@@ -55,8 +55,8 @@ describe("InkStory", () => {
     });
 
     it("should set contents", () => {
-      ink.contents = ["hello", "world"];
-      expect(ink.contents).toEqual(["hello", "world"]);
+      ink.contents = [{ text: "hello" }, { text: "world" }];
+      expect(ink.contents).toEqual([{ text: "hello" }, { text: "world" }]);
     });
 
     it("should emit CONTENTS_CHANGED event with proper data", () => {
@@ -64,7 +64,7 @@ describe("InkStory", () => {
       ink.eventEmitter.on("contents.changed", mockEventHandler);
 
       const oldContents = [...ink.contents];
-      const newContents = ["hello", "world"];
+      const newContents = [{ text: "hello" }, { text: "world" }];
       ink.contents = newContents;
 
       expect(mockEventHandler).toHaveBeenCalledWith({
@@ -105,8 +105,8 @@ describe("InkStory", () => {
 
       ink.continue();
 
-      expect(ink.contents).toContain("Line 1");
-      expect(ink.contents).toContain("Line 2");
+      expect(ink.contents).toContainEqual({ text: "Line 1" });
+      expect(ink.contents).toContainEqual({ text: "Line 2" });
     });
 
     it("should emit STORY_CONTINUE_START and STORY_CONTINUE_END events", () => {
@@ -130,7 +130,7 @@ describe("InkStory", () => {
       expect(endEventHandler).toHaveBeenCalledWith({
         story: ink,
         state: mockStory.state,
-        newContent: ["Line 1"],
+        newContent: [{ text: "Line 1" }],
         choices: [],
         variables: mockStory.variablesState,
       });
@@ -172,7 +172,7 @@ describe("InkStory", () => {
 
       ink.continue();
 
-      expect(ink.contents).toContain("HELLO");
+      expect(ink.contents).toContainEqual({ text: "HELLO", classes: [] });
     });
 
     it("should set choices", () => {
@@ -218,7 +218,7 @@ describe("InkStory", () => {
 
   describe("clear", () => {
     it("should clear contents by default", () => {
-      ink.contents = ["hello", "world"];
+      ink.contents = [{ text: "hello" }, { text: "world" }];
 
       ink.clear();
 
@@ -229,7 +229,7 @@ describe("InkStory", () => {
       const mockEventHandler = vi.fn();
       ink.eventEmitter.on("story.cleared", mockEventHandler);
 
-      ink.contents = ["hello", "world"];
+      ink.contents = [{ text: "hello" }, { text: "world" }];
       ink.clear();
 
       expect(mockEventHandler).toHaveBeenCalledWith({ story: ink });
@@ -250,7 +250,7 @@ describe("InkStory", () => {
     });
 
     it("should clear contents", () => {
-      ink.contents = ["hello", "world"];
+      ink.contents = [{ text: "hello" }, { text: "world" }];
       Object.defineProperty(mockStory, "canContinue", {
         get: () => false,
         configurable: true,

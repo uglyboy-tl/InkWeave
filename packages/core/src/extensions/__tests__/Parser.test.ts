@@ -31,7 +31,7 @@ describe("Parser", () => {
   describe("process", () => {
     it("should return text unchanged if no handlers", () => {
       const result = Parser.process("Hello World");
-      expect(result).toBe("Hello World");
+      expect(result).toEqual({ text: "Hello World", classes: [] });
     });
 
     it("should call tag handlers", () => {
@@ -57,12 +57,12 @@ describe("Parser", () => {
 
     it("should handle empty text", () => {
       const result = Parser.process("", []);
-      expect(result).toBe("");
+      expect(result).toEqual({ text: "", classes: [] });
     });
 
     it("should handle undefined text", () => {
       const result = Parser.process(undefined as unknown as string, []);
-      expect(result).toBe("");
+      expect(result).toEqual({ text: "", classes: [] });
     });
   });
 

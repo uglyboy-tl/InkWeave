@@ -1,10 +1,11 @@
 import { create } from "zustand";
+import type { ContentItem } from "../types";
 import createSelectors from "./createSelectors";
 
 type StoryContent = {
-  contents: string[];
-  setContents: (contents: string[]) => void;
-  add: (content: string[]) => void;
+  contents: ContentItem[];
+  setContents: (contents: ContentItem[]) => void;
+  add: (content: ContentItem[]) => void;
   clear: () => void;
 };
 
