@@ -5,7 +5,7 @@ const load = () => {
     let scrollTimer: ReturnType<typeof setTimeout> | null = null;
 
     // 使用事件系统监听选择更新
-    const unsubscribeChoice = this.eventEmitter.on("choice.selected", () => {
+    const unsubscribeChoice = this.eventEmitter.on(Events.CHOICE_SELECTED, () => {
       if (scrollTimer) clearTimeout(scrollTimer);
 
       scrollTimer = setTimeout(() => {
@@ -23,7 +23,7 @@ const load = () => {
     });
 
     // 监听内容变更事件
-    const unsubscribeContent = this.eventEmitter.on("contents.changed", () => {
+    const unsubscribeContent = this.eventEmitter.on(Events.CONTENTS_CHANGED, () => {
       if (scrollTimer) clearTimeout(scrollTimer);
 
       scrollTimer = setTimeout(() => {
