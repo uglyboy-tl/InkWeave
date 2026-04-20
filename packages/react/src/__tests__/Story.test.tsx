@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
 import { cleanup, render, screen } from "@testing-library/react";
 import Story, { StoryProvider, useStory } from "../components/Story";
+import { createMockInk } from "./mock";
 
 describe("Story", () => {
   beforeEach(() => {
@@ -8,11 +9,7 @@ describe("Story", () => {
   });
 
   it("should render StoryProvider with ink story", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     const TestComponent = () => {
       const ink = useStory();
@@ -40,11 +37,7 @@ describe("Story", () => {
 
   it("should call onInit callback on mount", () => {
     const onInit = vi.fn();
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
     render(<Story ink={mockInk as any} onInit={onInit} />);
@@ -54,11 +47,7 @@ describe("Story", () => {
   });
 
   it("should render children", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     render(
       // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
@@ -71,11 +60,7 @@ describe("Story", () => {
   });
 
   it("should apply className prop", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
     render(<Story ink={mockInk as any} className="custom-class" />);
@@ -86,16 +71,8 @@ describe("Story", () => {
 
   it("should call onInit when ink prop changes", () => {
     const onInit = vi.fn();
-    const mockInk1 = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
-    const mockInk2 = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk1 = createMockInk();
+    const mockInk2 = createMockInk();
 
     const { rerender } = render(
       // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
@@ -118,11 +95,7 @@ describe("Story", () => {
   it("should update onInit callback reference on subsequent renders", () => {
     const onInit1 = vi.fn();
     const onInit2 = vi.fn();
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     const { rerender } = render(
       // biome-ignore lint/suspicious/noExplicitAny: mock object for testing

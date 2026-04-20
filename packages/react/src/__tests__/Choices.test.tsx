@@ -5,6 +5,7 @@ import Choices from "../components/Choices";
 import { ChoiceRegistry } from "../components/Choices/registry";
 import Contents from "../components/Contents";
 import { StoryProvider } from "../components/Story";
+import { createMockInk } from "./mock";
 
 describe("Choices", () => {
   beforeEach(() => {
@@ -14,11 +15,7 @@ describe("Choices", () => {
   });
 
   it("should render choices from store", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     choicesStore.setState({
       choices: [new Choice("Choice 1", 0), new Choice("Choice 2", 1)],
@@ -36,11 +33,7 @@ describe("Choices", () => {
   });
 
   it("should call ink.choose when a choice is clicked", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     choicesStore.setState({
       choices: [new Choice("Click me", 5)],
@@ -59,11 +52,7 @@ describe("Choices", () => {
   });
 
   it("should not call onClick when choice type is unclickable", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     choicesStore.setState({
       choices: [new Choice("Disabled", 2, "unclickable")],
@@ -82,11 +71,7 @@ describe("Choices", () => {
   });
 
   it("should set aria-disabled on unclickable choices", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     choicesStore.setState({
       choices: [new Choice("Disabled", 3, "unclickable")],
@@ -104,11 +89,7 @@ describe("Choices", () => {
   });
 
   it("should render empty when no choices", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     choicesStore.getState().clear();
 
@@ -123,12 +104,9 @@ describe("Choices", () => {
   });
 
   it("should hide choices when choicesCanShow is false", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
+    const mockInk = createMockInk({
       choicesCanShow: false,
-    };
+    });
 
     choicesStore.setState({
       choices: [new Choice("Hidden", 0)],
@@ -146,11 +124,7 @@ describe("Choices", () => {
   });
 
   it("should render custom registered component for choice type", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     const CustomChoice = vi.fn(({ onClick, className, children }) => (
       <button type="button" data-testid="custom-choice" onClick={onClick} className={className}>
@@ -183,11 +157,7 @@ describe("Contents", () => {
   });
 
   it("should render content lines from store", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     contentsStore.getState().setContents(["Hello world", "Second line"]);
 
@@ -203,11 +173,7 @@ describe("Contents", () => {
   });
 
   it("should render divider for CHOICE_SEPARATOR", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     contentsStore.getState().setContents(["Before", CHOICE_SEPARATOR, "After"]);
 
@@ -224,11 +190,7 @@ describe("Contents", () => {
   });
 
   it("should render empty when no contents", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     contentsStore.getState().clear();
 
@@ -243,11 +205,9 @@ describe("Contents", () => {
   });
 
   it("should apply lineDelay from ink.options", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
+    const mockInk = createMockInk({
       options: { linedelay: 0.1 },
-    };
+    });
 
     contentsStore.getState().setContents(["Line 1", "Line 2"]);
 
@@ -263,11 +223,7 @@ describe("Contents", () => {
   });
 
   it("should use default lineDelay when not specified", () => {
-    const mockInk = {
-      restart: vi.fn(),
-      choose: vi.fn(),
-      options: {},
-    };
+    const mockInk = createMockInk();
 
     contentsStore.getState().setContents(["Line 1"]);
 
