@@ -7,6 +7,8 @@ export { default as loadAutoButton } from "./autoButton";
 // Autosave
 export { default as loadAutosave } from "./autosave";
 export { default as loadCdButton } from "./cdButton";
+// Class Tag
+export { default as loadClassTag } from "./classTag";
 // Effects
 export { default as loadFadeEffect } from "./fadeEffect";
 // Image

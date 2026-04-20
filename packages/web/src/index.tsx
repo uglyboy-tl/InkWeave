@@ -3,6 +3,7 @@ import {
   loadAudio,
   loadAutoButton,
   loadCdButton,
+  loadClassTag,
   loadFadeEffect,
   loadImage,
   loadLinkopen,
@@ -21,6 +22,7 @@ loadLinkopen();
 loadMemory();
 loadAutoButton();
 loadCdButton();
+loadClassTag();
 
 class FetchFileHandler extends BaseFileHandler {
   override loadFile(filename: string): string {
