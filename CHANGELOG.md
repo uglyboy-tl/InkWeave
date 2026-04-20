@@ -2,19 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## v1.4.1 (2026-04-17)
-
-### Bug Fixes
-- **ci**: resolve promise-retry error in npm installation
-
-**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.4.0...v1.4.1
-
-## v1.4.0 (2026-04-17)
+## v1.4.2 (2026-04-17)
 
 ### Features
 - **cli**: add CLI tool package
 
 ### Bug Fixes
+- **ci**: resolve promise-retry error in npm installation
 - **plugins-image**: handle falsy image values properly
 - **plugins-image**: fix img src attribute handling
 - **plugins-fade-effect**: export useContentComplete hook
@@ -34,7 +28,7 @@ All notable changes to this project will be documented in this file.
 - **release**: include web package in release process
 - **web**: update version and export paths for CDN usage
 
-**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.3.2...v1.4.0
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.3.2...v1.4.2
 
 ## v1.3.2 (2026-04-03)
 
