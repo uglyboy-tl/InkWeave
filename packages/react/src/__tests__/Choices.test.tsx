@@ -148,6 +148,30 @@ describe("Choices", () => {
     expect(screen.getByTestId("custom-choice")).toBeInTheDocument();
     expect(screen.getByText("Custom Choice")).toBeInTheDocument();
   });
+
+  it("should apply classes from choice to the rendered element", () => {
+    const mockInk = createMockInk();
+
+    const choiceWithClasses = new Choice("Styled Choice", 0);
+    // Add additional classes without replacing the initial inkweave-choice class
+    choiceWithClasses.classes.push("primary", "highlighted");
+
+    choicesStore.setState({
+      choices: [choiceWithClasses],
+    });
+
+    render(
+      // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
+      <StoryProvider ink={mockInk as any}>
+        <Choices />
+      </StoryProvider>,
+    );
+
+    const link = screen.getByText("Styled Choice");
+    expect(link).toHaveClass("inkweave-choice");
+    expect(link).toHaveClass("primary");
+    expect(link).toHaveClass("highlighted");
+  });
 });
 
 describe("Contents", () => {

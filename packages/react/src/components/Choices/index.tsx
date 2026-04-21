@@ -19,13 +19,25 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
     }, [choice.index, choice.type, onClick]);
 
     const Component = ChoiceRegistry.get(choice.type);
+
+    // Build class list: start with choice classes (including inkweave-choice), add button style
+    const classList = [...choice.classes, styles.button];
+
+    // Add type-specific class if needed (e.g., disabled for unclickable)
+    if (choice.type === "unclickable" && styles.disabled) {
+      classList.push(styles.disabled);
+    }
+
+    // Remove duplicates and join
+    const className = [...new Set(classList.filter(Boolean))].join(" ");
+
     if (Component) {
       return (
         <li style={{ "--index": index } as React.CSSProperties}>
           {createElement(Component, {
             choice,
             onClick: handleClick,
-            className: `inkweave-choice ${styles.button}`,
+            className,
             children: choice.text,
           })}
         </li>
@@ -36,7 +48,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
       <li className={styles.item} style={{ "--index": index } as React.CSSProperties}>
         <a
           onClick={handleClick}
-          className={`inkweave-choice ${styles.button} ${choice.type === "unclickable" ? styles.disabled : ""}`}
+          className={className}
           aria-disabled={choice.type === "unclickable"}
         >
           {choice.text}
