@@ -68,7 +68,13 @@ const load = () => {
         const contents = self.contents as ContentItem[];
         // 性能优化：添加空数组检查
         if (contents.length === 0) return -1;
-        return contents.findIndex((item) => item.text === last_content);
+        // 从后向前搜索，找到最后一个匹配的项
+        for (let i = contents.length - 1; i >= 0; i--) {
+          if (contents[i]?.text === last_content) {
+            return i;
+          }
+        }
+        return -1;
       },
     });
     Object.defineProperty(this, "choicesCanShow", {

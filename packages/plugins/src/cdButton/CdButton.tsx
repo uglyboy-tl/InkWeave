@@ -47,7 +47,9 @@ const CooldownChoice: React.FC<ChoiceComponentProps> = ({
   }, [isDisabled, cd, onClick, key]);
 
   const buttonClass =
-    `${choiceStyles?.button || ""} ${className} ${isDisabled ? choiceStyles?.disabled || "" : ""}`.trim();
+    isDisabled && choiceStyles.disabled
+      ? `${className} ${choiceStyles.disabled}`.trim()
+      : className;
 
   const template = (ink.options.cdTemplate as string) || "{text} ({time})";
   const displayText =
