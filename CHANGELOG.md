@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.5.0 (2026-04-21)
+
+### Features
+- **plugins-autorestore**: add auto-restore plugin for automatic save state loading
+- **react-contents**: support dynamic CSS classes in Contents component
+- **plugins-class-tag**: add class tag plugin for CSS class support
+- **parser**: add CSS class support to Parser
+- **cli**: add event listener support in runner
+- **plugins-scrollafterchoice**: add onScrollComplete event support
+- **plugins-audio**: add onAudioPlay event support
+- **plugins-fade-effect**: add onFadeComplete event support
+- **plugins-image**: add onImageLoad event support
+- **core**: integrate EventEmitter into InkStory
+- **core**: add EventEmitter extension for event-driven architecture
+
+### Refactoring
+- **plugins**: improve existing plugin implementations and tests
+- **core-state**: update state management for class support
+- **cli**: update runner to handle ContentItem structure
+- **tests**: introduce createMockInk utility for consistent test mocks
+- **plugins-scrollafterchoice**: use Events constants for event listeners
+
+### Documentation
+- **plugins-docs**: update README with autorestore plugin documentation
+- **changelog**: update changelog for event system features
+
+### Tests
+- **react-story**: update Story component tests and mock data
+- **plugins-test**: add createMockStory utility for plugin testing
+- **e2e**: add e2e tests for class tag feature
+
+### Chores
+- **typescript-config**: update TypeScript configuration files
+- **web-entry**: update web package entry point
+- **plugins-index**: add autorestore export to plugin index
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.4.2...v1.5.0
+
 ## v1.4.2 (2026-04-17)
 
 ### Features
