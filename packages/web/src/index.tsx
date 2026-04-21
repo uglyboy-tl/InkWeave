@@ -2,6 +2,7 @@ import { BaseFileHandler, createInkStory } from "@inkweave/core";
 import {
   loadAudio,
   loadAutoButton,
+  loadAutoRestore,
   loadCdButton,
   loadClassTag,
   loadFadeEffect,
@@ -16,6 +17,7 @@ import type { InkWeaveOptions } from "./types";
 
 loadImage();
 loadAudio();
+loadAutoRestore();
 loadFadeEffect();
 loadScrollafterchoice();
 loadLinkopen();
