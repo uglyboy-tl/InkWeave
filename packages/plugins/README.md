@@ -14,7 +14,8 @@ InkWeave 插件扩展包，为交互式故事提供丰富的功能增强。
 | AutoButton        | 隐藏按钮，定时自动触发   |
 | CdButton          | 冷却按钮，显示倒计时     |
 | Memory            | 存档管理（保存/读取）    |
-| Autosave          | 自动保存游戏进度         |
+| Autosave          | 标签触发自动保存         |
+| AutoRestore       | 自动保存和还原游戏进度   |
 
 ### 内容扩展
 
@@ -190,9 +191,9 @@ loadMemory(); // 默认 localStorage
 
 ---
 
-#### Autosave - 自动存档
+#### Autosave - 标签触发自动存档
 
-在指定位置自动保存游戏进度。
+在故事中使用标签触发自动保存。
 
 **Ink 语法：**
 
@@ -201,6 +202,36 @@ loadMemory(); // 默认 localStorage
 ```
 
 **效果：** 执行到此标签时自动保存到槽位 1。
+
+---
+
+#### AutoRestore - 自动保存和还原
+
+类似 Calico 的 autosave 功能，在关键节点自动保存，并在故事加载时自动还原。
+
+**功能：**
+
+- 选择选项后自动保存到槽位 0
+- 故事初始化时自动加载最近的存档
+- 低配置，只需确保存储机制正常工作即可使用
+
+**使用示例：**
+
+```js
+import { loadAutoRestore } from '@inkweave/plugins';
+
+loadAutoRestore();
+```
+
+**与 Autosave 的区别：**
+
+- `Autosave`：需要通过 `#autosave` 标签手动触发保存
+- `AutoRestore`：自动在关键节点保存，无需标签，并支持自动还原
+
+**保存时机：**
+
+- 玩家选择选项后自动保存
+- 存档槽位固定为 0（与 Memory 插件的默认槽位一致）
 
 ---
 
