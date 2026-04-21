@@ -42,7 +42,7 @@ describe("Story", () => {
     // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
     render(<Story ink={mockInk as any} onInit={onInit} />);
 
-    expect(mockInk.restart).toHaveBeenCalled();
+    expect(mockInk.continue).toHaveBeenCalled();
     expect(onInit).toHaveBeenCalledWith(mockInk);
   });
 
@@ -89,7 +89,7 @@ describe("Story", () => {
 
     expect(onInit).toHaveBeenCalledTimes(2);
     expect(onInit).toHaveBeenCalledWith(mockInk2);
-    expect(mockInk2.restart).toHaveBeenCalled();
+    expect(mockInk2.continue).toHaveBeenCalled();
   });
 
   it("should update onInit callback reference on subsequent renders", () => {

@@ -37,7 +37,7 @@ const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = "", o
   onInitRef.current = onInit;
 
   useEffect(() => {
-    ink.restart();
+    ink.continue();
     onInitRef.current?.(ink);
   }, [ink]);
 

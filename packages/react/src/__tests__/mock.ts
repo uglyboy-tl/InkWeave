@@ -7,7 +7,7 @@ import { EventEmitter } from "@inkweave/core";
  */
 export function createMockInk(
   overrides: Partial<{
-    restart?: () => void;
+    continue?: () => void;
     choose?: (choice: number) => void;
     options?: Record<string, unknown>;
     eventEmitter?: EventEmitter;
@@ -16,7 +16,7 @@ export function createMockInk(
 ) {
   return {
     eventEmitter: new EventEmitter(),
-    restart: vi.fn(),
+    continue: vi.fn(),
     choose: vi.fn(),
     options: {},
     ...overrides,
