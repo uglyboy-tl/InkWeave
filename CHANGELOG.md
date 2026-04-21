@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.5.1 (2026-04-21)
+
+### Features
+- **audio-plugin**: add music state persistence with Zustand
+- **react-choices**: enhance Choices component class handling
+
+### Bug Fixes
+- **core**: fix clear method and add Choice class support
+
+### Refactoring
+- **plugins**: improve plugin functionality and fix bugs
+
+### Chores
+- **deps**: upgrade development dependencies
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.5.0...v1.5.1
+
 ## v1.5.0 (2026-04-21)
 
 ### Features
