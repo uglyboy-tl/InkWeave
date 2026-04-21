@@ -153,7 +153,7 @@ export class InkStory implements InkStoryContext {
 
   dispose() {
     this.eventEmitter.emit(Events.STORY_DISPOSE, { story: this });
-
+    this.clear();
     this.eventEmitter.clear();
   }
 

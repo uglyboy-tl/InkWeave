@@ -95,9 +95,11 @@ export class Choice {
   index: number;
   type: string;
   val?: string;
+  classes: string[]; // Make classes required since it's always initialized
   constructor(text: string, index: number, type: string = "default") {
     this.text = text || "";
     this.index = index;
     this.type = type;
+    this.classes = ["inkweave-choice"]; // Initialize with the base class
   }
 }
