@@ -1,18 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
-import { contentsStore, EventEmitter, Patches, Tags } from "@inkweave/core";
+import { contentsStore, Patches, Tags } from "@inkweave/core";
+import { createMockStory } from "../../../test/utils";
 import load, { useContentComplete } from "../index";
-
-function createMockStory(overrides = {}) {
-  return {
-    eventEmitter: new EventEmitter(),
-    options: {} as Record<string, unknown>,
-    save_label: [] as string[],
-    contents: [] as string[],
-    saves: {},
-    choose: () => {},
-    ...overrides,
-  };
-}
 
 describe("fadeEffect", () => {
   beforeEach(() => {
@@ -67,7 +56,7 @@ describe("fadeEffect", () => {
       load();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1", "line2"],
+        contents: [{ text: "line1" }, { text: "line2" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -79,7 +68,7 @@ describe("fadeEffect", () => {
       useContentComplete.getState().setLastContent([]);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1", "line2"],
+        contents: [{ text: "line1" }, { text: "line2" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -88,10 +77,10 @@ describe("fadeEffect", () => {
 
     it("should return correct index for visibleLines", () => {
       load();
-      useContentComplete.getState().setLastContent(["line1", "line2"]);
+      useContentComplete.getState().setLastContent([{ text: "line1" }, { text: "line2" }]);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1", "line2", "line3"],
+        contents: [{ text: "line1" }, { text: "line2" }, { text: "line3" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -102,7 +91,7 @@ describe("fadeEffect", () => {
       load();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1"],
+        contents: [{ text: "line1" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -115,7 +104,7 @@ describe("fadeEffect", () => {
       load();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1", "line2"],
+        contents: [{ text: "line1" }, { text: "line2" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -138,7 +127,7 @@ describe("fadeEffect", () => {
       load();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1"],
+        contents: [{ text: "line1" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -150,7 +139,7 @@ describe("fadeEffect", () => {
       const mockChoose = vi.fn();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1"],
+        contents: [{ text: "line1" }],
         choose: mockChoose,
       });
       const patch = Patches.patches[0];
@@ -164,7 +153,7 @@ describe("fadeEffect", () => {
       useContentComplete.getState().setContentComplete(true);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1", "line2"],
+        contents: [{ text: "line1" }, { text: "line2" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -177,7 +166,7 @@ describe("fadeEffect", () => {
       useContentComplete.getState().setLastContent([]);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: ["line1", "line2"],
+        contents: [{ text: "line1" }, { text: "line2" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -190,7 +179,7 @@ describe("fadeEffect", () => {
       useContentComplete.getState().setContentComplete(true);
       const mockStory = createMockStory({
         options: { linedelay: 0 },
-        contents: ["line1"],
+        contents: [{ text: "line1" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -220,7 +209,7 @@ describe("fadeEffect", () => {
       useContentComplete.getState().setContentComplete(false);
       const mockStory = createMockStory({
         options: { linedelay: 0.01 },
-        contents: ["line1"],
+        contents: [{ text: "line1" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");

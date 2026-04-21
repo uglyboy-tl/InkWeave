@@ -1,18 +1,8 @@
 import { beforeEach, describe, expect, it, mock, vi } from "bun:test";
-import type { InkStoryContext } from "@inkweave/core";
-import { EventEmitter, Patches, Tags } from "@inkweave/core";
+import { Patches, Tags } from "@inkweave/core";
+import { createMockStory } from "../../../test/utils";
 import { AudioController } from "../AudioController";
 import load from "../index";
-
-function createMockStory(overrides = {}): InkStoryContext {
-  return {
-    eventEmitter: new EventEmitter(),
-    options: {} as Record<string, unknown>,
-
-    save_label: [],
-    ...overrides,
-  };
-}
 
 describe("audio", () => {
   beforeEach(() => {

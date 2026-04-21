@@ -1,3 +1,4 @@
+import type { ContentItem } from "@inkweave/core";
 import {
   contentsStore,
   createSelectors,
@@ -18,7 +19,7 @@ type ContentComplete = {
   contentComplete: boolean;
   last_content: string;
   setContentComplete: (contentComplete: boolean) => void;
-  setLastContent: (contents: string[]) => void;
+  setLastContent: (contents: ContentItem[]) => void;
 };
 
 const useContentComplete = create<ContentComplete>((set) => ({
@@ -30,8 +31,8 @@ const useContentComplete = create<ContentComplete>((set) => ({
       set({ last_content: "" });
       return;
     }
-    const last_content = contents[contents.length - 1];
-    set({ last_content });
+    const lastItem = contents[contents.length - 1];
+    set({ last_content: lastItem?.text });
   },
 }));
 
@@ -56,7 +57,7 @@ const load = () => {
     this.choose = (index: number) => {
       if (self.options.linedelay !== 0) {
         useContentComplete.getState().setContentComplete(false);
-        useContentComplete.getState().setLastContent(self.contents as string[]);
+        useContentComplete.getState().setLastContent(self.contents as ContentItem[]);
       }
       return originalChoose.call(self, index);
     };
@@ -64,7 +65,10 @@ const load = () => {
       get() {
         const last_content = useContentComplete.getState().last_content;
         if (!last_content) return -1;
-        return (self.contents as string[]).lastIndexOf(last_content);
+        const contents = self.contents as ContentItem[];
+        // 性能优化：添加空数组检查
+        if (contents.length === 0) return -1;
+        return contents.findIndex((item) => item.text === last_content);
       },
     });
     Object.defineProperty(this, "choicesCanShow", {
@@ -86,7 +90,7 @@ const load = () => {
         },
         Math.max(
           0,
-          ((self.contents as string[]).length - (self.visibleLines as number)) *
+          ((self.contents as ContentItem[]).length - (self.visibleLines as number)) *
             (self.options.linedelay as number) *
             1000,
         ),

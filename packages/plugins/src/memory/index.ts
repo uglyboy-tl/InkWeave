@@ -13,7 +13,8 @@ const options = {
 };
 
 const show = (title: string): SaveSlot[] | null => {
-  return useStorage((state) => state.storage.get(title) || null);
+  const storage = useStorage.getState().storage;
+  return storage.get(title) || null;
 };
 
 const save = (index: number, ink: InkStory) => {

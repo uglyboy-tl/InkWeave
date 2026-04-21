@@ -1,16 +1,7 @@
 import { beforeEach, describe, expect, it, mock } from "bun:test";
-import { EventEmitter, Patches, Tags } from "@inkweave/core";
+import { Patches, Tags } from "@inkweave/core";
+import { createMockStory } from "../../../test/utils";
 import load, { useStoryImage } from "../index";
-
-function createMockStory(overrides = {}) {
-  return {
-    eventEmitter: new EventEmitter(),
-    options: {} as Record<string, unknown>,
-    save_label: [] as string[],
-    saves: {},
-    ...overrides,
-  };
-}
 
 describe("image", () => {
   beforeEach(() => {
