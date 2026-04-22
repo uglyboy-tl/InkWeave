@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, mock } from "bun:test";
 import { Patches, Tags } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
-import load, { useStoryImage } from "../index";
+import { imagePlugin as load, useStoryImage } from "../index";
 
 describe("image", () => {
   beforeEach(() => {
@@ -11,12 +11,12 @@ describe("image", () => {
 
   describe("load", () => {
     it("should register image tag", () => {
-      load();
+      load.onLoad();
       expect(Tags.functions.has("image")).toBe(true);
     });
 
     it("should register patch", () => {
-      load();
+      load.onLoad();
       expect(Patches.patches.length).toBeGreaterThan(0);
     });
   });
@@ -40,7 +40,7 @@ describe("image", () => {
 
   describe("fileHandler integration", () => {
     it("should use fileHandler for path resolution", () => {
-      load();
+      load.onLoad();
       const mockFileHandler = {
         resolveFilename: mock((path: string) => `/base/${path}`),
         loadFile: mock(() => ""),
@@ -53,14 +53,14 @@ describe("image", () => {
     });
 
     it("should handle path without fileHandler", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "image: test.png");
       expect(useStoryImage.getState().image).toBe("test.png");
     });
 
     it("should clear image when tag value is empty", () => {
-      load();
+      load.onLoad();
       useStoryImage.getState().setImage("existing.png");
       const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "image");
@@ -70,7 +70,7 @@ describe("image", () => {
 
   describe("Patches", () => {
     it("should add image property", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -78,7 +78,7 @@ describe("image", () => {
     });
 
     it("should push image to save_label", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -86,7 +86,7 @@ describe("image", () => {
     });
 
     it("should clear image on clears callback", () => {
-      load();
+      load.onLoad();
       useStoryImage.getState().setImage("test.png");
       const mockStory = createMockStory();
       const patch = Patches.patches[0];
@@ -96,7 +96,7 @@ describe("image", () => {
     });
 
     it("should set image via property setter", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");

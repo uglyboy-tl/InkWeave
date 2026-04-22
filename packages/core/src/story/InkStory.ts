@@ -3,6 +3,7 @@ import { EventEmitter } from "../extensions/EventEmitter";
 import { ExternalFunctions } from "../extensions/ExternalFunctions";
 import { Parser } from "../extensions/Parser";
 import { Patches } from "../extensions/Patches";
+import { Plugins } from "../extensions/Plugins";
 import { Tags } from "../extensions/Tags";
 import choicesStore from "../state/choices";
 import contentsStore from "../state/contents";
@@ -20,6 +21,7 @@ export class InkStory implements InkStoryContext {
   story: Story;
   options: InkStoryOptions;
   eventEmitter: EventEmitterInterface;
+  plugins: Plugins;
   _save_label: string[] = ["contents"];
   [key: string]: unknown;
 
@@ -28,6 +30,7 @@ export class InkStory implements InkStoryContext {
     this.story = story;
     this.title = title;
     this.eventEmitter = new EventEmitter() as EventEmitterInterface;
+    this.plugins = new Plugins(this);
     const content = this.story.ToJson() || "";
     bindFunctions(this);
     Patches.apply(this, content);

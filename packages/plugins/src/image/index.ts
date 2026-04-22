@@ -1,3 +1,4 @@
+import type { Plugin } from "@inkweave/core";
 import { Events, type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
 import { create } from "zustand";
 
@@ -18,37 +19,42 @@ export const useStoryImage = create<StoryImage>((set) => ({
 }));
 
 const getPath = (path: string, fileHandler?: FileHandler) => {
-  if (fileHandler && "resolveFilename" in fileHandler) {
-    return (fileHandler as { resolveFilename: (f: string) => string }).resolveFilename(path);
+  if (fileHandler?.resolveFilename) {
+    return fileHandler.resolveFilename(path);
   }
   return path;
 };
 
-const load = () => {
-  Tags.add("image", (val: string | null | undefined, ink: InkStory) => {
-    if (val) {
-      useStoryImage.getState().setImage(getPath(val, ink.options.fileHandler));
-    } else {
-      useStoryImage.getState().setImage("");
-    }
-  });
-
-  Patches.add(function () {
-    Object.defineProperty(this, "image", {
-      get() {
-        return useStoryImage.getState().image;
-      },
-
-      set(path: string) {
-        useStoryImage.getState().setImage(path);
-      },
+export const imagePlugin: Plugin = {
+  id: "image",
+  name: "Image Plugin",
+  description: "Provides image display functionality for ink stories",
+  enabledByDefault: true,
+  onLoad: () => {
+    Tags.add("image", (val: string | null | undefined, ink: InkStory) => {
+      if (val) {
+        useStoryImage.getState().setImage(getPath(val, ink.options.fileHandler));
+      } else {
+        useStoryImage.getState().setImage("");
+      }
     });
-    this.save_label.push("image");
-    this.eventEmitter.on(Events.STORY_CLEARED, () => {
-      this.image = "";
-    });
-  }, {});
+
+    Patches.add(function () {
+      Object.defineProperty(this, "image", {
+        get() {
+          return useStoryImage.getState().image;
+        },
+
+        set(path: string) {
+          useStoryImage.getState().setImage(path);
+        },
+      });
+      this.save_label.push("image");
+      this.eventEmitter.on(Events.STORY_CLEARED, () => {
+        this.image = "";
+      });
+    }, {});
+  },
 };
 
-export default load;
 export { default as Image } from "./Image";

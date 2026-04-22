@@ -4,6 +4,7 @@ export { EventEmitter } from "./extensions/EventEmitter";
 export { ExternalFunctions } from "./extensions/ExternalFunctions";
 export { Parser, type ParserLine } from "./extensions/Parser";
 export { Patches } from "./extensions/Patches";
+export { Plugins } from "./extensions/Plugins";
 export { Tags } from "./extensions/Tags";
 export { default as choicesStore } from "./state/choices";
 export { default as contentsStore } from "./state/contents";
@@ -17,6 +18,7 @@ export type {
   FileHandler,
   InkStoryContext,
   InkStoryOptions,
+  Plugin,
   SaveData,
 } from "./types";
 export { BaseFileHandler, CHOICE_SEPARATOR, Choice, Events } from "./types";

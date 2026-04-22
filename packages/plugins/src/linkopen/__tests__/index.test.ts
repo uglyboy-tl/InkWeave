@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, mock } from "bun:test";
 import { Tags } from "@inkweave/core";
-import load from "../index";
+import { linkOpenPlugin as plugin } from "../index";
 
 describe("linkopen", () => {
   describe("load", () => {
     it("should register linkopen tag", () => {
-      load();
+      plugin.onLoad();
       expect(Tags.functions.has("linkopen")).toBe(true);
     });
   });
@@ -24,7 +24,7 @@ describe("linkopen", () => {
     });
 
     it("should open http URLs", () => {
-      load();
+      plugin.onLoad();
 
       Tags.process(
         {} as unknown as Parameters<typeof Tags.process>[0],
@@ -35,7 +35,7 @@ describe("linkopen", () => {
     });
 
     it("should open https URLs", () => {
-      load();
+      plugin.onLoad();
 
       Tags.process(
         {} as unknown as Parameters<typeof Tags.process>[0],
@@ -46,7 +46,7 @@ describe("linkopen", () => {
     });
 
     it("should block unsafe protocols", () => {
-      load();
+      plugin.onLoad();
       const warnSpy = mock(() => {});
       const originalWarn = console.warn;
       console.warn = warnSpy;
@@ -63,7 +63,7 @@ describe("linkopen", () => {
     });
 
     it("should handle invalid URLs", () => {
-      load();
+      plugin.onLoad();
       const warnSpy = mock(() => {});
       const originalWarn = console.warn;
       console.warn = warnSpy;

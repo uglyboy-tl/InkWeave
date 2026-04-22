@@ -38,81 +38,85 @@ const useContentComplete = create<ContentComplete>((set) => ({
 
 export { useContentComplete };
 
-const load = () => {
-  Tags.add("linedelay", (val: string | null | undefined, ink) => {
-    if (val != null) {
-      const value = parseFloat(val);
-      if (!Number.isNaN(value)) {
-        ink.options.linedelay = value;
-        if (value === 0) {
-          useContentComplete.getState().setContentComplete(true);
-        }
-      }
-    }
-  });
-
-  Patches.add(function (this: InkStoryContext) {
-    const originalChoose = this.choose as (index: number) => void;
-    const self = this;
-    this.choose = (index: number) => {
-      if (self.options.linedelay !== 0) {
-        useContentComplete.getState().setContentComplete(false);
-        useContentComplete.getState().setLastContent(self.contents as ContentItem[]);
-      }
-      return originalChoose.call(self, index);
-    };
-    Object.defineProperty(this, "visibleLines", {
-      get() {
-        const last_content = useContentComplete.getState().last_content;
-        if (!last_content) return -1;
-        const contents = self.contents as ContentItem[];
-        // 性能优化：添加空数组检查
-        if (contents.length === 0) return -1;
-        // 从后向前搜索，找到最后一个匹配的项
-        for (let i = contents.length - 1; i >= 0; i--) {
-          if (contents[i]?.text === last_content) {
-            return i;
+export const fadeEffectPlugin = {
+  id: "fadeEffect",
+  name: "Fade Effect Plugin",
+  description: "Provides text fade-in effect with configurable line delay",
+  enabledByDefault: true,
+  onLoad: () => {
+    Tags.add("linedelay", (val: string | null | undefined, ink) => {
+      if (val != null) {
+        const value = parseFloat(val);
+        if (!Number.isNaN(value)) {
+          ink.options.linedelay = value;
+          if (value === 0) {
+            useContentComplete.getState().setContentComplete(true);
           }
         }
-        return -1;
-      },
-    });
-    Object.defineProperty(this, "choicesCanShow", {
-      get() {
-        return createSelectors(useContentComplete).use.contentComplete();
-      },
-    });
-
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    const unsub = contentsStore.subscribe(() => {
-      if (timer) clearTimeout(timer);
-      if (self.options.linedelay === 0) {
-        useContentComplete.getState().setContentComplete(true);
-        return;
       }
-      timer = setTimeout(
-        () => {
-          useContentComplete.getState().setContentComplete(true);
+    });
+
+    Patches.add(function (this: InkStoryContext) {
+      const originalChoose = this.choose as (index: number) => void;
+      const self = this;
+      this.choose = (index: number) => {
+        if (self.options.linedelay !== 0) {
+          useContentComplete.getState().setContentComplete(false);
+          useContentComplete.getState().setLastContent(self.contents as ContentItem[]);
+        }
+        return originalChoose.call(self, index);
+      };
+      Object.defineProperty(this, "visibleLines", {
+        get() {
+          const last_content = useContentComplete.getState().last_content;
+          if (!last_content) return -1;
+          const contents = self.contents as ContentItem[];
+          // 性能优化：添加空数组检查
+          if (contents.length === 0) return -1;
+          // 从后向前搜索，找到最后一个匹配的项
+          for (let i = contents.length - 1; i >= 0; i--) {
+            if (contents[i]?.text === last_content) {
+              return i;
+            }
+          }
+          return -1;
         },
-        Math.max(
-          0,
-          ((self.contents as ContentItem[]).length - (self.visibleLines as number)) *
-            (self.options.linedelay as number) *
-            1000,
-        ),
-      );
-    });
+      });
+      Object.defineProperty(this, "choicesCanShow", {
+        get() {
+          return createSelectors(useContentComplete).use.contentComplete();
+        },
+      });
 
-    this.eventEmitter.on(Events.STORY_DISPOSE, () => {
-      unsub();
-      if (timer) clearTimeout(timer);
-    });
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      const unsub = contentsStore.subscribe(() => {
+        if (timer) clearTimeout(timer);
+        if (self.options.linedelay === 0) {
+          useContentComplete.getState().setContentComplete(true);
+          return;
+        }
+        timer = setTimeout(
+          () => {
+            useContentComplete.getState().setContentComplete(true);
+          },
+          Math.max(
+            0,
+            ((self.contents as ContentItem[]).length - (self.visibleLines as number)) *
+              (self.options.linedelay as number) *
+              1000,
+          ),
+        );
+      });
 
-    this.eventEmitter.on(Events.STORY_CLEARED, () => {
-      if (self.options.linedelay !== 0) useContentComplete.getState().setContentComplete(false);
-      useContentComplete.getState().setLastContent([]);
-    });
-  }, options);
+      this.eventEmitter.on(Events.STORY_DISPOSE, () => {
+        unsub();
+        if (timer) clearTimeout(timer);
+      });
+
+      this.eventEmitter.on(Events.STORY_CLEARED, () => {
+        if (self.options.linedelay !== 0) useContentComplete.getState().setContentComplete(false);
+        useContentComplete.getState().setLastContent([]);
+      });
+    }, options);
+  },
 };
-
-export default load;

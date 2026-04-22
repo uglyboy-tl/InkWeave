@@ -1,4 +1,4 @@
-import type { InkStory } from "@inkweave/core";
+import type { InkStory, Plugin } from "@inkweave/core";
 import { Patches } from "@inkweave/core";
 import type { SaveSlot } from "./storage";
 import useStorage from "./storage";
@@ -56,12 +56,17 @@ const load = (save_data: string, ink: InkStory) => {
   }
 };
 
-const loadMemory = () => {
-  Patches.add(() => {
-    useStorage.getState().changeFormat(options.memory_format);
-  }, options);
+export const memoryPlugin: Plugin = {
+  id: "memory",
+  name: "Memory Plugin",
+  description: "Provides save and load functionality using localStorage",
+  enabledByDefault: true,
+  onLoad: () => {
+    Patches.add(() => {
+      useStorage.getState().changeFormat(options.memory_format);
+    }, options);
+  },
 };
 
 export const memory = { save, load, show };
 export type { SaveSlot };
-export default loadMemory;

@@ -1,33 +1,13 @@
 import { createInkStory } from "@inkweave/core";
-import {
-  loadAudio,
-  loadAutoButton,
-  loadAutoRestore,
-  loadCdButton,
-  loadClassTag,
-  loadFadeEffect,
-  loadImage,
-  loadLinkopen,
-  loadMemory,
-  loadScrollafterchoice,
-} from "@inkweave/plugins";
+
 import { createRoot } from "react-dom/client";
 import Container from "./components/Container/index";
 import type { InkWeaveOptions } from "./types";
-import { FetchFileHandler } from "./utils";
-
-loadImage();
-loadAudio();
-loadAutoRestore();
-loadFadeEffect();
-loadScrollafterchoice();
-loadLinkopen();
-loadMemory();
-loadAutoButton();
-loadCdButton();
-loadClassTag();
+import { FetchFileHandler, initPlugins } from "./utils";
 
 const init = (options: InkWeaveOptions) => {
+  initPlugins();
+
   const containerEl =
     typeof options.container === "string"
       ? document.querySelector(options.container)

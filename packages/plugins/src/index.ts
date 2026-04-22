@@ -1,20 +1,12 @@
-// Audio
-export { default as loadAudio } from "./audio";
-// Buttons
-export { default as loadAutoButton } from "./autoButton";
-// AutoRestore
-export { default as loadAutoRestore } from "./autorestore";
-// Autosave
-export { default as loadAutosave } from "./autosave";
-export { default as loadCdButton } from "./cdButton";
-// Class Tag
-export { default as loadClassTag } from "./classTag";
-// Effects
-export { default as loadFadeEffect } from "./fadeEffect";
-// Image
-export { default as loadImage, Image, useStoryImage } from "./image";
-export { default as loadLinkopen } from "./linkopen";
-// Memory
+export { audioPlugin } from "./audio";
+export { autoButtonPlugin } from "./autoButton";
+export { autoRestorePlugin } from "./autorestore";
+export { autoSavePlugin } from "./autosave";
+export { cdButtonPlugin } from "./cdButton";
+export { classTagPlugin } from "./classTag";
+export { fadeEffectPlugin } from "./fadeEffect";
+export { Image, imagePlugin, useStoryImage } from "./image";
+export { linkOpenPlugin } from "./linkopen";
 export type { SaveSlot } from "./memory";
-export { default as loadMemory, memory } from "./memory";
-export { default as loadScrollafterchoice } from "./scrollafterchoice";
+export { memory, memoryPlugin } from "./memory";
+export { scrollAfterChoicePlugin } from "./scrollafterchoice";

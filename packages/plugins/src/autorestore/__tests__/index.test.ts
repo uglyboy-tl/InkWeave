@@ -3,7 +3,7 @@ import { Events, Patches, Tags } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
 import type { SaveSlot } from "../../memory";
 import { memory } from "../../memory";
-import loadAutoRestore from "../index";
+import { autoRestorePlugin as plugin } from "../index";
 
 describe("autorestore plugin", () => {
   beforeEach(() => {
@@ -13,12 +13,12 @@ describe("autorestore plugin", () => {
   });
 
   it("should register patch", () => {
-    loadAutoRestore();
+    plugin.onLoad();
     expect(Patches.patches.length).toBe(1);
   });
 
   it("should autosave on choice selected", () => {
-    loadAutoRestore();
+    plugin.onLoad();
 
     const mockInk = createMockStory();
 
@@ -32,7 +32,7 @@ describe("autorestore plugin", () => {
   });
 
   it("should auto restore on story initialized", () => {
-    loadAutoRestore();
+    plugin.onLoad();
 
     const mockSaveData: SaveSlot = {
       data: JSON.stringify({ state: "test-state" }),
@@ -61,7 +61,7 @@ describe("autorestore plugin", () => {
   });
 
   it("should use once to restore only once per instance", () => {
-    loadAutoRestore();
+    plugin.onLoad();
 
     const mockSaveData: SaveSlot = {
       data: JSON.stringify({ state: "test-state" }),

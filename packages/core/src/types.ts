@@ -28,6 +28,7 @@ export const DEFAULT_STORY_OPTIONS: InkStoryOptions = {
 // Types
 export interface FileHandler {
   loadFile(filename: string): string;
+  resolveFilename?(filename: string): string;
 }
 
 export class BaseFileHandler implements FileHandler {
@@ -72,6 +73,16 @@ export interface SaveData {
   state: string;
   contents?: ContentItem[];
   [key: string]: unknown;
+}
+
+export interface Plugin {
+  id: string;
+  name?: string;
+  description?: string;
+  version?: string;
+  enabledByDefault?: boolean;
+  onLoad: () => void | Promise<void>;
+  dependencies?: string[];
 }
 
 export const Events = {

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
 import { contentsStore, Patches, Tags } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
-import load, { useContentComplete } from "../index";
+import { fadeEffectPlugin as plugin, useContentComplete } from "../index";
 
 describe("fadeEffect", () => {
   beforeEach(() => {
@@ -11,40 +11,40 @@ describe("fadeEffect", () => {
 
   describe("load", () => {
     it("should register patch", () => {
-      load();
+      plugin.onLoad();
       expect(Patches.patches.length).toBeGreaterThan(0);
     });
 
     it("should register linedelay tag", () => {
-      load();
+      plugin.onLoad();
       expect(Tags.functions.has("linedelay")).toBe(true);
     });
   });
 
   describe("linedelay tag", () => {
     it("should set linedelay option from tag value", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay: 0.1");
       expect(mockStory.options.linedelay).toBe(0.1);
     });
 
     it("should handle linedelay 0", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay: 0");
       expect(mockStory.options.linedelay).toBe(0);
     });
 
     it("should handle invalid linedelay value", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay: invalid");
       expect(mockStory.options.linedelay).toBeUndefined();
     });
 
     it("should handle null linedelay value", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as never, "linedelay:");
       expect(mockStory.options.linedelay).toBeUndefined();
@@ -53,7 +53,7 @@ describe("fadeEffect", () => {
 
   describe("Patches", () => {
     it("should add visibleLines property", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: [{ text: "line1" }, { text: "line2" }],
@@ -64,7 +64,7 @@ describe("fadeEffect", () => {
     });
 
     it("should return -1 for visibleLines when no last_content", () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setLastContent([]);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -76,7 +76,7 @@ describe("fadeEffect", () => {
     });
 
     it("should return correct index for visibleLines", () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setLastContent([{ text: "line1" }, { text: "line2" }]);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -88,7 +88,7 @@ describe("fadeEffect", () => {
     });
 
     it("should add choicesCanShow property", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: [{ text: "line1" }],
@@ -101,7 +101,7 @@ describe("fadeEffect", () => {
     });
 
     it("should call clear function", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: [{ text: "line1" }, { text: "line2" }],
@@ -112,7 +112,7 @@ describe("fadeEffect", () => {
     });
 
     it("should set contentComplete false on clear with linedelay", () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setContentComplete(true);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -124,7 +124,7 @@ describe("fadeEffect", () => {
     });
 
     it("should call cleanup function", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
         contents: [{ text: "line1" }],
@@ -135,7 +135,7 @@ describe("fadeEffect", () => {
     });
 
     it("should wrap choose function", () => {
-      load();
+      plugin.onLoad();
       const mockChoose = vi.fn();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -149,7 +149,7 @@ describe("fadeEffect", () => {
     });
 
     it("should set contentComplete false on choose with linedelay", () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setContentComplete(true);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -162,7 +162,7 @@ describe("fadeEffect", () => {
     });
 
     it("should set lastContent on choose", () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setLastContent([]);
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -175,7 +175,7 @@ describe("fadeEffect", () => {
     });
 
     it("should not set contentComplete false on choose with zero linedelay", () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setContentComplete(true);
       const mockStory = createMockStory({
         options: { linedelay: 0 },
@@ -190,7 +190,7 @@ describe("fadeEffect", () => {
 
   describe("contentsStore subscription", () => {
     it("should set contentComplete true on contents update with zero linedelay", async () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setContentComplete(false);
       const mockStory = createMockStory({
         options: { linedelay: 0 },
@@ -205,7 +205,7 @@ describe("fadeEffect", () => {
     });
 
     it("should schedule timer on contents update with linedelay", async () => {
-      load();
+      plugin.onLoad();
       useContentComplete.getState().setContentComplete(false);
       const mockStory = createMockStory({
         options: { linedelay: 0.01 },
@@ -221,7 +221,7 @@ describe("fadeEffect", () => {
     });
 
     it("should unsubscribe on cleanup", () => {
-      load();
+      plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
       });
@@ -236,8 +236,8 @@ describe("fadeEffect", () => {
   });
 
   describe("CSS injection", () => {
-    it("should inject CSS when loaded", () => {
-      expect(typeof load).toBe("function");
+    it("should have onLoad method", () => {
+      expect(typeof plugin.onLoad).toBe("function");
     });
   });
 });

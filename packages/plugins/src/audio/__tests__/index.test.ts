@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, mock, vi } from "bun:test";
 import { Patches, Tags } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
 import { AudioController } from "../AudioController";
-import load from "../index";
+import { audioPlugin as load } from "../index";
 
 describe("audio", () => {
   beforeEach(() => {
@@ -13,17 +13,17 @@ describe("audio", () => {
 
   describe("load", () => {
     it("should register sound tag", () => {
-      load();
+      load.onLoad();
       expect(Tags.functions.has("sound")).toBe(true);
     });
 
     it("should register music tag", () => {
-      load();
+      load.onLoad();
       expect(Tags.functions.has("music")).toBe(true);
     });
 
     it("should register patch", () => {
-      load();
+      load.onLoad();
       expect(Patches.patches.length).toBeGreaterThan(0);
     });
   });
@@ -107,13 +107,13 @@ describe("audio", () => {
     });
 
     it("should process sound tag with null", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound");
     });
 
     it("should process music tag with null", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "music");
     });
@@ -121,7 +121,7 @@ describe("audio", () => {
 
   describe("fileHandler integration", () => {
     it("should use fileHandler for sound path resolution", () => {
-      load();
+      load.onLoad();
       const mockFileHandler = {
         resolveFilename: mock((path: string) => `/base/${path}`),
         loadFile: mock(() => ""),
@@ -134,7 +134,7 @@ describe("audio", () => {
     });
 
     it("should use fileHandler for music path resolution", () => {
-      load();
+      load.onLoad();
       const mockFileHandler = {
         resolveFilename: mock((path: string) => `/base/${path}`),
         loadFile: mock(() => ""),
@@ -147,7 +147,7 @@ describe("audio", () => {
     });
 
     it("should handle path without fileHandler", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound: click.mp3");
     });
@@ -155,7 +155,7 @@ describe("audio", () => {
 
   describe("Patches", () => {
     it("should add audio property", () => {
-      load();
+      load.onLoad();
       const mockStory = createMockStory();
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
@@ -163,7 +163,7 @@ describe("audio", () => {
     });
 
     it("should register dispose listener", () => {
-      load();
+      load.onLoad();
       const fn = vi.fn();
       const mockStory = createMockStory();
       const patch = Patches.patches[0];
@@ -175,7 +175,7 @@ describe("audio", () => {
     });
 
     it("should cleanup sound and music on dispose event", () => {
-      load();
+      load.onLoad();
       AudioController.set_sound("test.mp3");
       AudioController.set_music("bgm.mp3");
       const mockStory = createMockStory();
