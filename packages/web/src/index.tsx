@@ -1,4 +1,4 @@
-import { BaseFileHandler, createInkStory } from "@inkweave/core";
+import { createInkStory } from "@inkweave/core";
 import {
   loadAudio,
   loadAutoButton,
@@ -14,6 +14,7 @@ import {
 import { createRoot } from "react-dom/client";
 import Container from "./components/Container/index";
 import type { InkWeaveOptions } from "./types";
+import { FetchFileHandler } from "./utils";
 
 loadImage();
 loadAudio();
@@ -25,21 +26,6 @@ loadMemory();
 loadAutoButton();
 loadCdButton();
 loadClassTag();
-
-class FetchFileHandler extends BaseFileHandler {
-  override loadFile(filename: string): string {
-    const path = this.resolveFilename(filename);
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", path, false);
-    xhr.send();
-
-    if (xhr.status !== 200) {
-      throw new Error(`Failed to load: ${path}`);
-    }
-
-    return xhr.responseText;
-  }
-}
 
 const init = (options: InkWeaveOptions) => {
   const containerEl =
@@ -66,7 +52,7 @@ const init = (options: InkWeaveOptions) => {
     containerEl.innerHTML = "";
     const root = createRoot(containerEl);
 
-    root.render(<Container ink={ink} title={options.title} />);
+    root.render(<Container ink={ink} />);
 
     console.log("InkWeave v1.0.0 initialized");
   } catch (error) {
@@ -83,5 +69,5 @@ if (typeof window !== "undefined") {
 export { default as Container } from "./components/Container/index";
 export { default as Menu } from "./components/Menu/index";
 export { default as SaveModal } from "./components/SaveModal/index";
-export type { ContainerProps, InkWeaveOptions, MenuProps, SaveModalProps, SaveSlot } from "./types";
+export type { ContainerProps, InkWeaveOptions, MenuProps, SaveModalProps } from "./types";
 export { FetchFileHandler, init, version };
