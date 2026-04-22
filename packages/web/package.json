@@ -1,9 +1,10 @@
 {
   "name": "@inkweave/web",
   "version": "1.5.1",
-  "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or script tag",
+  "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or as an npm module",
   "type": "module",
-  "main": "./dist/inkweave.min.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "browser": "./dist/inkweave.min.js",
   "unpkg": "./dist/inkweave.min.js",
   "jsdelivr": "./dist/inkweave.min.js",
@@ -13,15 +14,20 @@
   ],
   "exports": {
     ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "browser": "./dist/inkweave.min.js",
-      "default": "./dist/inkweave.min.js"
+      "default": "./dist/index.js"
     },
+    "./es": "./dist/index.js",
+    "./cjs": "./dist/index.cjs",
+    "./min": "./dist/inkweave.min.js",
     "./inkweave-web.css": "./dist/inkweave.min.css"
   },
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite build -c vite.config.iife.ts",
     "preview": "vite preview"
   },
   "keywords": [
@@ -30,7 +36,8 @@
     "web",
     "cdn",
     "browser",
-    "inkweave"
+    "inkweave",
+    "npm-package"
   ],
   "author": "Uglyboy",
   "license": "MIT",
