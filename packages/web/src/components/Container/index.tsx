@@ -1,43 +1,20 @@
-import { Story } from "@inkweave/react";
-import { memo, useCallback, useRef, useState } from "react";
-import "@inkweave/react/react.css";
 import { Image } from "@inkweave/plugins";
-import "@inkweave/plugins/plugins.css";
+import { Story } from "@inkweave/react";
+import { memo } from "react";
 import type { ContainerProps } from "../../types";
+
 import Menu from "../Menu";
-import SaveModal from "../SaveModal";
+import "@inkweave/react/react.css";
+import "@inkweave/plugins/plugins.css";
 import styles from "./styles.module.css";
 
-const Container: React.FC<ContainerProps> = ({ ink, title }) => {
-  const [modalType, setModalType] = useState<"save" | "restore">("save");
-  const modalRef = useRef<HTMLDialogElement | null>(null);
-
-  const openModal = useCallback((type: "save" | "restore") => {
-    setModalType(type);
-    modalRef.current?.showModal();
-  }, []);
-
-  const handleSave = useCallback(() => {
-    openModal("save");
-  }, [openModal]);
-
-  const handleRestore = useCallback(() => {
-    openModal("restore");
-  }, [openModal]);
-
-  const handleRestart = useCallback(() => {
-    ink.restart();
-  }, [ink]);
-
-  const storyTitle = ink.title || title || "";
-
+const Container = ({ ink }: ContainerProps) => {
   return (
-    <div className={styles.container}>
-      <Menu onSave={handleSave} onRestore={handleRestore} onRestart={handleRestart} />
+    <div id="inkweave-player" className={styles.container}>
+      <Menu ink={ink} />
       <Story ink={ink}>
         <Image />
       </Story>
-      <SaveModal modalRef={modalRef} type={modalType} title={storyTitle} ink={ink} />
     </div>
   );
 };

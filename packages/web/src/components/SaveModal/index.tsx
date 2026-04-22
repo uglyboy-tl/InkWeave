@@ -1,6 +1,7 @@
+import type { SaveSlot } from "@inkweave/plugins";
 import { memory } from "@inkweave/plugins";
 import { memo, useCallback } from "react";
-import type { SaveModalProps, SaveSlot } from "../../types";
+import type { SaveModalProps } from "../../types";
 import styles from "./styles.module.css";
 
 const SAVE_SLOTS = [1, 2, 3, 4, 5];

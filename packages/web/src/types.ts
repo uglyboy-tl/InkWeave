@@ -1,5 +1,4 @@
 import type { InkStory } from "@inkweave/core";
-import type { SaveSlot as PluginSaveSlot } from "@inkweave/plugins";
 
 export interface InkWeaveOptions {
   container: string | HTMLElement;
@@ -9,7 +8,13 @@ export interface InkWeaveOptions {
   theme?: "light" | "dark";
 }
 
-export type SaveSlot = PluginSaveSlot;
+export interface ContainerProps {
+  ink: InkStory;
+}
+
+export interface MenuProps {
+  ink: InkStory;
+}
 
 export interface SaveModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
@@ -17,15 +22,4 @@ export interface SaveModalProps {
   title: string;
   ink: InkStory | null;
   onClose?: () => void;
-}
-
-export interface MenuProps {
-  onSave: () => void;
-  onRestore: () => void;
-  onRestart: () => void;
-}
-
-export interface ContainerProps {
-  ink: InkStory;
-  title?: string;
 }
