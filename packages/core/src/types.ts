@@ -51,8 +51,6 @@ export class BaseFileHandler implements FileHandler {
 
 export interface InkStoryOptions {
   title?: string;
-  debug?: boolean;
-  linedelay?: number;
   errorHandler?: ErrorHandler;
   fileHandler?: FileHandler;
   [key: string]: unknown;
@@ -73,7 +71,6 @@ export interface ContentItem {
 export interface SaveData {
   state: string;
   contents?: ContentItem[];
-  image?: string;
   [key: string]: unknown;
 }
 
