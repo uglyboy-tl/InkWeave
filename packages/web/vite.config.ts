@@ -22,7 +22,7 @@ export default defineConfig({
     emptyOutDir: true,
     copyPublicDir: false,
     lib: {
-      entry: resolve(__dirname, "src/index.tsx"),
+      entry: resolve(__dirname, "src/index.ts"),
       name: "InkWeave",
       formats: ["es", "cjs"], // 先构建 ES 和 CJS 格式（外部化依赖）
       fileName: (format) => {

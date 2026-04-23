@@ -2,12 +2,18 @@ import { createInkStory } from "@inkweave/core";
 
 import { createRoot } from "react-dom/client";
 import pkg from "../package.json";
-import Container from "./components/Container/index";
+import { renderInkWeave } from "./components/renderer";
+import { setTranslationFunction } from "./i18n";
 import type { InkWeaveOptions } from "./types";
 import { FetchFileHandler, initPlugins } from "./utils";
 
-const init = (options: InkWeaveOptions) => {
+export const init = (options: InkWeaveOptions) => {
   initPlugins(options.plugins);
+
+  // Initialize translation function if provided
+  if (options.translations) {
+    setTranslationFunction(options.translations);
+  }
 
   const containerEl =
     typeof options.container === "string"
@@ -32,8 +38,7 @@ const init = (options: InkWeaveOptions) => {
 
     containerEl.innerHTML = "";
     const root = createRoot(containerEl);
-
-    root.render(<Container ink={ink} />);
+    renderInkWeave(root, ink);
 
     console.log(`InkWeave v${pkg.version} initialized`);
   } catch (error) {
@@ -44,9 +49,3 @@ const init = (options: InkWeaveOptions) => {
 if (typeof window !== "undefined") {
   (window as unknown as Record<string, unknown>).InkWeave = { init };
 }
-
-export { default as Container } from "./components/Container/index";
-export { default as Menu } from "./components/Menu/index";
-export { default as SaveModal } from "./components/SaveModal/index";
-export type { ContainerProps, InkWeaveOptions, MenuProps, SaveModalProps } from "./types";
-export { FetchFileHandler, init };

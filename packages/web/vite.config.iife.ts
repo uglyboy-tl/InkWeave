@@ -14,7 +14,7 @@ export default defineConfig({
     emptyOutDir: false, // 不清空目录，因为我们只想添加 IIFE 文件
     copyPublicDir: false,
     lib: {
-      entry: resolve(__dirname, "src/index.tsx"),
+      entry: resolve(__dirname, "src/main.ts"),
       name: "InkWeave",
       formats: ["iife"],
       fileName: () => "inkweave.min.js",
