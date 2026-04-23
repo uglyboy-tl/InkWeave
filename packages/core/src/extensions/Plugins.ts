@@ -1,5 +1,10 @@
 import type { InkStory } from "../story/InkStory";
 import { Events, type Plugin } from "../types";
+import { ChoiceParser } from "./ChoiceParser";
+import { ExternalFunctions } from "./ExternalFunctions";
+import { Parser } from "./Parser";
+import { Patches } from "./Patches";
+import { Tags } from "./Tags";
 
 export class Plugins {
   private static _plugins: Map<string, Plugin> = new Map();
@@ -33,6 +38,11 @@ export class Plugins {
 
   clear() {
     this._loadedPluginIds.clear();
+    Patches.clear();
+    Tags.clear();
+    ChoiceParser.clear();
+    Parser.clear();
+    ExternalFunctions.clear();
   }
 
   static getAllPlugins() {
