@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.6.0 (2026-04-23)
+
+### Features
+- **i18n**: add internationalization support with translation system
+- **web**: integrate plugin configuration in web package
+- **core-plugins**: add plugin configuration system with enable/disable support
+
+### Bug Fixes
+- **auto-button**: fix minor issue in AutoButton component
+
+### Refactoring
+- **web**: restructure entry point and extract renderer
+- **plugins**: normalize plugin IDs to kebab-case
+- **cli-test**: rename runner test to integration test
+- **plugins**: normalize plugin directory names to kebab-case
+- **plugins**: migrate plugins to unified Plugin interface with Plugins manager
+- **web-entry**: refactor main entry point to use utility modules
+- **web-components**: refactor web components and extract icons
+- **web-utils**: extract utility classes to separate modules
+- **core**: clean up public API exports
+
+### Documentation
+- **dev-guide**: update development guide with e2e testing and plugin configuration
+
+### Tests
+- **e2e**: add comprehensive Ink syntax test suite
+
+### Chores
+- **deps**: update dependencies and build configuration
+- **scripts**: remove unnecessary test commands from package.json
+- **web-build**: update build configuration for npm package format
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.5.1...v1.6.0
+
 ## v1.5.1 (2026-04-21)
 
 ### Features
