@@ -1,12 +1,13 @@
 import { createInkStory } from "@inkweave/core";
 
 import { createRoot } from "react-dom/client";
+import pkg from "../package.json";
 import Container from "./components/Container/index";
 import type { InkWeaveOptions } from "./types";
 import { FetchFileHandler, initPlugins } from "./utils";
 
 const init = (options: InkWeaveOptions) => {
-  initPlugins();
+  initPlugins(options.plugins);
 
   const containerEl =
     typeof options.container === "string"
@@ -34,20 +35,18 @@ const init = (options: InkWeaveOptions) => {
 
     root.render(<Container ink={ink} />);
 
-    console.log("InkWeave v1.0.0 initialized");
+    console.log(`InkWeave v${pkg.version} initialized`);
   } catch (error) {
     console.error("InkWeave: Failed to initialize", error);
   }
 };
 
-const version = "1.0.0";
-
 if (typeof window !== "undefined") {
-  (window as unknown as Record<string, unknown>).InkWeave = { version, init };
+  (window as unknown as Record<string, unknown>).InkWeave = { init };
 }
 
 export { default as Container } from "./components/Container/index";
 export { default as Menu } from "./components/Menu/index";
 export { default as SaveModal } from "./components/SaveModal/index";
 export type { ContainerProps, InkWeaveOptions, MenuProps, SaveModalProps } from "./types";
-export { FetchFileHandler, init, version };
+export { FetchFileHandler, init };

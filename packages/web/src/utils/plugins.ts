@@ -12,7 +12,7 @@ import {
   scrollAfterChoicePlugin,
 } from "@inkweave/plugins";
 
-export const initPlugins = () => {
+export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
   Plugins.register(imagePlugin);
   Plugins.register(audioPlugin);
   Plugins.register(autoRestorePlugin);
@@ -23,4 +23,9 @@ export const initPlugins = () => {
   Plugins.register(autoButtonPlugin);
   Plugins.register(cdButtonPlugin);
   Plugins.register(classTagPlugin);
+
+  // 设置插件启用配置
+  if (pluginConfig) {
+    Plugins.setPluginsEnabled(pluginConfig);
+  }
 };

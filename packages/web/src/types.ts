@@ -6,6 +6,7 @@ export interface InkWeaveOptions {
   title?: string;
   basePath?: string;
   theme?: "light" | "dark";
+  plugins?: Record<string, boolean>;
 }
 
 export interface ContainerProps {
