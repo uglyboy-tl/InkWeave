@@ -12,7 +12,7 @@
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo --noEmit",
     "build": "bun build --compile --outfile=dist/inkweave src/cli.ts",
-    "test": "bun test"
+    "test:integration": "bun test ./src/__tests__/runner.integration.ts"
   },
   "keywords": [
     "ink",
