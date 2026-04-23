@@ -38,7 +38,20 @@ bun test --coverage                 # 带覆盖率报告
 - `test/happydom.ts` - DOM 环境（所有包共享）
 - `test/testing-library.ts` - React Testing Library 配置（所有包共享）
 
-### 4. 编译
+### 4. E2E 测试 (Playwright)
+
+```bash
+bun test:e2e          # 运行所有 E2E 测试
+bun run playwright test   # 直接运行 Playwright 测试
+bun run playwright show-report  # 查看测试报告
+```
+
+E2E 测试配置：
+- `playwright.config.ts` - Playwright 配置文件
+- `e2e/` - E2E 测试文件目录
+- `e2e/fixtures/` - HTML 测试 fixture 目录
+
+### 5. 编译
 
 ```bash
 bun run build         # 构建所有包
@@ -202,3 +215,31 @@ describe("模块名", () => {
 - 类型导入用 `import type`
 - 避免使用 `any`，必要时用 `unknown`
 - CSS 模块导入：`import styles from "./styles.module.css"`
+
+### 插件配置
+
+在 Web 环境中初始化 InkWeave 时，可以通过 `plugins` 参数控制插件启用状态：
+
+```typescript
+InkWeave.init({
+  container: '#app',
+  story: '...',
+  plugins: {
+    'image': false,        // 禁用图片插件
+    'audio': true,         // 启用音频插件
+    'auto-restore': false  // 禁用自动恢复插件
+  }
+});
+```
+
+插件 ID 对应关系：
+- `image` - 图片插件
+- `audio` - 音频插件  
+- `auto-restore` - 自动恢复插件
+- `fade-effect` - 淡入淡出效果插件
+- `scroll-after-choice` - 选择后滚动插件
+- `link-open` - 链接打开插件
+- `memory` - 记忆插件
+- `auto-button` - 自动按钮插件
+- `cd-button` - 倒计时按钮插件
+- `class-tag` - CSS 类标签插件
