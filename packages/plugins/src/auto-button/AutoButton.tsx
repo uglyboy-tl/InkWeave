@@ -9,7 +9,7 @@ const AutoChoice: React.FC<ChoiceComponentProps> = ({
 }) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const onClickRef = useRef(onClick);
-  const cd = parseFloat(choice.val) || 0;
+  const cd = parseFloat(choice.val ?? "") || 0;
 
   onClickRef.current = onClick;
 
