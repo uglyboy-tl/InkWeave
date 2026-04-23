@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2E Ink Syntax - Stitches</title>
+  <link rel="stylesheet" href="../../packages/web/dist/inkweave.min.css">
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    #app { min-height: 100vh; max-width: 680px; margin: 0 auto; padding: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../../packages/web/dist/inkweave.min.js"></script>
+  <script>
+InkWeave.init({
+      container: '#app',
+      story: `
+# linedelay:0
+
+-> the_orient_express
+
+=== the_orient_express ===
+We boarded the train, but where?
+* [First class] -> in_first_class
+* [Third class] -> in_third_class
+
+= in_first_class
+You settle into the plush first class seat.
+-> END
+
+= in_third_class
+You find a seat in third class.
+-> END
+`,
+      title: "Stitches Test",
+    });
+  </script>
+</body>
+</html>

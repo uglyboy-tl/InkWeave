@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2E Ink Syntax - Conditional Choices</title>
+  <link rel="stylesheet" href="../../packages/web/dist/inkweave.min.css">
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    #app { min-height: 100vh; max-width: 680px; margin: 0 auto; padding: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../../packages/web/dist/inkweave.min.js"></script>
+  <script>
+    InkWeave.init({
+      container: '#app',
+      story: `
+# linedelay:0
+
+-> room
+
+=== room ===
+You are in a room.
+* { not visited_chest } [Open the chest]
+    You open the chest and find gold!
+    -> visited_chest
+* { visited_chest } [Take the gold again]
+    You take more gold from the chest.
+    -> room
+* [Leave]
+    You leave the room.
+    -> END
+
+=== visited_chest ===
+The chest is now open.
+* [Take gold]
+    You take gold from the chest.
+    -> room
+* [Leave]
+    You leave the room.
+    -> END
+`,
+      title: "Conditional Choices Test",
+    });
+  </script>
+</body>
+</html>

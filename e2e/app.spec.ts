@@ -1,5 +1,46 @@
 import { expect, test } from "@playwright/test";
 
+test.describe("modal functionality", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/e2e/fixtures/basic.html");
+  });
+
+  test("save modal opens and closes", async ({ page }) => {
+    await page.getByRole("button", { name: "Save game" }).click();
+    const saveModal = page.locator("dialog");
+    await expect(saveModal).toBeVisible();
+    await expect(saveModal).toContainText("Save Game");
+
+    await saveModal.getByRole("button", { name: /close|×|Save/i }).first().click();
+    await expect(saveModal).not.toBeVisible();
+  });
+
+  test("load modal opens and closes", async ({ page }) => {
+    await page.getByRole("button", { name: "Restore saved game" }).click();
+    const loadModal = page.locator("dialog");
+    await expect(loadModal).toBeVisible();
+
+    await loadModal.getByRole("button", { name: /close|×|Cancel/i }).first().click();
+    await expect(loadModal).not.toBeVisible();
+  });
+
+  test("restart button restarts the game", async ({ page }) => {
+    await page.locator(".inkweave-choice").first().click();
+    const contents = page.locator(".inkweave-contents");
+    await expect(contents).toContainText("You chose A.");
+
+    await page.getByRole("button", { name: "Restart game" }).click();
+    await expect(contents).toContainText("Hello, World!");
+  });
+
+  test("save modal has proper form elements", async ({ page }) => {
+    await page.getByRole("button", { name: "Save game" }).click();
+    const modal = page.locator("dialog");
+    await expect(modal.locator("textarea, input, select")).toHaveCount(0);
+    await expect(modal.getByRole("button", { name: "Close" })).toHaveCount(1);
+  });
+});
+
 test.describe("basic fixture", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/basic.html");
