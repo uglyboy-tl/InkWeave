@@ -19,8 +19,7 @@
   ],
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
-    "build": "vite build",
-    "test": "bun test"
+    "build": "vite build"
   },
   "keywords": [
     "ink",
