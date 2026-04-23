@@ -1,4 +1,5 @@
 import { memo, useCallback, useRef, useState } from "react";
+import { t } from "../../i18n";
 import type { MenuProps } from "../../types";
 import SaveModal from "../SaveModal";
 import { RestartIcon, RestoreIcon, SaveIcon } from "./Icons";
@@ -22,8 +23,8 @@ const Menu = ({ ink }: MenuProps) => {
           type="button"
           className={styles.btn}
           onClick={() => openModal("restore")}
-          title="Restore"
-          aria-label="Restore saved game"
+          title={t("menu_restore")}
+          aria-label={t("menu_restore_aria")}
         >
           <RestoreIcon />
         </button>
@@ -31,8 +32,8 @@ const Menu = ({ ink }: MenuProps) => {
           type="button"
           className={styles.btn}
           onClick={() => openModal("save")}
-          title="Save"
-          aria-label="Save game"
+          title={t("menu_save")}
+          aria-label={t("menu_save_aria")}
         >
           <SaveIcon />
         </button>
@@ -40,8 +41,8 @@ const Menu = ({ ink }: MenuProps) => {
           type="button"
           className={styles.btn}
           onClick={() => ink.restart()}
-          title="Restart"
-          aria-label="Restart game"
+          title={t("menu_restart")}
+          aria-label={t("menu_restart_aria")}
         >
           <RestartIcon />
         </button>

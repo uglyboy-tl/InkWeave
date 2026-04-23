@@ -1,6 +1,7 @@
 import type { SaveSlot } from "@inkweave/plugins";
 import { memory } from "@inkweave/plugins";
 import { memo, useCallback } from "react";
+import { t } from "../../i18n";
 import type { SaveModalProps } from "../../types";
 import styles from "./styles.module.css";
 
@@ -32,8 +33,15 @@ const SaveModal: React.FC<SaveModalProps> = ({ modalRef, type, title, ink, onClo
   return (
     <dialog ref={modalRef} className={styles.modal}>
       <div className={styles.header}>
-        <div className={styles.title}>{type === "save" ? "Save Game" : "Restore Game"}</div>
-        <button type="button" className={styles.close} onClick={handleClose} aria-label="Close">
+        <div className={styles.title}>
+          {type === "save" ? t("modal_save_title") : t("modal_restore_title")}
+        </div>
+        <button
+          type="button"
+          className={styles.close}
+          onClick={handleClose}
+          aria-label={t("close")}
+        >
           ×
         </button>
       </div>
@@ -51,9 +59,9 @@ const SaveModal: React.FC<SaveModalProps> = ({ modalRef, type, title, ink, onClo
               onClick={() => handleSlotClick(slot)}
               disabled={isDisabled}
             >
-              <span className={styles["slot-name"]}>Slot {slot}</span>
+              <span className={styles["slot-name"]}>{t(`slot_${slot}`)}</span>
               <span className={hasData ? styles["slot-timestamp"] : styles["slot-empty"]}>
-                {hasData ? save.timestamp : "Empty"}
+                {hasData ? save.timestamp : t("slot_empty")}
               </span>
             </button>
           );
