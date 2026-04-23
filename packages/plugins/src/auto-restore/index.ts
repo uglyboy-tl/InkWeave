@@ -3,7 +3,7 @@ import { Events, Patches } from "@inkweave/core";
 import { memory } from "../memory";
 
 export const autoRestorePlugin: Plugin = {
-  id: "autorestore",
+  id: "auto-restore",
   name: "Auto Restore Plugin",
   description: "Automatically restores last game state on story initialization",
   enabledByDefault: true,

@@ -2,7 +2,7 @@ import type { Plugin } from "@inkweave/core";
 import { Events, Patches } from "@inkweave/core";
 
 export const scrollAfterChoicePlugin: Plugin = {
-  id: "scrollafterchoice",
+  id: "scroll-after-choice",
   name: "Scroll After Choice Plugin",
   description: "Automatically scrolls to the latest content after choices are made",
   enabledByDefault: true,

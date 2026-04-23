@@ -4,7 +4,7 @@ import { Tags } from "@inkweave/core";
 const ALLOWED_PROTOCOLS = ["http:", "https:"];
 
 export const linkOpenPlugin: Plugin = {
-  id: "linkopen",
+  id: "link-open",
   name: "Link Open Plugin",
   description: "Provides functionality to open links from ink stories",
   enabledByDefault: true,

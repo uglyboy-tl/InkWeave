@@ -4,7 +4,7 @@ import { ChoiceRegistry } from "@inkweave/react";
 import AutoChoice from "./AutoButton";
 
 export const autoButtonPlugin: Plugin = {
-  id: "autoButton",
+  id: "auto-button",
   name: "Auto Button Plugin",
   description: "Provides auto choice button functionality for ink stories",
   enabledByDefault: true,

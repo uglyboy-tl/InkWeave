@@ -39,7 +39,7 @@ const useContentComplete = create<ContentComplete>((set) => ({
 export { useContentComplete };
 
 export const fadeEffectPlugin = {
-  id: "fadeEffect",
+  id: "fade-effect",
   name: "Fade Effect Plugin",
   description: "Provides text fade-in effect with configurable line delay",
   enabledByDefault: true,

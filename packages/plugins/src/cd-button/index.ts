@@ -8,7 +8,7 @@ const options = {
 };
 
 export const cdButtonPlugin: Plugin = {
-  id: "cdButton",
+  id: "cd-button",
   name: "Cooldown Button Plugin",
   description: "Provides cooldown choice button functionality for ink stories",
   enabledByDefault: true,

@@ -12,7 +12,7 @@ import { ChoiceParser, Parser } from "@inkweave/core";
  * This text will have highlight and bold classes
  */
 export const classTagPlugin: Plugin = {
-  id: "classTag",
+  id: "class-tag",
   name: "Class Tag Plugin",
   description: "Provides functionality to add CSS classes to content and choices",
   enabledByDefault: true,
