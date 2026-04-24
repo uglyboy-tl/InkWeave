@@ -3,6 +3,7 @@ import {
   audioPlugin,
   autoButtonPlugin,
   autoRestorePlugin,
+  autoSavePlugin,
   cdButtonPlugin,
   classTagPlugin,
   fadeEffectPlugin,
@@ -16,6 +17,7 @@ export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
   Plugins.register(imagePlugin);
   Plugins.register(audioPlugin);
   Plugins.register(autoRestorePlugin);
+  Plugins.register(autoSavePlugin);
   Plugins.register(fadeEffectPlugin);
   Plugins.register(scrollAfterChoicePlugin);
   Plugins.register(linkOpenPlugin);
