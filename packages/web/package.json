@@ -14,20 +14,15 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "browser": "./dist/inkweave.min.js",
-      "default": "./dist/index.js"
+      "browser": "./dist/inkweave.min.js"
     },
-    "./es": "./dist/index.js",
-    "./cjs": "./dist/index.cjs",
     "./min": "./dist/inkweave.min.js",
     "./inkweave-web.css": "./dist/inkweave.min.css"
   },
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
-    "build": "vite build && vite build -c vite.config.iife.ts",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "keywords": [
@@ -36,8 +31,7 @@
     "web",
     "cdn",
     "browser",
-    "inkweave",
-    "npm-package"
+    "inkweave"
   ],
   "author": "Uglyboy",
   "license": "MIT",
@@ -47,18 +41,17 @@
   },
   "homepage": "https://github.com/uglyboy-tl/InkWeave#readme",
   "dependencies": {
-    "@inkweave/core": "^1.4.0",
-    "@inkweave/react": "^1.4.0",
-    "@inkweave/plugins": "^1.4.0"
+    "@inkweave/core": "^1.0.0",
+    "@inkweave/react": "^1.0.0",
+    "@inkweave/plugins": "^1.0.0",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "esbuild": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "vite": "catalog:",
-    "vite-plugin-dts": "catalog:"
+    "vite": "catalog:"
   }
 }
