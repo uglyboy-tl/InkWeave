@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CD Button Plugin Test</title>
+  <link rel="stylesheet" href="../../../packages/web/dist/inkweave.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    .inkweave-story {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="../../../packages/web/dist/inkweave.min.js"></script>
+  <script>
+    const storyContent = `
+# linedelay:0
+
+Welcome to the CD Button Plugin Test!
+
+This test verifies cooldown button functionality.
+---
+VAR counter = 0
+---
+
+-> start
+=== start
+= circle
+~counter +=1
+Counter is now {counter}.
++ [Normal Choice]
+  This is a normal choice that works immediately.
+  -> END
+
++ [CD Button#cd:0.5]
+  You clicked the cooldown button!
+  ->circle
+`;
+
+    InkWeave.init({
+      container: '#app',
+      story: storyContent,
+      plugins: {
+        'cd-button': true,
+        'auto-button': false,
+        'image': false,
+        'audio': false,
+        'auto-restore': false,
+        'auto-save': false,
+        'fade-effect': false,
+        'scroll-after-choice': false,
+        'link-open': false,
+        'memory': false,
+        'class-tag': false
+      }
+    });
+  </script>
+</body>
+</html>
