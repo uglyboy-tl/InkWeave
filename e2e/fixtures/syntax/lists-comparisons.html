@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2E Ink Syntax - List Comparisons</title>
+  <link rel="stylesheet" href="../../../packages/web/dist/inkweave.min.css">
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    #app { min-height: 100vh; max-width: 680px; margin: 0 auto; padding: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../../../packages/web/dist/inkweave.min.js"></script>
+  <script>
+    InkWeave.init({
+      container: '#app',
+      story: `
+# linedelay:0
+
+LIST Numbers = one, two, three, four, five
+
+VAR listA = (four, five)
+VAR listB = (one, two)
+
+-> start
+
+=== start ===
+List A: {listA}
+List B: {listB}
+* [Check A > B]
+    {listA > listB:
+        A is distinctly bigger than B.
+    - else:
+        A is not bigger than B.
+    }
+    -> start
+* [Check A >= B]
+    {listA >= listB:
+        A is never smaller than B.
+    - else:
+        A might be smaller than B.
+    }
+    -> start
+* [Check B < A]
+    {listB < listA:
+        B is distinctly smaller than A.
+    - else:
+        B is not smaller than A.
+    }
+    -> start
+`,
+      title: "List Comparisons Test",
+    });
+  </script>
+</body>
+</html>

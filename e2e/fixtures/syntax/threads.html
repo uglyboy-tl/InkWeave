@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2E Ink Syntax - Threads</title>
+  <link rel="stylesheet" href="../../../packages/web/dist/inkweave.min.css">
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    #app { min-height: 100vh; max-width: 680px; margin: 0 auto; padding: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../../../packages/web/dist/inkweave.min.js"></script>
+  <script>
+    InkWeave.init({
+      container: '#app',
+      story: `
+# linedelay:0
+
+-> thread_example
+
+=== thread_example ===
+I had a headache.
+<- conversation
+<- walking
+-> DONE
+
+== conversation ==
+It was a tense moment.
+* "What did you have for lunch?"[] I asked.
+    "Spam and eggs," he replied.
+    -> house
+* "Nice weather,"[] I said.
+    "I've seen better," he replied.
+    -> house
+
+== walking ==
+We walked in silence.
+* [Keep walking]
+    We continued on our way.
+    -> house
+
+== house ==
+Before long, we arrived at his house.
+-> END
+`,
+      title: "Threads Test",
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2E Ink Syntax - Reusing Lists</title>
+  <link rel="stylesheet" href="../../../packages/web/dist/inkweave.min.css">
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    #app { min-height: 100vh; max-width: 680px; margin: 0 auto; padding: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../../../packages/web/dist/inkweave.min.js"></script>
+  <script>
+    InkWeave.init({
+      container: '#app',
+      story: `
+# linedelay:0
+
+LIST heatedWaterStates = cold, boiling, recently_boiled
+VAR kettleState = cold
+VAR potState = cold
+
+-> start
+
+=== start ===
+Kettle: {kettleState}, Pot: {potState}
+* [Boil kettle]
+    ~ kettleState = boiling
+    Kettle is now boiling.
+    -> start
+* [Boil pot]
+    ~ potState = boiling
+    Pot is now boiling.
+    -> start
+* [Check both cold]
+    {kettleState == cold:
+        Kettle is cold.
+    - else:
+        Kettle is hot.
+    }
+    {potState == cold:
+        Pot is cold.
+    - else:
+        Pot is hot.
+    }
+    -> start
+`,
+      title: "Reusing Lists Test",
+    });
+  </script>
+</body>
+</html>
