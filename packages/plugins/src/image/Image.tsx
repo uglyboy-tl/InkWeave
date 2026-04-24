@@ -13,7 +13,7 @@ const ImageComponent: React.FC<ImageProps> = ({ className = "", fallback = null 
 
   useEffect(() => {
     setHasError(false);
-  }, []);
+  }, [image]);
 
   const imageRef = useRef(image);
   imageRef.current = image;
@@ -32,11 +32,15 @@ const ImageComponent: React.FC<ImageProps> = ({ className = "", fallback = null 
   if (!image) return null;
 
   if (hasError) {
-    return fallback ? <div className={containerClassName}>{fallback}</div> : null;
+    return fallback ? (
+      <div id="inkweave-image" className={containerClassName}>
+        {fallback}
+      </div>
+    ) : null;
   }
 
   return (
-    <div className={containerClassName}>
+    <div id="inkweave-image" className={containerClassName}>
       <img src={image} alt="" onError={handleError} onLoad={handleLoad} />
     </div>
   );
