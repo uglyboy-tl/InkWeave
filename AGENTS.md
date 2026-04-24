@@ -236,6 +236,7 @@ InkWeave.init({
 - `image` - 图片插件
 - `audio` - 音频插件  
 - `auto-restore` - 自动恢复插件
+- `auto-save` - 自动保存插件
 - `fade-effect` - 淡入淡出效果插件
 - `scroll-after-choice` - 选择后滚动插件
 - `link-open` - 链接打开插件
@@ -243,3 +244,74 @@ InkWeave.init({
 - `auto-button` - 自动按钮插件
 - `cd-button` - 倒计时按钮插件
 - `class-tag` - CSS 类标签插件
+
+### E2E 测试最佳实践
+
+#### 测试文件组织
+- E2E 测试按功能分组：`e2e/core/`（核心功能）、`e2e/plugins/`（插件功能）、`e2e/syntax/`（ink 语法）
+- 每个测试只使用一个 fixture 文件，避免多个文件维护复杂度
+- 为每个插件组件添加专用的 HTML ID（如 `#inkweave-image`）便于测试定位
+
+#### ink 语法注意事项
+- 选择后的文本必须正确缩进（4个空格）
+- 使用 `-> END` 结束选择分支
+- 标签（如 `# image`、`# clear`）应在独立行上，不要在缩进块内
+
+#### Fixture 编译验证
+- **每个 fixture 文件都应该首先添加一个编译验证测试用例**
+- 验证 story 能够正确编译，没有语法错误
+- 这样可以方便定位后续测试失败的原因（是编译问题还是功能问题）
+- 编译验证测试应该检查控制台中没有 "Failed to initialize" 和 "Compilation failed" 错误
+
+#### Playwright 测试技巧
+- 使用 `page.locator(".inkweave-choice")` 定位选择按钮
+- 等待内容更新时使用 `expect(contents).toContainText("expected text")` 而不是等待特定元素
+- 点击选择后等待具体的文本内容出现，确保故事执行完成
+- 在测试中禁用所有其他插件，只启用待测试的目标插件，避免互相影响
+
+#### 测试流程示例
+```typescript
+// 编译验证测试用例
+test("should compile without errors", async ({ page }) => {
+  const consoleMessages: { type: string; text: string }[] = [];
+  
+  page.on('console', msg => {
+    consoleMessages.push({
+      type: msg.type(),
+      text: msg.text()
+    });
+  });
+  
+  await page.goto("/e2e/fixtures/plugins/image.html");
+  await page.waitForSelector(".inkweave-story");
+  
+  // Verify no compilation errors
+  const hasCompilationError = consoleMessages.some(msg => 
+    msg.text.includes('Failed to initialize') && 
+    msg.text.includes('Compilation failed')
+  );
+  expect(hasCompilationError).toBe(false);
+});
+
+// 功能测试用例
+test("should clear image when # clear tag is used", async ({ page }) => {
+  await page.goto("/e2e/fixtures/plugins/image.html");
+  await page.waitForSelector(".inkweave-story");
+  
+  // 验证初始状态
+  const initialImageContainer = page.locator("#inkweave-image");
+  await expect(initialImageContainer).toBeVisible();
+  
+  // 执行交互
+  const clearChoice = page.locator('.inkweave-choice:has-text("Clear the image")');
+  await clearChoice.click();
+  
+  // 等待内容更新
+  const contents = page.locator(".inkweave-contents");
+  await expect(contents).toContainText("The image should be cleared.");
+  
+  // 验证最终状态
+  const imageAfterClear = page.locator("#inkweave-image");
+  await expect(imageAfterClear).not.toBeVisible();
+});
+```
