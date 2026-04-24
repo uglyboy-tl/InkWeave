@@ -70,7 +70,7 @@ packages/
 ├── cli/        # 命令行工具
 ├── core/       # 核心引擎 (InkStory, state stores, extensions)
 ├── desktop/    # 桌面应用 (Tauri)
-├── plugins/    # 插件集 (audio, autosave, image, linkopen, etc.)
+├── plugins/    # 插件集 (audio, auto-save, image, link-open, etc.)
 ├── react/      # React 组件 (Story, Choices, Contents)
 └── web/        # Web 打包 (预构建的浏览器 bundle)
 ```
@@ -234,7 +234,7 @@ InkWeave.init({
 
 插件 ID 对应关系：
 - `image` - 图片插件
-- `audio` - 音频插件  
+- `audio` - 音频插件
 - `auto-restore` - 自动恢复插件
 - `auto-save` - 自动保存插件
 - `fade-effect` - 淡入淡出效果插件
@@ -274,20 +274,20 @@ InkWeave.init({
 // 编译验证测试用例
 test("should compile without errors", async ({ page }) => {
   const consoleMessages: { type: string; text: string }[] = [];
-  
+
   page.on('console', msg => {
     consoleMessages.push({
       type: msg.type(),
       text: msg.text()
     });
   });
-  
+
   await page.goto("/e2e/fixtures/plugins/image.html");
   await page.waitForSelector(".inkweave-story");
-  
+
   // Verify no compilation errors
-  const hasCompilationError = consoleMessages.some(msg => 
-    msg.text.includes('Failed to initialize') && 
+  const hasCompilationError = consoleMessages.some(msg =>
+    msg.text.includes('Failed to initialize') &&
     msg.text.includes('Compilation failed')
   );
   expect(hasCompilationError).toBe(false);
@@ -297,19 +297,19 @@ test("should compile without errors", async ({ page }) => {
 test("should clear image when # clear tag is used", async ({ page }) => {
   await page.goto("/e2e/fixtures/plugins/image.html");
   await page.waitForSelector(".inkweave-story");
-  
+
   // 验证初始状态
   const initialImageContainer = page.locator("#inkweave-image");
   await expect(initialImageContainer).toBeVisible();
-  
+
   // 执行交互
   const clearChoice = page.locator('.inkweave-choice:has-text("Clear the image")');
   await clearChoice.click();
-  
+
   // 等待内容更新
   const contents = page.locator(".inkweave-contents");
   await expect(contents).toContainText("The image should be cleared.");
-  
+
   // 验证最终状态
   const imageAfterClear = page.locator("#inkweave-image");
   await expect(imageAfterClear).not.toBeVisible();
