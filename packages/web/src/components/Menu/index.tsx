@@ -1,9 +1,13 @@
+import type { InkStory } from "@inkweave/core";
 import { memo, useCallback, useRef, useState } from "react";
-import { t } from "../../i18n";
-import type { MenuProps } from "../../types";
+import { t } from "../../locales";
 import SaveModal from "../SaveModal";
 import { RestartIcon, RestoreIcon, SaveIcon } from "./Icons";
 import styles from "./styles.module.css";
+
+export interface MenuProps {
+  ink: InkStory;
+}
 
 const Menu = ({ ink }: MenuProps) => {
   const [modalType, setModalType] = useState<"save" | "restore">("save");

@@ -1,6 +1,6 @@
+export { render } from "./components";
 export { default as Menu } from "./components/Menu/index";
-export { renderInkWeave } from "./components/renderer";
-export { setTranslationFunction, t } from "./i18n";
+export { setTranslationFunction, t } from "./locales/i18n";
 export { init } from "./main";
-export type { InkWeaveOptions, MenuProps } from "./types";
+export type { InkWeaveOptions } from "./types";
 export { FetchFileHandler, initPlugins } from "./utils";

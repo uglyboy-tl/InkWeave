@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { setTranslationFunction, t } from "../i18n";
+import { setTranslationFunction, t } from "../locales/i18n";
 
 describe("Internationalization", () => {
   // Reset translation function before each test

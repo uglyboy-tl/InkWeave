@@ -1,9 +1,17 @@
+import type { InkStory } from "@inkweave/core";
 import type { SaveSlot } from "@inkweave/plugins";
 import { memory } from "@inkweave/plugins";
 import { memo, useCallback } from "react";
-import { t } from "../../i18n";
-import type { SaveModalProps } from "../../types";
+import { t } from "../../locales";
 import styles from "./styles.module.css";
+
+export interface SaveModalProps {
+  modalRef: React.RefObject<HTMLDialogElement | null>;
+  type: "save" | "restore";
+  title: string;
+  ink: InkStory | null;
+  onClose?: () => void;
+}
 
 const SAVE_SLOTS = [1, 2, 3, 4, 5];
 

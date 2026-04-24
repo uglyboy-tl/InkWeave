@@ -1,9 +1,8 @@
 import { createInkStory } from "@inkweave/core";
-
 import { createRoot } from "react-dom/client";
 import pkg from "../package.json";
-import { renderInkWeave } from "./components/renderer";
-import { setTranslationFunction } from "./i18n";
+import { render } from "./components";
+import { setTranslationFunction } from "./locales";
 import type { InkWeaveOptions } from "./types";
 import { FetchFileHandler, initPlugins } from "./utils";
 
@@ -38,7 +37,7 @@ export const init = (options: InkWeaveOptions) => {
 
     containerEl.innerHTML = "";
     const root = createRoot(containerEl);
-    renderInkWeave(root, ink);
+    render(root, ink);
 
     console.log(`InkWeave v${pkg.version} initialized`);
   } catch (error) {
