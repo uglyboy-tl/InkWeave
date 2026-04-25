@@ -1,10 +1,43 @@
 # InkWeave 开发指南
 
-## 项目概述
+## 🧭 核心原则 (7条黄金法则)
+
+在开始任何开发工作前，请务必牢记并遵守以下原则：
+
+1.  **先说假设**：做复杂任务前先列出你的假设。
+2.  **不懂就问**：需求不明确时立即停止并询问。
+3.  **敢于说不**：如发现人类方案有缺陷，请直接指出。
+4.  **简洁为王**：能用100行代码解决，绝不用1000行。
+5.  **不偷偷动手**：绝不擅自删除注释、重构代码或提交更改。
+6.  **先写测试**：实现复杂逻辑前，必须先编写测试。
+7.  **声明式指令**：始终以“目标是 X，你同意吗？”的方式确认任务。
+
+## 👤 用户偏好
+
+- **语言**：所有交互和文档均使用中文。
+- **字符**：请勿使用 Unicode 连字符 `‑` (U+2011)，请使用 ASCII 连字符 `-` (U+002D)。
+- **工具调用**：优先并行调用工具以提高效率。
+- **GitHub**：访问 GitHub 相关的一切操作都使用 `gh` 命令。
+- **项目整洁**：确保 `git status` 无垃圾文件，并相应更新 `.gitignore`。
+- **脚本存放**：一次性分析脚本请写入 `/tmp` 文件夹，不要污染项目目录。
+
+## 📦 项目概述
 
 InkWeave 是一个基于 inkjs 的交互式小说运行时引擎，提供 React 组件和插件系统。
 
-## 开发四件套
+### 包结构
+
+```
+packages/
+├── cli/        # 命令行工具
+├── core/       # 核心引擎 (InkStory, state stores, extensions)
+├── desktop/    # 桌面应用 (Tauri)
+├── plugins/    # 插件集 (audio, auto-save, image, link-open, etc.)
+├── react/      # React 组件 (Story, Choices, Contents)
+└── web/        # Web 打包 (预构建的浏览器 bundle)
+```
+
+## 🔧 开发四件套
 
 ### 1. 格式化 (Biome)
 
@@ -12,7 +45,6 @@ InkWeave 是一个基于 inkjs 的交互式小说运行时引擎，提供 React 
 bun run format        # 格式化所有文件
 bunx biome format --write <file>  # 格式化单个文件
 ```
-
 配置文件：`biome.json`
 
 ### 2. 语法检查 (TypeScript)
@@ -33,7 +65,7 @@ bun test <file>                     # 运行单个测试文件
 bun test --coverage                 # 带覆盖率报告
 ```
 
-测试配置：
+**测试配置**：
 - `bunfig.toml` - 根目录统一配置
 - `test/happydom.ts` - DOM 环境（所有包共享）
 - `test/testing-library.ts` - React Testing Library 配置（所有包共享）
@@ -46,7 +78,7 @@ bun run playwright test   # 直接运行 Playwright 测试
 bun run playwright show-report  # 查看测试报告
 ```
 
-E2E 测试配置：
+**E2E 测试配置**：
 - `playwright.config.ts` - Playwright 配置文件
 - `e2e/` - E2E 测试文件目录
 - `e2e/fixtures/` - HTML 测试 fixture 目录
@@ -58,26 +90,16 @@ bun run build         # 构建所有包
 bun run --filter @inkweave/core build  # 构建单个包
 ```
 
-## TypeScript 配置架构
+## ⚙️ 技术栈规范
+
+### TypeScript 配置架构
 
 - `tsconfig.json` - 根目录配置，extends `@tsconfig/bun/tsconfig.json` 和 `@tsconfig/vite-react/tsconfig.json`
 - `packages/*/tsconfig.json` - 各包独立配置，extends `@tsconfig/bun/tsconfig.json` 或 `@tsconfig/vite-react/tsconfig.json`
 
-## 包结构
+### 代码风格
 
-```
-packages/
-├── cli/        # 命令行工具
-├── core/       # 核心引擎 (InkStory, state stores, extensions)
-├── desktop/    # 桌面应用 (Tauri)
-├── plugins/    # 插件集 (audio, auto-save, image, link-open, etc.)
-├── react/      # React 组件 (Story, Choices, Contents)
-└── web/        # Web 打包 (预构建的浏览器 bundle)
-```
-
-## 代码风格
-
-### Imports
+#### Imports
 
 ```typescript
 // 1. 外部依赖（按字母排序）
@@ -97,7 +119,7 @@ import type { FileHandler } from "./types";
 import type { InkStoryOptions } from "./types";
 ```
 
-### 格式化 (Biome 默认)
+#### 格式化 (Biome 默认)
 
 - **引号**：双引号
 - **缩进**：2 空格
@@ -105,7 +127,7 @@ import type { InkStoryOptions } from "./types";
 - **分号**：不强制
 - **尾逗号**：不强制
 
-### 类型定义
+#### 类型定义
 
 ```typescript
 // 接口命名：PascalCase
@@ -127,7 +149,7 @@ export class Choice {
 }
 ```
 
-### 命名约定
+#### 命名约定
 
 | 类型 | 约定 | 示例 |
 |------|------|------|
@@ -138,7 +160,7 @@ export class Choice {
 | 文件 | camelCase | `create.ts`, `InkStory.ts` |
 | CSS 类 | kebab-case | `inkweave-story` |
 
-### 错误处理
+#### 错误处理
 
 ```typescript
 // 抛出明确的错误信息
@@ -163,7 +185,7 @@ if (!ink) {
 }
 ```
 
-### React 组件
+#### React 组件
 
 ```typescript
 // Props 接口定义
@@ -185,7 +207,7 @@ const onInitRef = useRef(onInit);
 onInitRef.current = onInit;
 ```
 
-### 测试编写
+#### 测试编写
 
 ```typescript
 import { describe, expect, it, vi } from "bun:test";
@@ -208,13 +230,15 @@ describe("模块名", () => {
 });
 ```
 
-## 注意事项
+## 📌 重要注意事项
 
-- 使用 `bun:test` 而非 `vitest`
-- 测试文件导入：`import { describe, it, expect } from "bun:test"`
-- 类型导入用 `import type`
-- 避免使用 `any`，必要时用 `unknown`
-- CSS 模块导入：`import styles from "./styles.module.css"`
+- **测试框架**：使用 `bun:test` 而非 `vitest`。测试文件导入：`import { describe, it, expect } from "bun:test"`。
+- **类型安全**：类型导入必须用 `import type`。严格避免使用 `any`，必要时用 `unknown`。
+- **CSS 模块**：CSS 模块导入：`import styles from "./styles.module.css"`。
+- **问题解决**：
+    - **优先检索**: 遇到复杂或不确定的技术问题时，优先进行网络检索。
+    - **技能优先**: 进行网络检索前，先加载 `retrieve` 技能。
+    - **资料验证**: 参考网络资料时注意验证时效性和权威性，优先选择官方文档。
 
 ### 插件配置
 
@@ -232,7 +256,7 @@ InkWeave.init({
 });
 ```
 
-插件 ID 对应关系：
+**插件 ID 对应关系**：
 - `image` - 图片插件
 - `audio` - 音频插件
 - `auto-restore` - 自动恢复插件
@@ -245,73 +269,69 @@ InkWeave.init({
 - `cd-button` - 倒计时按钮插件
 - `class-tag` - CSS 类标签插件
 
-### E2E 测试最佳实践
+### E2E 测试架构与最佳实践
 
-#### 测试文件组织
-- E2E 测试按功能分组：`e2e/core/`（核心功能）、`e2e/plugins/`（插件功能）、`e2e/syntax/`（ink 语法）
-- 每个测试只使用一个 fixture 文件，避免多个文件维护复杂度
-- 为每个插件组件添加专用的 HTML ID（如 `#inkweave-image`）便于测试定位
+#### 统一测试入口架构
+
+项目使用**统一的 HTML 入口文件**管理所有 E2E 测试，通过 URL 参数动态配置：
+
+- **入口文件**: `e2e/fixtures/index.html`
+- **故事文件**: `.ink` 文件存储在对应的子目录中
+- **URL 参数**:
+  - `story` - 指定 .ink 故事文件的相对路径
+  - `plugins` - 指定要启用的插件（逗号分隔，或使用 `all`）
+
+**目录结构**:
+```
+e2e/fixtures/
+├── index.html              # 统一测试入口
+├── assets/                 # 公共资源目录
+│   ├── test-image.png
+│   └── test-image2.png
+├── core/                   # 核心功能测试
+├── plugins/                # 插件功能测试
+└── syntax/                 # ink 语法测试
+```
+
+**使用示例**:
+- Plugins: `/e2e/fixtures/index.html?story=plugins/auto-button.ink&plugins=auto-button`
+- Core: `/e2e/fixtures/index.html?story=core/basic.ink`
+- Syntax: `/e2e/fixtures/index.html?story=syntax/choices.ink`
+
+#### 测试文件组织原则
+
+- **按功能分组**: `e2e/core/`（核心功能）、`e2e/plugins/`（插件功能）、`e2e/syntax/`（ink 语法）
+- **每个测试只使用一个 .ink 文件**，避免多个文件维护复杂度
+- **为每个插件组件添加专用的 HTML ID**（如 `#inkweave-image`）便于测试定位
+- **Core 和 Syntax 测试不需要启用插件**，Plugin 测试需要明确指定插件
 
 #### ink 语法注意事项
+
 - 选择后的文本必须正确缩进（4个空格）
 - 使用 `-> END` 结束选择分支
 - 标签（如 `# image`、`# clear`）应在独立行上，不要在缩进块内
+- **移除 `# linedelay:0` 标签**（仅在旧的 HTML fixture 中使用，新的 .ink 文件不需要）
 
-#### Fixture 编译验证
-- **每个 fixture 文件都应该首先添加一个编译验证测试用例**
-- 验证 story 能够正确编译，没有语法错误
-- 这样可以方便定位后续测试失败的原因（是编译问题还是功能问题）
-- 编译验证测试应该检查控制台中没有 "Failed to initialize" 和 "Compilation failed" 错误
+#### 测试用例编写规范
+
+- **使用 beforeEach 统一设置**: 所有测试用例应在 `beforeEach` 中设置页面导航
+- **避免重复的 page.goto()**: 不要在每个测试函数内部重复调用 `page.goto()`
+- **等待故事容器加载**: 在 beforeEach 中添加 `await page.waitForSelector(".inkweave-story")`
+- **编译验证测试**: 每个测试套件都应该包含编译验证测试用例
 
 #### Playwright 测试技巧
+
 - 使用 `page.locator(".inkweave-choice")` 定位选择按钮
 - 等待内容更新时使用 `expect(contents).toContainText("expected text")` 而不是等待特定元素
 - 点击选择后等待具体的文本内容出现，确保故事执行完成
 - 在测试中禁用所有其他插件，只启用待测试的目标插件，避免互相影响
 
-#### 测试流程示例
-```typescript
-// 编译验证测试用例
-test("should compile without errors", async ({ page }) => {
-  const consoleMessages: { type: string; text: string }[] = [];
+#### 测试迁移工作流程
 
-  page.on('console', msg => {
-    consoleMessages.push({
-      type: msg.type(),
-      text: msg.text()
-    });
-  });
+当需要创建新的 E2E 测试时，遵循以下流程：
 
-  await page.goto("/e2e/fixtures/plugins/image.html");
-  await page.waitForSelector(".inkweave-story");
-
-  // Verify no compilation errors
-  const hasCompilationError = consoleMessages.some(msg =>
-    msg.text.includes('Failed to initialize') &&
-    msg.text.includes('Compilation failed')
-  );
-  expect(hasCompilationError).toBe(false);
-});
-
-// 功能测试用例
-test("should clear image when # clear tag is used", async ({ page }) => {
-  await page.goto("/e2e/fixtures/plugins/image.html");
-  await page.waitForSelector(".inkweave-story");
-
-  // 验证初始状态
-  const initialImageContainer = page.locator("#inkweave-image");
-  await expect(initialImageContainer).toBeVisible();
-
-  // 执行交互
-  const clearChoice = page.locator('.inkweave-choice:has-text("Clear the image")');
-  await clearChoice.click();
-
-  // 等待内容更新
-  const contents = page.locator(".inkweave-contents");
-  await expect(contents).toContainText("The image should be cleared.");
-
-  // 验证最终状态
-  const imageAfterClear = page.locator("#inkweave-image");
-  await expect(imageAfterClear).not.toBeVisible();
-});
-```
+1.  **创建 .ink 文件**: 在对应的子目录（core/plugins/syntax）中创建 .ink 文件
+2.  **编写测试用例**: 在对应的 spec.ts 文件中编写测试，使用统一入口 URL
+3.  **配置 beforeEach**: 使用 `page.goto("/e2e/fixtures/index.html?story=...")`
+4.  **回归测试**: 运行测试确保功能正常
+5.  **清理**: 如果是从旧 HTML 迁移，删除原 HTML 文件
