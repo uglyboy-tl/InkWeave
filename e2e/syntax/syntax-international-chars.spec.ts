@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - international characters", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/international-chars.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/international-chars.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("Cyrillic characters work in variable names", async ({ page }) => {

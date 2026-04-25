@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - advanced list operations", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/lists-advanced.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/lists-advanced.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("list value can be displayed", async ({ page }) => {

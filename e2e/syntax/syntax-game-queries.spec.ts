@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - game queries", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/game-queries.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/game-queries.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("CHOICE_COUNT can be assigned to temp variable", async ({ page }) => {

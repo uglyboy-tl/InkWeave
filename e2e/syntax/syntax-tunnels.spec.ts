@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - tunnels", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/tunnels.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/tunnels.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("tunnel divert executes sub-knot", async ({ page }) => {

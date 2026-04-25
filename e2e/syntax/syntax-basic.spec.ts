@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - basic content", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/basic-content.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/basic-content.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("text content displays", async ({ page }) => {

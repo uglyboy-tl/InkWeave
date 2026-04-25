@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - multi-list lists", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/lists-multi-list.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/lists-multi-list.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("variable can hold values from multiple lists", async ({ page }) => {

@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - OR operator", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/or-operator.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/or-operator.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("OR option hidden when both conditions false", async ({ page }) => {

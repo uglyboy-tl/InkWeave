@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - nested weave", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/nested-weave.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/nested-weave.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("first level choices display", async ({ page }) => {

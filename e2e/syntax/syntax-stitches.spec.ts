@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - stitches", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/stitches.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/stitches.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("knot with stitches displays header content", async ({ page }) => {

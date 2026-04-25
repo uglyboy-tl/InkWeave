@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - basic lists", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/lists-basic.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/lists-basic.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("list value can be assigned", async ({ page }) => {

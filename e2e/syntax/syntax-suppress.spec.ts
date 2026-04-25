@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - suppress choice text", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/suppress-choice.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/suppress-choice.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("suppressed choice text not in output", async ({ page }) => {

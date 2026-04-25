@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - list intersection", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/lists-intersection.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/lists-intersection.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("list intersection operator works", async ({ page }) => {

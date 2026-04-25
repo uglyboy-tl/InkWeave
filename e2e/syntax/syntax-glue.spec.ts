@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - glue", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/glue.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/glue.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("glue joins text on same line", async ({ page }) => {

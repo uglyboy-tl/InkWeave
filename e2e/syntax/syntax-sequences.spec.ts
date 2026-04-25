@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - sequences", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/sequences.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/sequences.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("first sequence element displays", async ({ page }) => {

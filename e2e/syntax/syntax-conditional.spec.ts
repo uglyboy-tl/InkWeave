@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - conditional choices", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/conditional-choices.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/conditional-choices.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("initial choice displays when condition is true", async ({ page }) => {

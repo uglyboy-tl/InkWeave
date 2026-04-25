@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test.describe("ink syntax - functions", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/syntax/functions.html");
+    await page.goto("/e2e/fixtures/index.html?story=syntax/functions.ink");
+    await page.waitForSelector(".inkweave-story");
   });
 
   test("function call displays result", async ({ page }) => {
