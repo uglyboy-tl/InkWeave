@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("CD Button Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/plugins/cd-button.html");
+    await page.goto("/e2e/fixtures/index.html?story=plugins/cd-button.ink&plugins=cd-button");
     await page.waitForSelector(".inkweave-story");
   });
 

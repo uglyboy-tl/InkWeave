@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Image Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/plugins/image.html");
+    await page.goto("/e2e/fixtures/index.html?story=plugins/image.ink&plugins=image");
     await page.waitForSelector(".inkweave-story");
   });
 

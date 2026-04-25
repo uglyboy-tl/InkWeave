@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Memory Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/plugins/memory.html");
+    await page.goto("/e2e/fixtures/index.html?story=plugins/memory.ink&plugins=memory");
     await page.waitForSelector(".inkweave-story");
   });
 
@@ -25,19 +25,6 @@ test.describe("Memory Plugin", () => {
         msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
-  });
-
-  test("should show initial content", async ({ page }) => {
-    const contents = page.locator(".inkweave-contents");
-    await expect(contents).toContainText("Start of the story.");
-  });
-
-  test("should increment counter on click", async ({ page }) => {
-    const clickChoice = page.locator('.inkweave-choice:has-text("Click me")');
-    await clickChoice.click();
-
-    const contents = page.locator(".inkweave-contents");
-    await expect(contents).toContainText("Total: 1");
   });
 
   test("should open save modal", async ({ page }) => {

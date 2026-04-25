@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("Class Tag Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/plugins/class-tag.html");
+    await page.goto("/e2e/fixtures/index.html?story=plugins/class-tag.ink&plugins=class-tag");
     await page.waitForSelector(".inkweave-story");
   });
 

@@ -1,10 +1,8 @@
 import { test, expect } from "@playwright/test";
 
+const TEST_URL = "/e2e/fixtures/index.html?story=plugins/link-open.ink&plugins=link-open";
+
 test.describe("Link Open Plugin", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/plugins/link-open.html");
-    await page.waitForSelector(".inkweave-story");
-  });
 
   test("should compile without errors", async ({ page }) => {
     const consoleMessages: { type: string; text: string }[] = [];
@@ -16,7 +14,7 @@ test.describe("Link Open Plugin", () => {
       });
     });
 
-    await page.reload();
+    await page.goto(TEST_URL);
     await page.waitForSelector(".inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
@@ -36,7 +34,7 @@ test.describe("Link Open Plugin", () => {
       }) as any;
     });
 
-    await page.goto("/e2e/fixtures/plugins/link-open.html");
+    await page.goto(TEST_URL);
     await page.waitForSelector(".inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open HTTPS Link")').click();
@@ -54,7 +52,7 @@ test.describe("Link Open Plugin", () => {
       }) as any;
     });
 
-    await page.goto("/e2e/fixtures/plugins/link-open.html");
+    await page.goto(TEST_URL);
     await page.waitForSelector(".inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open HTTP Link")').click();
@@ -68,7 +66,7 @@ test.describe("Link Open Plugin", () => {
       window.open = () => null;
     });
 
-    await page.goto("/e2e/fixtures/plugins/link-open.html");
+    await page.goto(TEST_URL);
     await page.waitForSelector(".inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open HTTPS Link")').click();
@@ -86,7 +84,7 @@ test.describe("Link Open Plugin", () => {
       }) as any;
     });
 
-    await page.goto("/e2e/fixtures/plugins/link-open.html");
+    await page.goto(TEST_URL);
     await page.waitForSelector(".inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open URL with Slash")').click();
@@ -104,7 +102,7 @@ test.describe("Link Open Plugin", () => {
       }) as any;
     });
 
-    await page.goto("/e2e/fixtures/plugins/link-open.html");
+    await page.goto(TEST_URL);
     await page.waitForSelector(".inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open Relative Path")').click();
