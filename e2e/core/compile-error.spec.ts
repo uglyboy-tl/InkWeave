@@ -17,7 +17,7 @@ test.describe("compile error handling", () => {
       pageErrors.push(err.toString());
     });
 
-    await page.goto("/e2e/fixtures/core/compile-error.html");
+    await page.goto("/e2e/fixtures/index.html?story=core/compile-error.ink");
 
     // Wait a bit for potential errors to appear
     await page.waitForTimeout(1000);

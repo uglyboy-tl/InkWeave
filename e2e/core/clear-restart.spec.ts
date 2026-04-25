@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("clear and restart tags", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/core/clear-restart.html");
+    await page.goto("/e2e/fixtures/index.html?story=core/clear-restart.ink");
   });
 
   test("clear tag should clear previous content", async ({ page }) => {
