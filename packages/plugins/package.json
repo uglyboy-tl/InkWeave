@@ -2,14 +2,14 @@
   "name": "@inkweave/plugins",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
   "version": "1.6.0",
-  "description": "Optional plugins for InkWeave",
+  "description": "Plugin collection for InkWeave - extend functionality with plugins",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },

@@ -2,14 +2,14 @@
   "name": "@inkweave/react",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
   "version": "1.6.0",
-  "description": "React components for InkWeave",
+  "description": "React components for InkWeave - ready to use in React applications",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
@@ -26,6 +26,7 @@
     "ink",
     "interactive-fiction",
     "react",
+    "components",
     "inkweave"
   ],
   "author": "Uglyboy",
