@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.0.0 (2026-04-26)
+
+### Features
+- **web**: replace Menu with CommandBar in web layout
+- **react**: add command-bar component with command registry
+- **e2e**: add unified test entry point with shared assets
+
+### Bug Fixes
+- **plugins**: fix auto-save plugin and register new plugins
+
+### Refactoring
+- **plugins**: migrate SaveModal from web to plugins/memory
+- **react-components**: rename component directories to lowercase
+- **e2e-syntax**: migrate syntax fixtures from HTML to ink
+- **e2e-plugins**: migrate plugin fixtures from HTML to ink
+- **e2e-core**: migrate core fixtures from HTML to ink
+- **e2e**: simplify image E2E tests with shared patterns
+- **e2e**: rename classTag fixtures to kebab-case
+- **e2e**: restructure test files into core, plugins, and syntax directories
+- **web**: restructure components and relocate i18n module
+
+### Documentation
+- **agents**: restructure development guide with best practices
+- **agents**: fix plugin name format in development guide
+- add E2E testing best practices to AGENTS.md
+
+### Tests
+- **e2e**: merge save modal test into existing basic fixture
+- **e2e**: add E2E tests for auto-button, auto-save, cd-button, link-open, and memory plugins
+- **plugins**: add E2E tests for image plugin
+- **core**: add E2E tests for clear, restart, and compile error handling
+
+### Chores
+- **config**: fix types path and upgrade TypeScript
+- **web**: simplify build config to single IIFE output
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v1.6.0...v2.0.0
+
 ## v1.6.0 (2026-04-23)
 
 ### Features
