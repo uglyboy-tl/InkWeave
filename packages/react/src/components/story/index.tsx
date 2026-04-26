@@ -1,7 +1,7 @@
 import type { InkStory } from "@inkweave/core";
 import { createContext, memo, use, useEffect, useRef } from "react";
-import Choices from "../Choices";
-import Contents from "../Contents";
+import Choices from "../choices";
+import Contents from "../contents";
 import styles from "./styles.module.css";
 
 const StoryContext = createContext<InkStory | null>(null);

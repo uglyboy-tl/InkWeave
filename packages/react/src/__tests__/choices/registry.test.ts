@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { ChoiceRegistry } from "../../components/Choices/registry";
+import { ChoiceRegistry } from "../../components/choices/ChoiceRegistry";
 
 describe("ChoiceRegistry", () => {
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
 import { cleanup, render, screen } from "@testing-library/react";
-import Story, { StoryProvider, useStory } from "../components/Story";
+import Story, { StoryProvider, useStory } from "../components/story";
 import { createMockInk } from "./mock";
 
 describe("Story", () => {

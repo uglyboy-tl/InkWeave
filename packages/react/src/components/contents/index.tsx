@@ -1,6 +1,6 @@
 import { CHOICE_SEPARATOR, type ContentItem, contentsStore } from "@inkweave/core";
 import { type CSSProperties, memo, useMemo } from "react";
-import { useStory } from "../Story";
+import { useStory } from "../story";
 import styles from "./styles.module.css";
 
 const ContentsComponent = () => {

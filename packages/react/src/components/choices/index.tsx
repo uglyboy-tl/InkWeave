@@ -1,7 +1,7 @@
 import { type Choice, choicesStore } from "@inkweave/core";
 import { createElement, memo, useCallback } from "react";
-import { useStory } from "../Story";
-import { ChoiceRegistry } from "./registry";
+import { useStory } from "../story";
+import { ChoiceRegistry } from "./ChoiceRegistry";
 import styles from "./styles.module.css";
 
 interface ChoiceItemProps {
