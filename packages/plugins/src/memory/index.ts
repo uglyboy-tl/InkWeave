@@ -1,7 +1,15 @@
 import type { InkStory, Plugin } from "@inkweave/core";
 import { Patches } from "@inkweave/core";
+import { Commands } from "@inkweave/react";
+import * as React from "react";
+import SaveModal from "./components/SaveModal";
 import type { SaveSlot } from "./storage";
 import useStorage from "./storage";
+
+const SAVE_ICON_PATH =
+  "M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z";
+const RESTORE_ICON_PATH =
+  "M12 3a9 9 0 0 0-9 9H0l4 4 4-4H5a7 7 0 1 1 2.05 4.95l-1.41 1.41A9 9 0 1 0 12 3z M13 8v5l4.25 2.52.77-1.28-3.52-2.09V8z";
 
 interface MemorySaveData {
   state: string;
@@ -49,8 +57,10 @@ const load = (save_data: string, ink: InkStory) => {
     ink.story.state.LoadJson(save.state);
     ink.clear();
     ink.save_label.forEach((label) => {
-      if (label in ink && typeof ink[label as keyof InkStory] !== "undefined" && label in save)
+      if (label in save) {
+        // Safe to assign since save_label contains only user-defined savable properties
         (ink as Record<string, unknown>)[label] = save[label];
+      }
     });
     ink.continue();
   }
@@ -65,6 +75,41 @@ export const memoryPlugin: Plugin = {
     Patches.add(() => {
       useStorage.getState().changeFormat(options.memory_format);
     }, options);
+
+    // Register memory commands
+    Commands.add("memory-save", {
+      name: "Save game",
+      description: "Save the current game state",
+      icon: SAVE_ICON_PATH,
+      priority: 51,
+      handler: (_ink: InkStory) => {
+        // Handler is not used since Menu handles modal opening
+      },
+      getModalContent: (ink: InkStory, onClose: () => void) =>
+        React.createElement(SaveModal, {
+          key: "memory-save-modal",
+          ink,
+          type: "save",
+          onClose,
+        }),
+    });
+
+    Commands.add("memory-restore", {
+      name: "Restore saved game",
+      description: "Load a saved game state",
+      icon: RESTORE_ICON_PATH,
+      priority: 50,
+      handler: (_ink: InkStory) => {
+        // Handler is not used since Menu handles modal opening
+      },
+      getModalContent: (ink: InkStory, onClose: () => void) =>
+        React.createElement(SaveModal, {
+          key: "memory-restore-modal",
+          ink,
+          type: "restore",
+          onClose,
+        }),
+    });
   },
 };
 

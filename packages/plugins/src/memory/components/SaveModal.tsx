@@ -1,22 +1,36 @@
 import type { InkStory } from "@inkweave/core";
-import type { SaveSlot } from "@inkweave/plugins";
-import { memory } from "@inkweave/plugins";
 import { memo, useCallback } from "react";
-import { t } from "../../locales";
-import styles from "./styles.module.css";
+import { memory } from "../index";
+import type { SaveSlot } from "../storage";
+import styles from "./SaveModal.module.css";
 
-export interface SaveModalProps {
-  modalRef: React.RefObject<HTMLDialogElement | null>;
+const translations = {
+  modal_save_title: "Save Game",
+  modal_restore_title: "Load Game",
+  close: "Close",
+  slot_1: "Slot 1",
+  slot_2: "Slot 2",
+  slot_3: "Slot 3",
+  slot_4: "Slot 4",
+  slot_5: "Slot 5",
+  slot_empty: "Empty",
+};
+
+// Future: replace with external i18n function
+const t = (key: string): string => {
+  return key in translations ? translations[key as keyof typeof translations] : key;
+};
+
+interface SaveModalProps {
   type: "save" | "restore";
-  title: string;
-  ink: InkStory | null;
-  onClose?: () => void;
+  ink: InkStory;
+  onClose: () => void;
 }
 
 const SAVE_SLOTS = [1, 2, 3, 4, 5];
 
-const SaveModal: React.FC<SaveModalProps> = ({ modalRef, type, title, ink, onClose }) => {
-  const saves = memory.show(title);
+const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose }) => {
+  const saves = memory.show(ink.title);
 
   const handleSlotClick = useCallback(
     (index: number) => {
@@ -27,29 +41,18 @@ const SaveModal: React.FC<SaveModalProps> = ({ modalRef, type, title, ink, onClo
       } else if (type === "restore" && saves && saves[index]) {
         memory.load(saves[index].data, ink);
       }
-      modalRef.current?.close();
-      onClose?.();
+      onClose();
     },
-    [ink, type, saves, modalRef, onClose],
+    [ink, type, saves, onClose],
   );
 
-  const handleClose = useCallback(() => {
-    modalRef.current?.close();
-    onClose?.();
-  }, [modalRef, onClose]);
-
   return (
-    <dialog ref={modalRef} className={styles.modal}>
+    <>
       <div className={styles.header}>
         <div className={styles.title}>
           {type === "save" ? t("modal_save_title") : t("modal_restore_title")}
         </div>
-        <button
-          type="button"
-          className={styles.close}
-          onClick={handleClose}
-          aria-label={t("close")}
-        >
+        <button type="button" className={styles.close} onClick={onClose} aria-label={t("close")}>
           ×
         </button>
       </div>
@@ -75,7 +78,7 @@ const SaveModal: React.FC<SaveModalProps> = ({ modalRef, type, title, ink, onClo
           );
         })}
       </div>
-    </dialog>
+    </>
   );
 };
 
