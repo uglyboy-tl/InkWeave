@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("modal functionality", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=core/basic.ink");
+    await page.goto("/e2e/fixtures/index.html?story=core/basic.ink&plugins=memory");
   });
 
   test("save modal opens and closes", async ({ page }) => {
@@ -38,12 +38,6 @@ test.describe("modal functionality", () => {
     const modal = page.locator("dialog");
     await expect(modal.locator("textarea, input, select")).toHaveCount(0);
     await expect(modal.getByRole("button", { name: "Close" })).toHaveCount(1);
-  });
-});
-
-test.describe("basic fixture", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=core/basic.ink");
   });
 
   test("page loads successfully", async ({ page }) => {
