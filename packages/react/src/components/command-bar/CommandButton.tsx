@@ -40,7 +40,7 @@ const CommandButton: React.FC<CommandButtonProps> = ({
       className={`inkweave-command-btn ${className}`.trim()}
       onClick={handleClick}
       title={command.name}
-      aria-label={command.name}
+      aria-label={command.description}
     >
       {command.icon ? (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

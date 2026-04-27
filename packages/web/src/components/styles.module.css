@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 
-:global(.inkweave-story) {
+:global(#inkweave-story) {
   padding: 1.5rem;
 }
 

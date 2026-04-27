@@ -2,6 +2,7 @@ import type { InkStory } from "@inkweave/core";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Commands } from "../../commands";
 import CommandButton from "./CommandButton";
+import style from "./styles.module.css";
 
 export interface CommandBarProps {
   ink: InkStory;
@@ -91,7 +92,28 @@ const CommandBar = ({ ink, className, buttonClassName, modalClassName }: Command
         onKeyUp={handleKeyUp}
         className={modalClassName}
       >
-        {getModalContent()}
+        <div id="inkweave-modal-header" className={style.header}>
+          <span id="inkweave-modal-title" className={style.title}>
+            {modalId
+              ? (() => {
+                  const command = Commands.get(modalId);
+                  return command?.title ?? "Command";
+                })()
+              : "Command"}
+          </span>
+          <button
+            type="button"
+            id="inkweave-modal-close"
+            className={style.close}
+            onClick={closeModal}
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+        <div id="inkweave-modal-body" className={style.body}>
+          {getModalContent()}
+        </div>
       </dialog>
     </>
   );

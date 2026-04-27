@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.0.2 (2026-04-27)
+## v2.0.2 (2026-04-27)
 
 ### Chores
 - **release**: bump versions and migrate publish pipeline to bun

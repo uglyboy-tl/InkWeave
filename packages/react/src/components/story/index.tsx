@@ -43,7 +43,11 @@ const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = "", o
 
   return (
     <StoryProvider ink={ink}>
-      <div className={`inkweave-story ${styles.story} ${className}`.trim()} data-inkweave="story">
+      <div
+        id="inkweave-story"
+        className={`${styles.story} ${className}`.trim()}
+        data-inkweave="story"
+      >
         {children}
         <Contents />
         <Choices />

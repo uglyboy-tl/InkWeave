@@ -7,6 +7,7 @@ export interface Command {
   id: string;
   name: string;
   description?: string;
+  title?: string;
   handler: (ink: InkStory) => void | Promise<void>;
   icon?: string;
   getModalContent?: (ink: InkStory, onClose: () => void) => React.ReactNode;
@@ -50,8 +51,8 @@ export class Commands {
 
 // Register default commands
 Commands.add("restart", {
-  name: "Restart game",
-  description: "Restart the story from the beginning",
+  name: "Restart",
+  description: "Restart game",
   icon: RESTART_ICON_PATH,
   priority: 100, // 较低优先级，显示在后面
   handler: (ink: InkStory) => {
