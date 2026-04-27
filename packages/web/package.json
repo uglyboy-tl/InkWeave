@@ -41,9 +41,9 @@
   },
   "homepage": "https://github.com/uglyboy-tl/InkWeave#readme",
   "dependencies": {
-    "@inkweave/core": "^1.0.0",
-    "@inkweave/react": "^1.0.0",
-    "@inkweave/plugins": "^1.0.0",
+    "@inkweave/core": "workspace:*",
+    "@inkweave/react": "workspace:*",
+    "@inkweave/plugins": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

@@ -31,8 +31,8 @@
   "author": "Uglyboy",
   "license": "MIT",
   "peerDependencies": {
-    "@inkweave/core": "^1.0.0",
-    "@inkweave/react": "^1.0.0",
+    "@inkweave/core": "workspace:*",
+    "@inkweave/react": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "zustand": "catalog:"
