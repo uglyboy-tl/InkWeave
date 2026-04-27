@@ -2,11 +2,20 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Commands } from "../../commands";
 import type { CommandBarProps } from "../../types";
 import CommandButton from "./CommandButton";
-import { t as translate_fn } from "./i18n";
+import { t as default_t } from "./i18n";
 import style from "./styles.module.css";
 
-const CommandBar = ({ ink, className, buttonClassName, modalClassName, t }: CommandBarProps) => {
-  if (!t) t = translate_fn;
+const CommandBar = ({
+  ink,
+  className,
+  buttonClassName,
+  modalClassName,
+  t: input_t,
+}: CommandBarProps) => {
+  const t = (key: string | undefined) => {
+    if (!input_t) return default_t(key);
+    return input_t(key) ?? default_t(key);
+  };
   const [modalId, setModalId] = useState<string | null>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
 
