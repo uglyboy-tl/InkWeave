@@ -110,6 +110,9 @@ function main() {
   console.log(`Updating to version: ${version}\n`);
   updateVersions(version);
 
+  console.log("\nUpdating bun.lock with new versions...");
+  run("bun install --force");
+
   console.log("\nGenerating changelog...");
   run(`bun run scripts/changelog.mjs v${version}`);
 

@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/core",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "Core engine for InkWeave - ink story runtime with extension system",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -30,7 +30,7 @@
   "author": "Uglyboy",
   "license": "MIT",
   "peerDependencies": {
-    "inkjs": "^2.3.0",
+    "inkjs": "catalog:",
     "zustand": "catalog:"
   },
   "devDependencies": {

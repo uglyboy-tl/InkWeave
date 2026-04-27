@@ -17,19 +17,6 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Fix promise-retry and update npm
-        run: |
-          echo "Current npm version: $(npm --version)"
-          # Pre-install the missing promise-retry module to prevent the error
-          npm install -g npm@10.9.8
-          # Now safely update npm
-          npm install -g npm@latest
-          echo "Updated npm version: $(npm --version)"
 
       - name: Install dependencies
         run: bun install
@@ -42,10 +29,12 @@ jobs:
 
       - name: Publish packages
         run: |
-          npm publish --workspace @inkweave/core --access public
-          npm publish --workspace @inkweave/react --access public
-          npm publish --workspace @inkweave/plugins --access public
-          npm publish --workspace @inkweave/web --access public
+          bun publish --access public  --cwd="packages/core"
+          bun publish --access public --cwd="packages/react"
+          bun publish --access public --cwd="packages/plugins"
+          bun publish --access public --cwd="packages/web"
+        env:
+          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Extract release notes
         run: |
