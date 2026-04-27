@@ -17,7 +17,7 @@ const defaultTranslations: Record<string, string> = {
   // Save Modal translations
   modal_save_title: "Save Game",
   modal_restore_title: "Restore Game",
-  slot_empty: "Empty",
+  modal_slot_empty: "Empty",
 
   // Menu button translations
   menu_save: "Save",
@@ -28,7 +28,7 @@ const defaultTranslations: Record<string, string> = {
 
 // Generate slot keys dynamically (slot_1, slot_2, etc.)
 for (let i = 1; i <= 5; i++) {
-  defaultTranslations[`slot_${i}`] = `Slot ${i}`;
+  defaultTranslations[`modal_slot_${i}`] = `Slot ${i}`;
 }
 
 interface MemorySaveData {

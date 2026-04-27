@@ -8,13 +8,12 @@ import styles from "./SaveModal.module.css";
 const translations: Record<string, string> = {
   modal_save_title: "Save Game",
   modal_restore_title: "Load Game",
-  close: "Close",
-  slot_1: "Slot 1",
-  slot_2: "Slot 2",
-  slot_3: "Slot 3",
-  slot_4: "Slot 4",
-  slot_5: "Slot 5",
-  slot_empty: "Empty",
+  modal_slot_1: "Slot 1",
+  modal_slot_2: "Slot 2",
+  modal_slot_3: "Slot 3",
+  modal_slot_4: "Slot 4",
+  modal_slot_5: "Slot 5",
+  modal_slot_empty: "Empty",
 };
 
 interface SaveModalProps {
@@ -59,10 +58,10 @@ const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose, t }) => {
             disabled={isDisabled}
           >
             <span className={styles["slot-name"]}>
-              {t(`slot_${slot}`) ?? translations[`slot_${slot}`]}
+              {t(`modal_slot_${slot}`) ?? translations[`modal_slot_${slot}`]}
             </span>
             <span className={hasData ? styles["slot-timestamp"] : styles["slot-empty"]}>
-              {hasData ? save.timestamp : (t("slot_empty") ?? translations.slot_empty)}
+              {hasData ? save.timestamp : (t("modal_slot_empty") ?? translations.modal_slot_empty)}
             </span>
           </button>
         );
