@@ -1,18 +1,24 @@
 import { createInkStory } from "@inkweave/core";
+import type { TranslationFunction } from "@inkweave/react";
 import { createRoot } from "react-dom/client";
 import pkg from "../package.json";
 import { render } from "./components";
-import { setTranslationFunction } from "./locales";
-import type { InkWeaveOptions } from "./types";
 import { FetchFileHandler, initPlugins } from "./utils";
+
+interface InkWeaveOptions {
+  container: string | HTMLElement;
+  story: string;
+  title?: string;
+  basePath?: string;
+  theme?: "light" | "dark";
+  plugins?: Record<string, boolean>;
+  translations?: TranslationFunction;
+}
 
 export const init = (options: InkWeaveOptions) => {
   initPlugins(options.plugins);
 
-  // Initialize translation function if provided
-  if (options.translations) {
-    setTranslationFunction(options.translations);
-  }
+  // Translation function is handled directly by the t function in components
 
   const containerEl =
     typeof options.container === "string"
@@ -37,7 +43,7 @@ export const init = (options: InkWeaveOptions) => {
 
     containerEl.innerHTML = "";
     const root = createRoot(containerEl);
-    render(root, ink);
+    render(root, ink, options.translations);
 
     console.log(`InkWeave v${pkg.version} initialized`);
   } catch (error) {

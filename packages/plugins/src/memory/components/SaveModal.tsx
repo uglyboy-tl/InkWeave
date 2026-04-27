@@ -1,10 +1,11 @@
 import type { InkStory } from "@inkweave/core";
+import type { TranslationFunction } from "@inkweave/react";
 import { memo, useCallback } from "react";
 import { memory } from "../index";
 import type { SaveSlot } from "../storage";
 import styles from "./SaveModal.module.css";
 
-const translations = {
+const translations: Record<string, string> = {
   modal_save_title: "Save Game",
   modal_restore_title: "Load Game",
   close: "Close",
@@ -16,20 +17,16 @@ const translations = {
   slot_empty: "Empty",
 };
 
-// Future: replace with external i18n function
-const t = (key: string): string => {
-  return key in translations ? translations[key as keyof typeof translations] : key;
-};
-
 interface SaveModalProps {
   type: "save" | "restore";
   ink: InkStory;
   onClose: () => void;
+  t: TranslationFunction;
 }
 
 const SAVE_SLOTS = [1, 2, 3, 4, 5];
 
-const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose }) => {
+const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose, t }) => {
   const saves = memory.show(ink.title);
 
   const handleSlotClick = useCallback(
@@ -61,9 +58,11 @@ const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose }) => {
             onClick={() => handleSlotClick(slot)}
             disabled={isDisabled}
           >
-            <span className={styles["slot-name"]}>{t(`slot_${slot}`)}</span>
+            <span className={styles["slot-name"]}>
+              {t(`slot_${slot}`) ?? translations[`slot_${slot}`]}
+            </span>
             <span className={hasData ? styles["slot-timestamp"] : styles["slot-empty"]}>
-              {hasData ? save.timestamp : t("slot_empty")}
+              {hasData ? save.timestamp : (t("slot_empty") ?? translations.slot_empty)}
             </span>
           </button>
         );

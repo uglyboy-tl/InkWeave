@@ -1,14 +1,4 @@
-import type { Choice } from "@inkweave/core";
-import type { FC } from "react";
-
-export interface ChoiceComponentProps {
-  choice: Choice;
-  onClick: () => void;
-  className?: string;
-  children?: React.ReactNode;
-}
-
-type ChoiceComponent = FC<ChoiceComponentProps>;
+import type { ChoiceComponent } from "../../types";
 
 class ChoiceRegistryClass {
   private _components: Map<string, ChoiceComponent> = new Map();

@@ -1,5 +1,6 @@
 import type { InkStory, Plugin } from "@inkweave/core";
 import { Patches } from "@inkweave/core";
+import type { ModalContentProps } from "@inkweave/react";
 import { Commands } from "@inkweave/react";
 import * as React from "react";
 import SaveModal from "./components/SaveModal";
@@ -10,6 +11,25 @@ const SAVE_ICON_PATH =
   "M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z";
 const RESTORE_ICON_PATH =
   "M12 3a9 9 0 0 0-9 9H0l4 4 4-4H5a7 7 0 1 1 2.05 4.95l-1.41 1.41A9 9 0 1 0 12 3z M13 8v5l4.25 2.52.77-1.28-3.52-2.09V8z";
+
+// Default English translations
+const defaultTranslations: Record<string, string> = {
+  // Save Modal translations
+  modal_save_title: "Save Game",
+  modal_restore_title: "Restore Game",
+  slot_empty: "Empty",
+
+  // Menu button translations
+  menu_save: "Save",
+  menu_restore: "Restore",
+  menu_save_aria: "Save game",
+  menu_restore_aria: "Restore saved game",
+};
+
+// Generate slot keys dynamically (slot_1, slot_2, etc.)
+for (let i = 1; i <= 5; i++) {
+  defaultTranslations[`slot_${i}`] = `Slot ${i}`;
+}
 
 interface MemorySaveData {
   state: string;
@@ -78,40 +98,44 @@ export const memoryPlugin: Plugin = {
 
     // Register memory commands
     Commands.add("memory-save", {
-      name: "Save",
-      description: "Save game",
-      title: "Save Game",
+      name: "menu_save",
+      description: "menu_save_aria",
+      title: "modal_save_title",
       icon: SAVE_ICON_PATH,
       priority: 51,
       handler: (_ink: InkStory) => {
         // Handler is not used since Menu handles modal opening
       },
-      getModalContent: (ink: InkStory, onClose: () => void) =>
+      getModalContent: ({ ink, onClose, t }: ModalContentProps) =>
         React.createElement(SaveModal, {
           key: "memory-save-modal",
           ink,
           type: "save",
           onClose,
+          t,
         }),
     });
 
     Commands.add("memory-restore", {
-      name: "Restore",
-      description: "Restore saved game",
-      title: "Restore Game",
+      name: "menu_restore",
+      description: "menu_restore_aria",
+      title: "modal_restore_title",
       icon: RESTORE_ICON_PATH,
       priority: 50,
       handler: (_ink: InkStory) => {
         // Handler is not used since Menu handles modal opening
       },
-      getModalContent: (ink: InkStory, onClose: () => void) =>
+      getModalContent: ({ ink, onClose, t }: ModalContentProps) =>
         React.createElement(SaveModal, {
           key: "memory-restore-modal",
           ink,
           type: "restore",
           onClose,
+          t,
         }),
     });
+
+    Commands.addTranslations(defaultTranslations);
   },
 };
 

@@ -1,17 +1,12 @@
-import type { InkStory } from "@inkweave/core";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Commands } from "../../commands";
+import type { CommandBarProps } from "../../types";
 import CommandButton from "./CommandButton";
+import { t as translate_fn } from "./i18n";
 import style from "./styles.module.css";
 
-export interface CommandBarProps {
-  ink: InkStory;
-  className?: string;
-  buttonClassName?: string;
-  modalClassName?: string;
-}
-
-const CommandBar = ({ ink, className, buttonClassName, modalClassName }: CommandBarProps) => {
+const CommandBar = ({ ink, className, buttonClassName, modalClassName, t }: CommandBarProps) => {
+  if (!t) t = translate_fn;
   const [modalId, setModalId] = useState<string | null>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -64,7 +59,11 @@ const CommandBar = ({ ink, className, buttonClassName, modalClassName }: Command
     if (!modalId) return null;
     const command = Commands.get(modalId);
     if (command?.getModalContent) {
-      return command.getModalContent(ink, closeModal);
+      return command.getModalContent({
+        ink,
+        onClose: closeModal,
+        t,
+      });
     }
     return null;
   };
@@ -81,6 +80,7 @@ const CommandBar = ({ ink, className, buttonClassName, modalClassName }: Command
               ink={ink}
               className={buttonClassName}
               onRequestOpenModal={command.getModalContent ? setActiveModal : undefined}
+              t={t}
             />
           ))}
       </div>
@@ -97,7 +97,7 @@ const CommandBar = ({ ink, className, buttonClassName, modalClassName }: Command
             {modalId
               ? (() => {
                   const command = Commands.get(modalId);
-                  return command?.title ?? "Command";
+                  return t(command?.title) ?? "Command";
                 })()
               : "Command"}
           </span>
