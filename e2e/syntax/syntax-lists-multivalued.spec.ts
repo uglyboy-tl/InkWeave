@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe("ink syntax - multivalued lists", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=syntax/lists-multivalued.ink");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("list can hold single value", async ({ page }) => {

@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Auto Save Plugin", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=plugins/auto-save.ink&plugins=auto-save,memory");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("should compile without errors", async ({ page }) => {
@@ -17,7 +17,7 @@ test.describe("Auto Save Plugin", () => {
     });
 
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
       (msg) =>
@@ -76,7 +76,7 @@ test.describe("Auto Save Plugin", () => {
 
     // Reload page to clear in-memory state
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     // Open restore modal and load from slot 1
     await page.getByRole("button", { name: "Restore saved game" }).click();

@@ -65,7 +65,7 @@ describe("Story", () => {
     // biome-ignore lint/suspicious/noExplicitAny: mock object for testing
     render(<Story ink={mockInk as any} className="custom-class" />);
 
-    const storyElement = document.querySelector(".inkweave-story");
+    const storyElement = document.querySelector("#inkweave-story");
     expect(storyElement).toHaveClass("custom-class");
   });
 

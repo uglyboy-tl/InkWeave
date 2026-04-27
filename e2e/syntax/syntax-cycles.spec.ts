@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe("ink syntax - cycles", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=syntax/cycles.ink");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("cycle displays first element", async ({ page }) => {

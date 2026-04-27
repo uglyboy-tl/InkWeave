@@ -30,7 +30,7 @@ test.describe("compile error handling", () => {
     expect(hasCompilationError).toBe(true);
 
     // Story container should not be rendered
-    const storyContainer = page.locator(".inkweave-story");
+    const storyContainer = page.locator("#inkweave-story");
     await expect(storyContainer).not.toBeVisible();
 
   });

@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Auto Restore Plugin", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=plugins/auto-restore.ink&plugins=auto-restore,memory");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("should compile without errors", async ({ page }) => {
@@ -17,7 +17,7 @@ test.describe("Auto Restore Plugin", () => {
     });
 
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
       (msg) =>
@@ -48,7 +48,7 @@ test.describe("Auto Restore Plugin", () => {
 
     // Reload page - should auto-restore to last choice state
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     // Should restore to Total: 3 (last choice state), not initial state
     await expect(contents).toContainText("Total: 3");
@@ -83,7 +83,7 @@ test.describe("Auto Restore Plugin", () => {
 
     // Reload page - should auto-restore to last choice state (Total: 3)
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     // Should restore to Total: 3 (last choice state), not Total: 2 (slot 1 save)
     await expect(contents).toContainText("Total: 3");
@@ -94,7 +94,7 @@ test.describe("Auto Restore Plugin", () => {
     await page.evaluate(() => localStorage.clear());
 
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     const contents = page.locator(".inkweave-contents");
     // Should show initial state

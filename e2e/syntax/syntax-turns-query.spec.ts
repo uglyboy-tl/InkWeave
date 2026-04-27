@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe("ink syntax - TURNS query", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=syntax/turns-query.ink");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("TURNS returns current turn count", async ({ page }) => {

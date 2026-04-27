@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe("ink syntax - weave gathers", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=syntax/weave-gather.ink");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("multiple choices display", async ({ page }) => {

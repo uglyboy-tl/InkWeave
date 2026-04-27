@@ -78,8 +78,9 @@ export const memoryPlugin: Plugin = {
 
     // Register memory commands
     Commands.add("memory-save", {
-      name: "Save game",
-      description: "Save the current game state",
+      name: "Save",
+      description: "Save game",
+      title: "Save Game",
       icon: SAVE_ICON_PATH,
       priority: 51,
       handler: (_ink: InkStory) => {
@@ -95,8 +96,9 @@ export const memoryPlugin: Plugin = {
     });
 
     Commands.add("memory-restore", {
-      name: "Restore saved game",
-      description: "Load a saved game state",
+      name: "Restore",
+      description: "Restore saved game",
+      title: "Restore Game",
       icon: RESTORE_ICON_PATH,
       priority: 50,
       handler: (_ink: InkStory) => {

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe("ink syntax - once-only choices", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=syntax/sticky-choices.ink");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("choice disappears after selection", async ({ page }) => {

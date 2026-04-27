@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Auto Button Plugin", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=plugins/auto-button.ink&plugins=auto-button");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("should compile without errors", async ({ page }) => {
@@ -17,7 +17,7 @@ test.describe("Auto Button Plugin", () => {
     });
 
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
       (msg) =>

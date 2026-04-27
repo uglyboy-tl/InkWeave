@@ -48,36 +48,26 @@ const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose }) => {
 
   return (
     <>
-      <div className={styles.header}>
-        <div className={styles.title}>
-          {type === "save" ? t("modal_save_title") : t("modal_restore_title")}
-        </div>
-        <button type="button" className={styles.close} onClick={onClose} aria-label={t("close")}>
-          ×
-        </button>
-      </div>
-      <div className={styles.body}>
-        {SAVE_SLOTS.map((slot) => {
-          const save = saves?.[slot] as SaveSlot | undefined;
-          const hasData = !!save;
-          const isDisabled = type === "restore" && !hasData;
+      {SAVE_SLOTS.map((slot) => {
+        const save = saves?.[slot] as SaveSlot | undefined;
+        const hasData = !!save;
+        const isDisabled = type === "restore" && !hasData;
 
-          return (
-            <button
-              type="button"
-              key={slot}
-              className={styles.slot}
-              onClick={() => handleSlotClick(slot)}
-              disabled={isDisabled}
-            >
-              <span className={styles["slot-name"]}>{t(`slot_${slot}`)}</span>
-              <span className={hasData ? styles["slot-timestamp"] : styles["slot-empty"]}>
-                {hasData ? save.timestamp : t("slot_empty")}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+        return (
+          <button
+            type="button"
+            key={slot}
+            className={styles.slot}
+            onClick={() => handleSlotClick(slot)}
+            disabled={isDisabled}
+          >
+            <span className={styles["slot-name"]}>{t(`slot_${slot}`)}</span>
+            <span className={hasData ? styles["slot-timestamp"] : styles["slot-empty"]}>
+              {hasData ? save.timestamp : t("slot_empty")}
+            </span>
+          </button>
+        );
+      })}
     </>
   );
 };

@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Memory Plugin", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=plugins/memory.ink&plugins=memory");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("should compile without errors", async ({ page }) => {
@@ -17,7 +17,7 @@ test.describe("Memory Plugin", () => {
     });
 
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
       (msg) =>
@@ -31,7 +31,7 @@ test.describe("Memory Plugin", () => {
     await page.getByRole("button", { name: "Save game" }).click();
     const modal = page.locator("dialog");
     await expect(modal).toBeVisible();
-    await expect(modal).toContainText("Save Game");
+    await expect(modal.locator("#inkweave-modal-title")).toHaveText("Save Game");
   });
 
   test("should save and load game state", async ({ page }) => {

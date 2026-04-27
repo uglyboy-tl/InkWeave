@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Image Plugin", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/e2e/fixtures/index.html?story=plugins/image.ink&plugins=image");
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
   });
 
   test("should compile without errors", async ({ page }) => {
@@ -17,7 +17,7 @@ test.describe("Image Plugin", () => {
     });
 
     await page.reload();
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
       (msg) =>

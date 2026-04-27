@@ -15,7 +15,7 @@ test.describe("Link Open Plugin", () => {
     });
 
     await page.goto(TEST_URL);
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
       (msg) =>
@@ -35,7 +35,7 @@ test.describe("Link Open Plugin", () => {
     });
 
     await page.goto(TEST_URL);
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open HTTPS Link")').click();
 
@@ -53,7 +53,7 @@ test.describe("Link Open Plugin", () => {
     });
 
     await page.goto(TEST_URL);
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open HTTP Link")').click();
 
@@ -67,7 +67,7 @@ test.describe("Link Open Plugin", () => {
     });
 
     await page.goto(TEST_URL);
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open HTTPS Link")').click();
 
@@ -85,7 +85,7 @@ test.describe("Link Open Plugin", () => {
     });
 
     await page.goto(TEST_URL);
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open URL with Slash")').click();
 
@@ -103,7 +103,7 @@ test.describe("Link Open Plugin", () => {
     });
 
     await page.goto(TEST_URL);
-    await page.waitForSelector(".inkweave-story");
+    await page.waitForSelector("#inkweave-story");
 
     await page.locator('.inkweave-choice:has-text("Open Relative Path")').click();
 

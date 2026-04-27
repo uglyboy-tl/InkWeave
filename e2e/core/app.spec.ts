@@ -9,7 +9,7 @@ test.describe("modal functionality", () => {
     await page.getByRole("button", { name: "Save game" }).click();
     const saveModal = page.locator("dialog");
     await expect(saveModal).toBeVisible();
-    await expect(saveModal).toContainText("Save Game");
+    await expect(saveModal.locator("#inkweave-modal-title")).toHaveText("Save Game");
 
     await saveModal.getByRole("button", { name: /close|×|Save/i }).first().click();
     await expect(saveModal).not.toBeVisible();
@@ -46,7 +46,7 @@ test.describe("modal functionality", () => {
   });
 
   test("story container renders", async ({ page }) => {
-    const story = page.locator(".inkweave-story");
+    const story = page.locator("#inkweave-story");
     await expect(story).toBeVisible();
   });
 
@@ -84,6 +84,6 @@ test.describe("modal functionality", () => {
     await page.locator("nav").getByRole("button", { name: "Save game" }).click();
     const modal = page.locator("dialog");
     await expect(modal).toBeVisible();
-    await expect(modal).toContainText("Save Game");
+    await expect(modal.locator("#inkweave-modal-title")).toHaveText("Save Game");
   });
 });
