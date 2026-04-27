@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/react",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "React components for InkWeave - ready to use in React applications",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -32,7 +32,7 @@
   "author": "Uglyboy",
   "license": "MIT",
   "peerDependencies": {
-    "@inkweave/core": "workspace:*",
+    "@inkweave/core": "^2.0.3",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

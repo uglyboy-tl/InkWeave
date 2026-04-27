@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/plugins",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Plugin collection for InkWeave - extend functionality with plugins",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -31,8 +31,8 @@
   "author": "Uglyboy",
   "license": "MIT",
   "peerDependencies": {
-    "@inkweave/core": "workspace:*",
-    "@inkweave/react": "workspace:*",
+    "@inkweave/core": "^2.0.3",
+    "@inkweave/react": "^2.0.3",
     "react": "catalog:",
     "react-dom": "catalog:",
     "zustand": "catalog:"

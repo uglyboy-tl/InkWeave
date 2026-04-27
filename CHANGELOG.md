@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.0.3 (2026-04-27)
+
+### Features
+- **react/command-bar**: add modal header structure and ID selectors
+
+### Refactoring
+- **react**: centralize i18n types and translation keys in react package
+- **plugins/memory**: migrate SaveModal to use centralized CommandBar modal
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.0.2...v2.0.3
+
 ## v2.0.2 (2026-04-27)
 
 ### Chores

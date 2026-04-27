@@ -1,6 +1,6 @@
 {
   "name": "@inkweave/web",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or as an npm module",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -41,9 +41,9 @@
   },
   "homepage": "https://github.com/uglyboy-tl/InkWeave#readme",
   "dependencies": {
-    "@inkweave/core": "workspace:*",
-    "@inkweave/react": "workspace:*",
-    "@inkweave/plugins": "workspace:*",
+    "@inkweave/core": "^2.0.3",
+    "@inkweave/react": "^2.0.3",
+    "@inkweave/plugins": "^2.0.3",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
