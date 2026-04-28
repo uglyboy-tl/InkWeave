@@ -32,7 +32,7 @@
   "author": "Uglyboy",
   "license": "MIT",
   "peerDependencies": {
-    "@inkweave/core": "^2.0.3",
+    "@inkweave/core": "^2.0.0",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

@@ -1,0 +1,4 @@
+[submodule "packages/obsidian"]
+	path = packages/obsidian
+	url = git@github.com:uglyboy-tl/obsidian-ink-player.git
+	ignore = dirty
