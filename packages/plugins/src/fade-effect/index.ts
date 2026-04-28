@@ -23,7 +23,7 @@ type ContentComplete = {
 };
 
 const useContentComplete = create<ContentComplete>((set) => ({
-  contentComplete: true,
+  contentComplete: false,
   last_content: "",
   setContentComplete: (contentComplete) => set({ contentComplete }),
   setLastContent: (contents) => {
@@ -66,6 +66,21 @@ export const fadeEffectPlugin = {
         }
         return originalChoose.call(self, index);
       };
+
+      // Define linedelay property that maps to options.linedelay
+      Object.defineProperty(this, "linedelay", {
+        get() {
+          return this.options.linedelay;
+        },
+        set(value: number) {
+          this.options.linedelay = value;
+        },
+        enumerable: true,
+      });
+
+      // Add linedelay to save_label for persistence
+      this.save_label.push("linedelay");
+
       Object.defineProperty(this, "visibleLines", {
         get() {
           const last_content = useContentComplete.getState().last_content;
