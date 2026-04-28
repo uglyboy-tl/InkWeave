@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.0.4 (2026-04-28)
+
+### Bug Fixes
+- **react/command-bar**: fall back to default translations when custom t returns undefined
+
+### Refactoring
+- **plugins/memory**: prefix slot translation keys with modal_ to avoid naming conflicts
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.0.3...v2.0.4
+
 ## v2.0.3 (2026-04-27)
 
 ### Features
