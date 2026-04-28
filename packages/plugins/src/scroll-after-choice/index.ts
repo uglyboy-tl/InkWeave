@@ -48,12 +48,16 @@ export const scrollAfterChoicePlugin: Plugin = {
         }, 0);
       });
 
-      // 使用事件系统来处理清理操作
-      this.eventEmitter.on(Events.STORY_CLEARED, () => {
+      // 在 dispose 时清理所有资源
+      this.eventEmitter.on(Events.STORY_DISPOSE, () => {
         if (scrollTimer) clearTimeout(scrollTimer);
         unsubscribeChoice();
         unsubscribeContent();
-        // 不需要清理自身监听器，因为 STORY_CLEARED 事件只在故事清理时触发一次
+      });
+
+      // 在 clear 时也清理资源（例如 restart 操作）
+      this.eventEmitter.on(Events.STORY_CLEARED, () => {
+        if (scrollTimer) clearTimeout(scrollTimer);
       });
     }, {});
   },
