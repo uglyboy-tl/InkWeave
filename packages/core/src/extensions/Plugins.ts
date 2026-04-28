@@ -35,7 +35,10 @@ export class Plugins {
   }
 
   loadEnabledPlugins() {
-    // 使用 filter 和 forEach 来处理插件加载
+    // 清除之前加载的插件状态，重新评估所有插件的启用状态
+    this.clear();
+
+    // 重新加载所有启用的插件
     Array.from(Plugins._plugins.entries())
       .filter(([id, plugin]) => {
         // 获取配置值，undefined 表示未配置
@@ -43,7 +46,7 @@ export class Plugins {
         // 如果有配置，使用配置值；否则使用默认值
         const isEnabled =
           configValue !== undefined ? configValue : (plugin.enabledByDefault ?? true);
-        return isEnabled && !this._loadedPluginIds.has(id);
+        return isEnabled;
       })
       .forEach(([, plugin]) => {
         plugin.onLoad();

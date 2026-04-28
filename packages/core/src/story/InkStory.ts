@@ -36,7 +36,7 @@ export class InkStory implements InkStoryContext {
     Patches.apply(this, content);
     this.bindExternalFunctions(content);
 
-    // 使用事件系统来清除内容
+    // 使用事件系统来清除内容（清屏操作）
     const unsubscribeClear = this.eventEmitter.on(Events.STORY_CLEARED, () => {
       contentsStore.getState().clear();
     });
@@ -155,8 +155,10 @@ export class InkStory implements InkStoryContext {
   }
 
   dispose() {
+    this.clear(); // 清理显示内容
     this.eventEmitter.emit(Events.STORY_DISPOSE, { story: this });
-    this.clear();
+    // 清理其他状态
+    variablesStore.setState({ variables: new Map<string, unknown>() });
     this.eventEmitter.clear();
   }
 
