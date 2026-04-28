@@ -310,13 +310,13 @@ e2e/fixtures/
 - 选择后的文本必须正确缩进（4个空格）
 - 使用 `-> END` 结束选择分支
 - 标签（如 `# image`、`# clear`）应在独立行上，不要在缩进块内
-- **移除 `# linedelay:0` 标签**（仅在旧的 HTML fixture 中使用，新的 .ink 文件不需要）
+- **`# linedelay` 标签可用于控制淡入效果速度，包括 `# linedelay:0` 用于即时显示（在测试场景中很有用）**
 
 #### 测试用例编写规范
 
 - **使用 beforeEach 统一设置**: 所有测试用例应在 `beforeEach` 中设置页面导航
 - **避免重复的 page.goto()**: 不要在每个测试函数内部重复调用 `page.goto()`
-- **等待故事容器加载**: 在 beforeEach 中添加 `await page.waitForSelector(".inkweave-story")`
+- **等待故事容器加载**: 在 beforeEach 中添加 `await page.waitForSelector("#inkweave-story")`
 - **编译验证测试**: 每个测试套件都应该包含编译验证测试用例
 
 #### Playwright 测试技巧
