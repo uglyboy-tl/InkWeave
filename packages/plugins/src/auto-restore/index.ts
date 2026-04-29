@@ -28,4 +28,5 @@ export const autoRestorePlugin: Plugin = {
       });
     });
   },
+  dependencies: ["memory"],
 };

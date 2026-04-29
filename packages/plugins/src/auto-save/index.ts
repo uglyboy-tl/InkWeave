@@ -12,4 +12,5 @@ export const autoSavePlugin: Plugin = {
       memory.save(1, ink);
     });
   },
+  dependencies: ["memory"],
 };
