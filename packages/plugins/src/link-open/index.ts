@@ -10,19 +10,19 @@ export const linkOpenPlugin: Plugin = {
   enabledByDefault: true,
   onLoad: () => {
     Tags.add("linkopen", (val: string | null | undefined) => {
-      if (val) {
-        try {
-          const url = new URL(val);
-          if (!ALLOWED_PROTOCOLS.includes(url.protocol)) {
-            console.warn("InkWeave: Blocked unsafe URL protocol:", url.protocol);
-            return;
-          }
-        } catch {
-          console.warn("InkWeave: Invalid URL:", val);
-          return;
-        }
-        window.open(val, "_blank", "noopener,noreferrer");
+      if (!val) return;
+      let url: URL;
+      try {
+        url = new URL(val);
+      } catch {
+        console.warn("InkWeave: Invalid URL:", val);
+        return;
       }
+      if (!ALLOWED_PROTOCOLS.includes(url.protocol)) {
+        console.warn("InkWeave: Blocked unsafe URL protocol:", url.protocol);
+        return;
+      }
+      window.open(url.href, "_blank", "noopener,noreferrer");
     });
   },
 };

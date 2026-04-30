@@ -31,7 +31,7 @@ describe("linkopen", () => {
         "linkopen: http://example.com",
       );
 
-      expect(mockOpen).toHaveBeenCalledWith("http://example.com", "_blank", "noopener,noreferrer");
+      expect(mockOpen).toHaveBeenCalledWith("http://example.com/", "_blank", "noopener,noreferrer");
     });
 
     it("should open https URLs", () => {
@@ -42,7 +42,11 @@ describe("linkopen", () => {
         "linkopen: https://example.com",
       );
 
-      expect(mockOpen).toHaveBeenCalledWith("https://example.com", "_blank", "noopener,noreferrer");
+      expect(mockOpen).toHaveBeenCalledWith(
+        "https://example.com/",
+        "_blank",
+        "noopener,noreferrer",
+      );
     });
 
     it("should block unsafe protocols", () => {

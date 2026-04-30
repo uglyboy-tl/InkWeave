@@ -40,7 +40,7 @@ test.describe("Link Open Plugin", () => {
     await page.locator('.inkweave-choice:has-text("Open HTTPS Link")').click();
 
     const urls = await page.evaluate(() => (window as any).__openedUrls);
-    expect(urls).toContain("https:example.com");
+    expect(urls).toContain("https://example.com/");
   });
 
   test("should open HTTP link when tag is triggered", async ({ page }) => {
@@ -58,7 +58,7 @@ test.describe("Link Open Plugin", () => {
     await page.locator('.inkweave-choice:has-text("Open HTTP Link")').click();
 
     const urls = await page.evaluate(() => (window as any).__openedUrls);
-    expect(urls).toContain("http:example.org");
+    expect(urls).toContain("http://example.org/");
   });
 
   test("should display content after clicking link", async ({ page }) => {
@@ -90,7 +90,7 @@ test.describe("Link Open Plugin", () => {
     await page.locator('.inkweave-choice:has-text("Open URL with Slash")').click();
 
     const urls = await page.evaluate(() => (window as any).__openedUrls);
-    expect(urls).toContain("https:example.com/path/to/page");
+    expect(urls).toContain("https://example.com/path/to/page");
   });
 
   test("should handle relative path to existing page", async ({ page }) => {
@@ -108,6 +108,6 @@ test.describe("Link Open Plugin", () => {
     await page.locator('.inkweave-choice:has-text("Open Relative Path")').click();
 
     const urls = await page.evaluate(() => (window as any).__openedUrls);
-    expect(urls).toContain("http:../core/basic.html");
+    expect(urls).toContain("http://../core/basic.html");
   });
 });
