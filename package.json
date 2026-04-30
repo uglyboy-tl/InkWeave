@@ -33,6 +33,7 @@
     "check": "biome check --write --error-on-warnings . && tsgo -b --noEmit",
     "test": "bun test && bun test:integration && bun test:e2e",
     "test:e2e": "playwright test",
+    "test:e2e:all": "E2E_SYNTAX=1 playwright test",
     "test:integration": "bun -F '*' test:integration",
     "serve": "vite",
     "release": "bun run scripts/release.mjs"
