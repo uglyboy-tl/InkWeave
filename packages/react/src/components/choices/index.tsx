@@ -1,5 +1,5 @@
 import { type Choice, choicesStore } from "@inkweave/core";
-import { createElement, memo, useCallback } from "react";
+import { createElement, memo, useCallback, useRef } from "react";
 import { useStory } from "../story";
 import { ChoiceRegistry } from "./ChoiceRegistry";
 import styles from "./styles.module.css";
@@ -29,7 +29,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = memo(
     }
 
     // Remove duplicates and join
-    const className = [...new Set(classList.filter(Boolean))].join(" ");
+    const className = [...new Set(classList)].join(" ");
 
     if (Component) {
       return (
@@ -70,16 +70,14 @@ ChoiceItem.displayName = "ChoiceItem";
 const ChoicesComponent = () => {
   const ink = useStory();
   const choices = choicesStore((state) => state.choices);
-  const inkRecord = ink as unknown as Record<string, unknown>;
-  const canShow =
-    inkRecord && "choicesCanShow" in inkRecord ? (inkRecord.choicesCanShow as boolean) : true;
+  const canShow = typeof ink.choicesCanShow === "boolean" ? ink.choicesCanShow : true;
 
-  const handleClick = useCallback(
-    (index: number) => {
-      ink.choose(index);
-    },
-    [ink],
-  );
+  const inkRef = useRef(ink);
+  inkRef.current = ink;
+
+  const handleClick = useCallback((index: number) => {
+    inkRef.current.choose(index);
+  }, []);
 
   return (
     <ul

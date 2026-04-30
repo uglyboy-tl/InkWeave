@@ -45,7 +45,7 @@ const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = "", o
     <StoryProvider ink={ink}>
       <div
         id="inkweave-story"
-        className={`${styles.story} ${className}`.trim()}
+        className={[styles.story, className].filter(Boolean).join(" ")}
         data-inkweave="story"
       >
         {children}
