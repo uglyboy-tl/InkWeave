@@ -26,7 +26,6 @@ export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
   Plugins.register(cdButtonPlugin);
   Plugins.register(classTagPlugin);
 
-  // 设置插件启用配置
   if (pluginConfig) {
     Plugins.setPluginsEnabled(pluginConfig);
   }
