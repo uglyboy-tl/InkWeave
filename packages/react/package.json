@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/react",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "React components for InkWeave - ready to use in React applications",
   "type": "module",
   "main": "./dist/index.cjs",

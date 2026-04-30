@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/plugins",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Plugin collection for InkWeave - extend functionality with plugins",
   "type": "module",
   "main": "./dist/index.cjs",

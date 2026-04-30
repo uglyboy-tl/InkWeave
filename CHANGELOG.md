@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.1.0 (2026-04-30)
+
+### Features
+- **web**: add dispose and re-init support
+- **plugins/memory**: add slot reservation system
+- **core**: add plugin dependency cascade logic
+- **obsidian**: add obsidian plugin as git submodule
+- **plugins/fade-effect**: add linedelay property and E2E tests
+
+### Bug Fixes
+- **react**: avoid type casting in components
+- **plugins/auto-restore**: remove redundant parse
+- **plugins/link-open**: normalize URL handling
+- **plugins**: add missing memory dependency
+- **plugins/scroll-after-choice**: fix cleanup event handling and add E2E tests
+- **core**: fix plugin reload and story disposal
+
+### Performance
+- **react/command-bar**: memoize buttons and title
+
+### Refactoring
+- **plugins/fade-effect**: simplify delay calc
+- **core**: clean up extensions and state access
+- **core**: rework InkStory method binding
+
+### Documentation
+- **AGENTS.md**: fix selector reference and linedelay guidance
+
+### Styles
+- **e2e**: apply biome formatting to e2e tests
+
+### Tests
+- **core**: add unit tests for ink syntax features
+- **e2e**: improve reliability and type safety in e2e tests
+
+### Chores
+- **config**: add selective E2E syntax test execution
+- **biome**: enable formatting for e2e directory
+- **obsidian**: update submodule reference
+- **web**: update build config and add docs
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.0.4...v2.1.0
+
 ## v2.0.4 (2026-04-28)
 
 ### Bug Fixes
