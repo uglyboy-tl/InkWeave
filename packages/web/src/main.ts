@@ -1,5 +1,6 @@
-import { createInkStory } from "@inkweave/core";
+import { createInkStory, type ErrorHandler } from "@inkweave/core";
 import type { TranslationFunction } from "@inkweave/react";
+import type { Root } from "react-dom/client";
 import { createRoot } from "react-dom/client";
 import pkg from "../package.json";
 import { render } from "./components";
@@ -15,10 +16,12 @@ interface InkWeaveOptions {
   translations?: TranslationFunction;
 }
 
-export const init = (options: InkWeaveOptions) => {
-  initPlugins(options.plugins);
+let currentRoot: Root | null = null;
 
-  // Translation function is handled directly by the t function in components
+export const init = (
+  options: InkWeaveOptions,
+): { ink: ReturnType<typeof createInkStory>; dispose: () => void } | undefined => {
+  initPlugins(options.plugins);
 
   const containerEl =
     typeof options.container === "string"
@@ -35,22 +38,51 @@ export const init = (options: InkWeaveOptions) => {
   }
 
   try {
+    const errorHandler: ErrorHandler = (message, errorType) => {
+      console.error(`InkWeave: ${errorType}: ${message}`);
+    };
+
     const fileHandler = new FetchFileHandler({ basePath: options.basePath || "" });
     const ink = createInkStory(options.story, {
       title: options.title || "Ink Story",
       fileHandler,
+      errorHandler,
     });
 
-    containerEl.innerHTML = "";
-    const root = createRoot(containerEl);
+    // Unmount previous instance if re-initialized
+    if (currentRoot) {
+      currentRoot.unmount();
+      currentRoot = null;
+    }
+    (containerEl as HTMLElement).innerHTML = "";
+    const root = createRoot(containerEl as HTMLElement);
+    currentRoot = root;
     render(root, ink, options.translations);
 
     console.log(`InkWeave v${pkg.version} initialized`);
+
+    return {
+      ink,
+      dispose: () => {
+        ink.dispose();
+        if (currentRoot === root) {
+          currentRoot.unmount();
+          currentRoot = null;
+        }
+        (containerEl as HTMLElement).innerHTML = "";
+      },
+    };
   } catch (error) {
     console.error("InkWeave: Failed to initialize", error);
   }
 };
 
+declare global {
+  interface Window {
+    InkWeave?: { init: typeof init; version: string };
+  }
+}
+
 if (typeof window !== "undefined") {
-  (window as unknown as Record<string, unknown>).InkWeave = { init };
+  window.InkWeave = { init, version: pkg.version };
 }
