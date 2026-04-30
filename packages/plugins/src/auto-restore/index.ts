@@ -19,8 +19,7 @@ export const autoRestorePlugin: Plugin = {
         const savedState = memory.show(ink.title)?.[0];
         if (savedState) {
           try {
-            const saveData = JSON.parse(savedState.data);
-            memory.load(JSON.stringify(saveData), ink);
+            memory.load(savedState.data, ink);
           } catch (e) {
             console.warn("InkWeave AutoRestore: Failed to load autosave:", e);
           }
