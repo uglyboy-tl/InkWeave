@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Commands } from "../../commands";
 import type { CommandBarProps } from "../../types";
 import CommandButton from "./CommandButton";
@@ -12,10 +12,13 @@ const CommandBar = ({
   modalClassName,
   t: input_t,
 }: CommandBarProps) => {
-  const t = (key: string | undefined) => {
-    if (!input_t) return default_t(key);
-    return input_t(key) ?? default_t(key);
-  };
+  const t = useCallback(
+    (key: string | undefined) => {
+      if (!input_t) return default_t(key);
+      return input_t(key) ?? default_t(key);
+    },
+    [input_t],
+  );
   const [modalId, setModalId] = useState<string | null>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -77,22 +80,32 @@ const CommandBar = ({
     return null;
   };
 
+  const sortedButtons = useMemo(
+    () =>
+      Commands.getAll()
+        .sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))
+        .map((command) => (
+          <CommandButton
+            key={command.id}
+            commandId={command.id}
+            ink={ink}
+            className={buttonClassName}
+            onRequestOpenModal={command.getModalContent ? setActiveModal : undefined}
+            t={t}
+          />
+        )),
+    [ink, buttonClassName, t],
+  );
+
+  const modalTitle = useMemo(() => {
+    if (!modalId) return "Command";
+    const command = Commands.get(modalId);
+    return t(command?.title) ?? "Command";
+  }, [modalId, t]);
+
   return (
     <>
-      <div className={className}>
-        {Commands.getAll()
-          .sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))
-          .map((command) => (
-            <CommandButton
-              key={command.id}
-              commandId={command.id}
-              ink={ink}
-              className={buttonClassName}
-              onRequestOpenModal={command.getModalContent ? setActiveModal : undefined}
-              t={t}
-            />
-          ))}
-      </div>
+      <div className={className}>{sortedButtons}</div>
       {/* Modal Dialog */}
       <dialog
         ref={modalRef}
@@ -103,12 +116,7 @@ const CommandBar = ({
       >
         <div id="inkweave-modal-header" className={style.header}>
           <span id="inkweave-modal-title" className={style.title}>
-            {modalId
-              ? (() => {
-                  const command = Commands.get(modalId);
-                  return t(command?.title) ?? "Command";
-                })()
-              : "Command"}
+            {modalTitle}
           </span>
           <button
             type="button"
