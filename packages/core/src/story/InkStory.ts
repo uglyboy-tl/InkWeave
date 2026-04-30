@@ -31,10 +31,11 @@ export class InkStory implements InkStoryContext {
     this.title = title;
     this.eventEmitter = new EventEmitter() as EventEmitterInterface;
     this.plugins = new Plugins(this);
-    const content = this.story.ToJson() || "";
-    bindFunctions(this);
-    Patches.apply(this, content);
-    this.bindExternalFunctions(content);
+    const content = this.story.ToJson();
+    if (content) {
+      Patches.apply(this, content);
+      this.bindExternalFunctions(content);
+    }
 
     // 使用事件系统来清除内容（清屏操作）
     const unsubscribeClear = this.eventEmitter.on(Events.STORY_CLEARED, () => {
@@ -80,7 +81,7 @@ export class InkStory implements InkStoryContext {
     return this._save_label;
   }
 
-  continue() {
+  continue = () => {
     // 发射故事继续前事件
     this.eventEmitter.emit(Events.STORY_CONTINUE_START, { story: this, state: this.story.state });
 
@@ -116,35 +117,38 @@ export class InkStory implements InkStoryContext {
       choices: currentChoices,
       variables: variablesState,
     });
-  }
+  };
 
-  choose(index: number) {
+  choose = (index: number) => {
+    const preChoices = [...this.choices];
+    const preSelectedChoice = preChoices[index];
+
     // 发射选择前事件
     this.eventEmitter.emit(Events.CHOICE_SELECTING, {
       story: this,
       index,
-      choices: this.choices,
-      selectedChoice: this.choices[index],
+      choices: preChoices,
+      selectedChoice: preSelectedChoice,
     });
 
     this.story.ChooseChoiceIndex(index);
     contentsStore.getState().add([{ text: CHOICE_SEPARATOR }]);
     this.continue();
 
-    // 发射选择后事件
+    // 发射选择后事件 - 使用 continue 前的快照，避免拿到新一轮的选择列表
     this.eventEmitter.emit(Events.CHOICE_SELECTED, {
       story: this,
       index,
-      choices: this.choices,
-      selectedChoice: this.choices[index],
+      choices: preChoices,
+      selectedChoice: preSelectedChoice,
     });
-  }
+  };
 
-  clear() {
+  clear = () => {
     this.eventEmitter.emit(Events.STORY_CLEARED, { story: this });
-  }
+  };
 
-  restart() {
+  restart = () => {
     this.eventEmitter.emit(Events.STORY_RESTART_START, { story: this });
 
     this.story.ResetState();
@@ -152,40 +156,39 @@ export class InkStory implements InkStoryContext {
     this.continue();
 
     this.eventEmitter.emit(Events.STORY_RESTART_END, { story: this });
-  }
+  };
 
-  dispose() {
+  dispose = () => {
     this.clear(); // 清理显示内容
     this.eventEmitter.emit(Events.STORY_DISPOSE, { story: this });
     // 清理其他状态
     variablesStore.setState({ variables: new Map<string, unknown>() });
     this.eventEmitter.clear();
-  }
+  };
 
   bindExternalFunctions = (content: string) => {
-    const matches = Array.from(content.matchAll(/"x\(\)":"(\w+)/gi));
-    const externalIds = new Set(
-      matches.map((m) => m[1]).filter((id): id is string => id !== undefined),
-    );
-    externalIds.forEach((id) => {
-      ExternalFunctions.bind(this, id);
-    });
-  };
-}
+    try {
+      const jsonContent = JSON.parse(content);
+      const externalIds = new Set<string>();
 
-function bindFunctions(target: object) {
-  const prototype = Object.getPrototypeOf(target);
+      const findExternalFunctions = (obj: unknown) => {
+        if (typeof obj === "object" && obj !== null) {
+          const recordObj = obj as Record<string, unknown>;
+          if ("x()" in recordObj && typeof recordObj["x()"] === "string") {
+            externalIds.add(recordObj["x()"]);
+          }
+          for (const key of Object.keys(recordObj)) {
+            findExternalFunctions(recordObj[key]);
+          }
+        }
+      };
 
-  Object.getOwnPropertyNames(prototype).forEach((property) => {
-    if (
-      property !== "constructor" &&
-      typeof Object.getOwnPropertyDescriptor(prototype, property)?.value === "function"
-    ) {
-      const targetRecord = target as Record<string, (...args: unknown[]) => unknown>;
-      const method = targetRecord[property];
-      if (method) {
-        targetRecord[property] = method.bind(target);
-      }
+      findExternalFunctions(jsonContent);
+      externalIds.forEach((id) => {
+        ExternalFunctions.bind(this, id);
+      });
+    } catch (error) {
+      console.warn("Failed to parse story content for external functions:", error);
     }
-  });
+  };
 }
