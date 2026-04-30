@@ -110,16 +110,13 @@ export const fadeEffectPlugin = {
           useContentComplete.getState().setContentComplete(true);
           return;
         }
+        const visible = self.visibleLines as number;
+        const delayLines = visible >= 0 ? (self.contents as ContentItem[]).length - visible : 0;
         timer = setTimeout(
           () => {
             useContentComplete.getState().setContentComplete(true);
           },
-          Math.max(
-            0,
-            ((self.contents as ContentItem[]).length - (self.visibleLines as number)) *
-              (self.options.linedelay as number) *
-              1000,
-          ),
+          Math.max(0, delayLines * (self.options.linedelay as number) * 1000),
         );
       });
 
