@@ -36,8 +36,8 @@ test.describe("Auto Save Plugin", () => {
     const modal = page.locator("dialog");
     await expect(modal).toBeVisible();
 
-    // Slot 1 button should NOT be disabled (it has saved data)
-    const slot1Button = modal.getByRole("button", { name: /Slot 1/i });
+    // Slot 1 (Auto-Save) should NOT be disabled in restore mode
+    const slot1Button = modal.getByRole("button", { name: /Auto-Save/i });
     await expect(slot1Button).not.toBeDisabled();
   });
 
@@ -49,7 +49,7 @@ test.describe("Auto Save Plugin", () => {
     await page.getByRole("button", { name: "Restore saved game" }).click();
     const modal = page.locator("dialog");
     await expect(modal).toBeVisible();
-    const slot1Button = modal.getByRole("button", { name: /Slot 1/i });
+    const slot1Button = modal.getByRole("button", { name: /Auto-Save/i });
     const firstText = await slot1Button.textContent();
     expect(firstText).not.toContain("Empty");
     await modal.getByRole("button", { name: /close|×|Close/i }).first().click();
@@ -83,7 +83,7 @@ test.describe("Auto Save Plugin", () => {
     const modal = page.locator("dialog");
     await expect(modal).toBeVisible();
 
-    const slot1Button = modal.getByRole("button", { name: /Slot 1/i });
+    const slot1Button = modal.getByRole("button", { name: /Auto-Save/i });
     await expect(slot1Button).not.toBeDisabled();
     await slot1Button.click();
 

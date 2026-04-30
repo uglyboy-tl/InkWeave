@@ -1,7 +1,7 @@
 import type { InkStory } from "@inkweave/core";
 import type { TranslationFunction } from "@inkweave/react";
 import { memo, useCallback } from "react";
-import { memory } from "../index";
+import { getSlotLabelKey, isSlotReserved, memory } from "../index";
 import type { SaveSlot } from "../storage";
 import styles from "./SaveModal.module.css";
 
@@ -30,7 +30,10 @@ const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose, t }) => {
 
   const handleSlotClick = useCallback(
     (index: number) => {
-      if (!ink) return;
+      if (!ink) {
+        onClose();
+        return;
+      }
 
       if (type === "save") {
         memory.save(index, ink);
@@ -47,7 +50,10 @@ const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose, t }) => {
       {SAVE_SLOTS.map((slot) => {
         const save = saves?.[slot] as SaveSlot | undefined;
         const hasData = !!save;
-        const isDisabled = type === "restore" && !hasData;
+        const reserved = isSlotReserved(slot);
+        const labelKey = getSlotLabelKey(slot);
+        const isRestoreDisabled = type === "restore" && !hasData;
+        const isSaveDisabled = type === "save" && reserved;
 
         return (
           <button
@@ -55,10 +61,12 @@ const SaveModal: React.FC<SaveModalProps> = ({ ink, type, onClose, t }) => {
             key={slot}
             className={styles.slot}
             onClick={() => handleSlotClick(slot)}
-            disabled={isDisabled}
+            disabled={isRestoreDisabled || isSaveDisabled}
           >
             <span className={styles["slot-name"]}>
-              {t(`modal_slot_${slot}`) ?? translations[`modal_slot_${slot}`]}
+              {labelKey
+                ? (t(labelKey) ?? `Slot ${slot}`)
+                : (t(`modal_slot_${slot}`) ?? translations[`modal_slot_${slot}`])}
             </span>
             <span className={hasData ? styles["slot-timestamp"] : styles["slot-empty"]}>
               {hasData ? save.timestamp : (t("modal_slot_empty") ?? translations.modal_slot_empty)}

@@ -1,6 +1,7 @@
 import type { InkStory, Plugin } from "@inkweave/core";
 import { Tags } from "@inkweave/core";
-import { memory } from "../memory";
+import { Commands } from "@inkweave/react";
+import { memory, reserveSlot } from "../memory";
 
 export const autoSavePlugin: Plugin = {
   id: "auto-save",
@@ -11,6 +12,8 @@ export const autoSavePlugin: Plugin = {
     Tags.add("autosave", (_: string | null | undefined, ink: InkStory) => {
       memory.save(1, ink);
     });
+    reserveSlot(1, "modal_slot_auto");
+    Commands.addTranslations({ modal_slot_auto: "Auto-Save" });
   },
   dependencies: ["memory"],
 };

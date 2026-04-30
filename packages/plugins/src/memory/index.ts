@@ -51,7 +51,7 @@ const save = (index: number, ink: InkStory) => {
   };
   ink.save_label.forEach((label) => {
     const value = ink[label as keyof InkStory];
-    if (label in ink && value !== undefined) {
+    if (value !== undefined) {
       if (
         typeof value === "string" ||
         typeof value === "number" ||
@@ -141,3 +141,16 @@ export const memoryPlugin: Plugin = {
 
 export const memory = { save, load, show };
 export type { SaveSlot };
+
+// 通用插槽预留机制 — 任何插件可通过此 API 标记插槽为只读并提供自定义标签
+// memory 本身不关心哪个插件预留了插槽，只提供基础设施
+const _reservedSlots = new Map<number, string>();
+
+const reserveSlot = (index: number, labelKey: string) => {
+  _reservedSlots.set(index, labelKey);
+};
+
+const getSlotLabelKey = (index: number) => _reservedSlots.get(index);
+const isSlotReserved = (index: number) => _reservedSlots.has(index);
+
+export { getSlotLabelKey, isSlotReserved, reserveSlot };

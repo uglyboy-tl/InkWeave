@@ -1,20 +1,15 @@
 import { create } from "zustand";
 import { persist, type StorageValue } from "zustand/middleware";
 
-const StorageType: { [key: string]: Storage } = {
-  local: localStorage,
-  session: sessionStorage,
+const getStorageByType = (type: string): Storage => {
+  if (typeof window === "undefined") {
+    throw new Error("Storage only available in browser environment");
+  }
+  return type === "local" ? localStorage : sessionStorage;
 };
 
 let type = "local";
-const getStorage = (): Storage => {
-  const storage = StorageType[type];
-  if (!storage) {
-    const validTypes = Object.keys(StorageType).join(", ");
-    throw new Error(`Invalid storage type: "${type}". Valid types: ${validTypes}`);
-  }
-  return storage;
-};
+const getStorage = (): Storage => getStorageByType(type);
 
 export interface SaveSlot {
   data: string;
