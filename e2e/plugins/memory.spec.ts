@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Memory Plugin", () => {
   test.beforeEach(async ({ page }) => {
@@ -20,9 +20,7 @@ test.describe("Memory Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
@@ -81,7 +79,7 @@ test.describe("Memory Plugin", () => {
     const modal = page.locator("dialog");
     await expect(modal).toBeVisible();
 
-    const slotButtons = modal.getByRole("button").and(modal.locator('[disabled]'));
+    const slotButtons = modal.getByRole("button").and(modal.locator("[disabled]"));
     await expect(slotButtons).toHaveCount(5);
   });
 

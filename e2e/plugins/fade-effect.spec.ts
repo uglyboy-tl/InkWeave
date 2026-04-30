@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Fade Effect Plugin", () => {
   test.beforeEach(async ({ page }) => {
@@ -20,9 +20,7 @@ test.describe("Fade Effect Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
@@ -30,7 +28,9 @@ test.describe("Fade Effect Plugin", () => {
   test("should gradually reveal content lines with default delay", async ({ page }) => {
     // Wait for initial content to load
     const contents = page.locator(".inkweave-contents");
-    await expect(contents).toContainText("This is the beginning of a story to test the fade effect plugin.");
+    await expect(contents).toContainText(
+      "This is the beginning of a story to test the fade effect plugin.",
+    );
 
     const contentLines = page.locator(".inkweave-content-line");
     const lineCount = await contentLines.count();
@@ -49,20 +49,22 @@ test.describe("Fade Effect Plugin", () => {
     expect(parseFloat(middleLineOpacity)).toBeGreaterThan(0.2);
     expect(parseFloat(middleLineOpacity)).toBeLessThan(0.8);
 
-    // Wait for complete fade in
-    await page.waitForTimeout(800);
-
-    // All lines should now be fully visible
-    const lastContentLineIndex = lineCount - 2;
-    const lastLineOpacity = await contentLines.nth(lastContentLineIndex).evaluate((el) => {
-      return window.getComputedStyle(el).opacity;
-    });
-    expect(parseFloat(lastLineOpacity)).toBeCloseTo(1, 0.1);
+    // All lines should fade in completely after waiting
+    await expect(async () => {
+      const lines = page.locator(".inkweave-content-line");
+      const idx = (await lines.count()) - 2;
+      const opacity = await lines.nth(idx).evaluate((el) => {
+        return window.getComputedStyle(el).opacity;
+      });
+      expect(parseFloat(opacity)).toBeCloseTo(1, 0.1);
+    }).toPass({ timeout: 550 });
   });
 
   test("should apply custom line delay when specified", async ({ page }) => {
     // Go to custom delay section
-    const customDelayChoice = page.locator('.inkweave-choice', { hasText: "Test with custom line delay" });
+    const customDelayChoice = page.locator(".inkweave-choice", {
+      hasText: "Test with custom line delay",
+    });
     await customDelayChoice.click();
 
     const contents = page.locator(".inkweave-contents");
@@ -77,24 +79,27 @@ test.describe("Fade Effect Plugin", () => {
     await page.waitForTimeout(600);
 
     // Last lines should still be fading in (not fully visible)
-    const lastContentLineIndex = lineCount - 2;
-    const lastLineOpacity = await contentLines.nth(lastContentLineIndex).evaluate((el) => {
+    const linesNow = page.locator(".inkweave-content-line");
+    const lastIdx = (await linesNow.count()) - 2;
+    const lastLineOpacity = await linesNow.nth(lastIdx).evaluate((el) => {
       return window.getComputedStyle(el).opacity;
     });
     expect(parseFloat(lastLineOpacity)).toBeLessThan(0.7); // Not fully visible yet
 
     // Wait for full completion with custom delay
-    await page.waitForTimeout(500);
-
-    const lastLineOpacityFinal = await contentLines.nth(lastContentLineIndex).evaluate((el) => {
-      return window.getComputedStyle(el).opacity;
-    });
-    expect(parseFloat(lastLineOpacityFinal)).toBeCloseTo(1, 0.1);
+    await expect(async () => {
+      const lines = page.locator(".inkweave-content-line");
+      const idx = (await lines.count()) - 2;
+      const opacity = await lines.nth(idx).evaluate((el) => {
+        return window.getComputedStyle(el).opacity;
+      });
+      expect(parseFloat(opacity)).toBeCloseTo(1, 0.1);
+    }).toPass({ timeout: 550 });
   });
 
   test("should display content immediately when linedelay is 0", async ({ page }) => {
     // Go to no fade section
-    const noFadeChoice = page.locator('.inkweave-choice', { hasText: "Test with no fade effect" });
+    const noFadeChoice = page.locator(".inkweave-choice", { hasText: "Test with no fade effect" });
     await noFadeChoice.click();
 
     const contents = page.locator(".inkweave-contents");
@@ -122,7 +127,9 @@ test.describe("Fade Effect Plugin", () => {
 
   test("should work correctly after restart", async ({ page }) => {
     // Make a choice first to ensure we have content
-    const continueChoice = page.locator('.inkweave-choice', { hasText: "Continue with more fade effect content" });
+    const continueChoice = page.locator(".inkweave-choice", {
+      hasText: "Continue with more fade effect content",
+    });
     await continueChoice.click();
 
     const contents = page.locator(".inkweave-contents");
@@ -132,10 +139,12 @@ test.describe("Fade Effect Plugin", () => {
     await page.getByRole("button", { name: "Restart game" }).click();
 
     // Wait for restart to complete
-    await page.waitForSelector('.inkweave-choice', { state: "visible" });
+    await page.waitForSelector(".inkweave-choice", { state: "visible" });
 
     // After restart, make sure we can see the initial content
-    await expect(contents).toContainText("This is the beginning of a story to test the fade effect plugin.");
+    await expect(contents).toContainText(
+      "This is the beginning of a story to test the fade effect plugin.",
+    );
 
     // The fade effect should work on the restarted content
     const contentLines = page.locator(".inkweave-content-line");
@@ -155,7 +164,9 @@ test.describe("Fade Effect Plugin", () => {
   test("should delay choices display until content fade-in completes", async ({ page }) => {
     // Wait for initial content to load completely
     const contents = page.locator(".inkweave-contents");
-    await expect(contents).toContainText("This is the beginning of a story to test the fade effect plugin.");
+    await expect(contents).toContainText(
+      "This is the beginning of a story to test the fade effect plugin.",
+    );
 
     // Wait for all content lines to be fully visible (wait for fade effect to complete)
     await page.waitForTimeout(1000);
@@ -187,7 +198,9 @@ test.describe("Fade Effect Plugin", () => {
 
   test("should maintain sequential display after user interactions", async ({ page }) => {
     // Make a choice to trigger new content
-    const continueChoice = page.locator('.inkweave-choice', { hasText: "Continue with more fade effect content" });
+    const continueChoice = page.locator(".inkweave-choice", {
+      hasText: "Continue with more fade effect content",
+    });
     await continueChoice.click();
 
     const contents = page.locator(".inkweave-contents");
@@ -218,66 +231,78 @@ test.describe("Fade Effect Plugin", () => {
 
   test("should persist linedelay settings through save and load", async ({ page }) => {
     // This test requires the memory plugin for save/load functionality
-    await page.goto("/e2e/fixtures/index.html?story=plugins/fade-effect.ink&plugins=fade-effect,memory");
+    await page.goto(
+      "/e2e/fixtures/index.html?story=plugins/fade-effect.ink&plugins=fade-effect,memory",
+    );
     await page.waitForSelector("#inkweave-story");
 
     // Go to no fade section (linedelay=0)
-    const noFadeChoice = page.locator('.inkweave-choice', { hasText: "Test with no fade effect" });
+    const noFadeChoice = page.locator(".inkweave-choice", { hasText: "Test with no fade effect" });
     await noFadeChoice.click();
-    
+
     const contents = page.locator(".inkweave-contents");
     await expect(contents).toContainText("Testing with no fade effect (instant display).");
-    
+
     // Verify no fade effect: content appears immediately
-    await page.waitForTimeout(200);
     const contentLines = page.locator(".inkweave-content-line");
     const lastContentLineIndex = (await contentLines.count()) - 2;
-    const lastLineOpacity = await contentLines.nth(lastContentLineIndex).evaluate((el) => {
-      return window.getComputedStyle(el).opacity;
-    });
-    expect(parseFloat(lastLineOpacity)).toBeCloseTo(1, 0.1);
-    
+    // Wait for the last line to be fully visible (opacity = 1)
+    await expect(async () => {
+      const opacity = await contentLines.nth(lastContentLineIndex).evaluate((el) => {
+        return window.getComputedStyle(el).opacity;
+      });
+      expect(parseFloat(opacity)).toBeCloseTo(1, 0.1);
+    }).toPass({ timeout: 550 });
+
     // Save the game
     await page.getByRole("button", { name: "Save game" }).click();
     const saveModal = page.locator("dialog");
     await expect(saveModal).toBeVisible();
     await saveModal.getByRole("button", { name: /Slot 1/i }).click();
-    
+
     // Go to custom delay section (linedelay=0.1) to verify different behavior
-    const backToMenu = page.locator('.inkweave-choice', { hasText: "Back to start" });
+    const backToMenu = page.locator(".inkweave-choice", { hasText: "Back to start" });
     await backToMenu.click();
-    
-    const customDelayChoice = page.locator('.inkweave-choice', { hasText: "Test with custom line delay" });
+
+    const customDelayChoice = page.locator(".inkweave-choice", {
+      hasText: "Test with custom line delay",
+    });
     await customDelayChoice.click();
-    
+
     await expect(contents).toContainText("Testing custom line delay of 100ms.");
-    
+
     // Verify custom delay: after 600ms, content should still be fading in
     await page.waitForTimeout(600);
     const contentLinesAfterCustom = page.locator(".inkweave-content-line");
     const lastContentLineIndexAfterCustom = (await contentLinesAfterCustom.count()) - 2;
-    const lastLineOpacityCustom = await contentLinesAfterCustom.nth(lastContentLineIndexAfterCustom).evaluate((el) => {
-      return window.getComputedStyle(el).opacity;
-    });
+    const lastLineOpacityCustom = await contentLinesAfterCustom
+      .nth(lastContentLineIndexAfterCustom)
+      .evaluate((el) => {
+        return window.getComputedStyle(el).opacity;
+      });
     // With 100ms delay, should not be fully visible after 600ms
     expect(parseFloat(lastLineOpacityCustom)).toBeLessThan(0.8);
-    
+
     // Load the saved game
     await page.getByRole("button", { name: "Restore saved game" }).click();
     const loadModal = page.locator("dialog");
     await expect(loadModal).toBeVisible();
     await loadModal.getByRole("button", { name: /Slot 1/i }).click();
-    
+
     // After loading, we should be back in the no fade section
     await expect(contents).toContainText("Testing with no fade effect (instant display).");
-    
+
     // Verify no fade effect is still active: content appears immediately
-    await page.waitForTimeout(200);
     const contentLinesAfterLoad = page.locator(".inkweave-content-line");
     const lastContentLineIndexAfterLoad = (await contentLinesAfterLoad.count()) - 2;
-    const lastLineOpacityAfterLoad = await contentLinesAfterLoad.nth(lastContentLineIndexAfterLoad).evaluate((el) => {
-      return window.getComputedStyle(el).opacity;
-    });
-    expect(parseFloat(lastLineOpacityAfterLoad)).toBeCloseTo(1, 0.1);
+    // Wait for the last line to be fully visible (opacity = 1)
+    await expect(async () => {
+      const opacity = await contentLinesAfterLoad
+        .nth(lastContentLineIndexAfterLoad)
+        .evaluate((el) => {
+          return window.getComputedStyle(el).opacity;
+        });
+      expect(parseFloat(opacity)).toBeCloseTo(1, 0.1);
+    }).toPass({ timeout: 550 });
   });
 });

@@ -26,6 +26,6 @@ test.describe("ink syntax - weave gathers", () => {
   test("choice outcome displays correctly", async ({ page }) => {
     await page.locator(".inkweave-choice").first().click();
     const contents = page.locator(".inkweave-contents");
-    await expect(contents).toContainText("\"Really,\" he responded.");
+    await expect(contents).toContainText('"Really," he responded.');
   });
 });

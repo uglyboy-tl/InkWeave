@@ -33,7 +33,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const storyPath = urlParams.get('story') || 'default.ink';
     const pluginsParam = urlParams.get('plugins') || '';
-    
+
     // Default plugin configuration (all disabled)
     const defaultPlugins = {
       'auto-button': false,
@@ -48,7 +48,7 @@
       'memory': false,
       'class-tag': false
     };
-    
+
     // Parse plugins parameter (comma-separated list of enabled plugins)
     const pluginsConfig = { ...defaultPlugins };
     if (pluginsParam) {
@@ -60,18 +60,18 @@
       } else {
         const enabledPlugins = pluginsParam.split(',').map(p => p.trim());
         enabledPlugins.forEach(plugin => {
-          if (pluginsConfig.hasOwnProperty(plugin)) {
+          if (Object.hasOwn(pluginsConfig, plugin)) {
             pluginsConfig[plugin] = true;
           }
         });
       }
     }
-    
+
     // Validate storyPath to prevent path traversal and ensure it's a .ink file
-    if (!storyPath.match(/^[a-zA-Z0-9\-_\/\.]+\.ink$/) || storyPath.includes('..')) {
+    if (!storyPath.match(/^[a-zA-Z0-9\-_/.]+\.ink$/) || storyPath.includes('..')) {
       throw new Error('Invalid story path: must be a .ink file in fixtures directory');
     }
-    
+
     // Fetch the ink file content
     fetch(storyPath)
       .then(response => {

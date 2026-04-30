@@ -30,8 +30,8 @@ test.describe("ink syntax - TURNS query", () => {
     const text = await contents.textContent();
     const match = text?.match(/Turns since game_start: (\d+)/);
     expect(match).toBeTruthy();
-    if (match && match[1]) {
-      expect(parseInt(match[1])).toBeGreaterThan(0);
+    if (match?.[1]) {
+      expect(parseInt(match[1], 10)).toBeGreaterThan(0);
     }
   });
 

@@ -1,9 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 const TEST_URL = "/e2e/fixtures/index.html?story=plugins/link-open.ink&plugins=link-open";
 
-test.describe("Link Open Plugin", () => {
+type MockWindow = Window & typeof globalThis & { __openedUrls: string[] };
 
+test.describe("Link Open Plugin", () => {
   test("should compile without errors", async ({ page }) => {
     const consoleMessages: { type: string; text: string }[] = [];
 
@@ -18,20 +19,18 @@ test.describe("Link Open Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
 
   test("should open HTTPS link when tag is triggered", async ({ page }) => {
     await page.addInitScript(() => {
-      (window as any).__openedUrls = [];
+      (window as unknown as MockWindow).__openedUrls = [];
       window.open = ((url?: string | URL | undefined) => {
-        (window as any).__openedUrls.push(url);
+        (window as unknown as MockWindow).__openedUrls.push(url as string);
         return null;
-      }) as any;
+      }) as unknown as typeof window.open;
     });
 
     await page.goto(TEST_URL);
@@ -39,17 +38,17 @@ test.describe("Link Open Plugin", () => {
 
     await page.locator('.inkweave-choice:has-text("Open HTTPS Link")').click();
 
-    const urls = await page.evaluate(() => (window as any).__openedUrls);
+    const urls = await page.evaluate(() => (window as unknown as MockWindow).__openedUrls);
     expect(urls).toContain("https://example.com/");
   });
 
   test("should open HTTP link when tag is triggered", async ({ page }) => {
     await page.addInitScript(() => {
-      (window as any).__openedUrls = [];
+      (window as unknown as MockWindow).__openedUrls = [];
       window.open = ((url?: string | URL | undefined) => {
-        (window as any).__openedUrls.push(url);
+        (window as unknown as MockWindow).__openedUrls.push(url as string);
         return null;
-      }) as any;
+      }) as unknown as typeof window.open;
     });
 
     await page.goto(TEST_URL);
@@ -57,13 +56,13 @@ test.describe("Link Open Plugin", () => {
 
     await page.locator('.inkweave-choice:has-text("Open HTTP Link")').click();
 
-    const urls = await page.evaluate(() => (window as any).__openedUrls);
+    const urls = await page.evaluate(() => (window as unknown as MockWindow).__openedUrls);
     expect(urls).toContain("http://example.org/");
   });
 
   test("should display content after clicking link", async ({ page }) => {
     await page.addInitScript(() => {
-      window.open = () => null;
+      window.open = (() => null) as unknown as typeof window.open;
     });
 
     await page.goto(TEST_URL);
@@ -77,11 +76,11 @@ test.describe("Link Open Plugin", () => {
 
   test("should open URL with slash when tag is triggered", async ({ page }) => {
     await page.addInitScript(() => {
-      (window as any).__openedUrls = [];
+      (window as unknown as MockWindow).__openedUrls = [];
       window.open = ((url?: string | URL | undefined) => {
-        (window as any).__openedUrls.push(url);
+        (window as unknown as MockWindow).__openedUrls.push(url as string);
         return null;
-      }) as any;
+      }) as unknown as typeof window.open;
     });
 
     await page.goto(TEST_URL);
@@ -89,17 +88,17 @@ test.describe("Link Open Plugin", () => {
 
     await page.locator('.inkweave-choice:has-text("Open URL with Slash")').click();
 
-    const urls = await page.evaluate(() => (window as any).__openedUrls);
+    const urls = await page.evaluate(() => (window as unknown as MockWindow).__openedUrls);
     expect(urls).toContain("https://example.com/path/to/page");
   });
 
   test("should handle relative path to existing page", async ({ page }) => {
     await page.addInitScript(() => {
-      (window as any).__openedUrls = [];
+      (window as unknown as MockWindow).__openedUrls = [];
       window.open = ((url?: string | URL | undefined) => {
-        (window as any).__openedUrls.push(url);
+        (window as unknown as MockWindow).__openedUrls.push(url as string);
         return null;
-      }) as any;
+      }) as unknown as typeof window.open;
     });
 
     await page.goto(TEST_URL);
@@ -107,7 +106,7 @@ test.describe("Link Open Plugin", () => {
 
     await page.locator('.inkweave-choice:has-text("Open Relative Path")').click();
 
-    const urls = await page.evaluate(() => (window as any).__openedUrls);
+    const urls = await page.evaluate(() => (window as unknown as MockWindow).__openedUrls);
     expect(urls).toContain("http://../core/basic.html");
   });
 });
