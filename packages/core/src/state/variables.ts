@@ -7,27 +7,14 @@ type StoryVariables = {
   setGlobalVars: (variablesState: VariablesState) => void;
 };
 
-interface GlobalVariableEntry {
-  value: unknown;
-}
-
-interface GlobalVariablesMap {
-  keys(): IterableIterator<string>;
-  get(key: string): GlobalVariableEntry | undefined;
-}
-
 const variablesStore = create<StoryVariables>((set) => ({
   variables: new Map<string, unknown>(),
   setGlobalVars: (variablesState) => {
     const globalVars = new Map<string, unknown>();
 
-    // Access inkjs internal _globalVariables
-    // Note: This relies on inkjs internal implementation.
-    // If inkjs updates and breaks this, we'll need to find an alternative.
-    const variablesStateAny = variablesState as unknown as {
-      _globalVariables?: GlobalVariablesMap;
-    };
-    const globalVariables = variablesStateAny._globalVariables;
+    // Access inkjs internal _globalVariables (current version only)
+    // @ts-expect-error - accessing internal property
+    const globalVariables = variablesState._globalVariables;
 
     if (globalVariables) {
       for (const key of globalVariables.keys()) {

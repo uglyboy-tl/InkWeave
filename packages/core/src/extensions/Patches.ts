@@ -21,10 +21,11 @@ export class Patches {
 
   static apply(story: InkStoryContext | object, content: string) {
     const storyCtx = story as InkStoryContext;
+    if (!storyCtx.options) return;
     Object.assign(storyCtx.options, Patches._options);
     for (const patch of Patches._patches) {
       if (patch) {
-        patch.bind(storyCtx, content)();
+        patch.call(storyCtx, content);
       }
     }
   }

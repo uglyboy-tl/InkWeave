@@ -22,11 +22,13 @@ export class ExternalFunctions {
   }
 
   static bind(ink: InkStory, id: string) {
-    const externalFunction =
-      ExternalFunctions.get(id) ||
-      (typeof window !== "undefined"
-        ? (window as unknown as Record<string, ExternalFunc>)[id]
-        : undefined);
+    let externalFunction = ExternalFunctions.get(id);
+    if (!externalFunction && typeof window !== "undefined") {
+      const fn = (window as unknown as Record<string, unknown>)[id];
+      if (typeof fn === "function") {
+        externalFunction = fn as ExternalFunc;
+      }
+    }
     if (externalFunction) {
       ink.story.BindExternalFunction(id, externalFunction.bind(ink));
     }

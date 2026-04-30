@@ -18,10 +18,7 @@ export class EventEmitter implements EventEmitterInterface {
       this.handlers.set(eventName, new Set<EventHandler<EventData>>());
     }
 
-    const handlers = this.handlers.get(eventName);
-    if (handlers) {
-      handlers.add(handler as EventHandler<EventData>);
-    }
+    this.handlers.get(eventName)?.add(handler as EventHandler<EventData>);
 
     // 返回取消订阅函数
     return () => this.off(eventName, handler);

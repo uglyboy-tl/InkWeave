@@ -11,6 +11,7 @@ type ParserCallback = (line: ParserLine, ...args: unknown[]) => unknown;
 
 export class Parser {
   private static _tags: { [key: string]: ParserCallback } = {};
+  private static _tagCount = 0;
   private static _patterns: {
     matcher: string | RegExp;
     callback: (line: ParserLine) => unknown;
@@ -27,10 +28,12 @@ export class Parser {
   static clear = () => {
     Parser._tags = {};
     Parser._patterns = [];
+    Parser._tagCount = 0;
   };
 
   static tag(tag: string, callback: ParserCallback) {
     Parser.tags[tag] = callback;
+    Parser._tagCount++;
   }
 
   static pattern(pattern: string | RegExp, callback: (line: ParserLine) => unknown) {
@@ -42,7 +45,7 @@ export class Parser {
 
     const line: ParserLine = { text: text, tags: tags, classes: [] };
 
-    if (line.tags.length && Object.keys(Parser.tags).length) {
+    if (line.tags.length && Parser._tagCount > 0) {
       line.tags.forEach((tag) => {
         const splitTag = splitAtCharacter(tag, ":");
 
