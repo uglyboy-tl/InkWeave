@@ -26,41 +26,35 @@ export class Plugins {
 
   static setPluginsEnabled(enabled: Record<string, boolean>) {
     if (enabled && typeof enabled === "object") {
-      // 只添加 boolean 类型的值
       const validatedConfig = Object.fromEntries(
         Object.entries(enabled).filter(([, value]) => typeof value === "boolean"),
       );
-      Plugins._pluginsEnabled = { ...Plugins._pluginsEnabled, ...validatedConfig };
+      const resolved = Plugins.resolveDependencies(validatedConfig);
+      Plugins._pluginsEnabled = { ...Plugins._pluginsEnabled, ...resolved };
     }
   }
 
   loadEnabledPlugins() {
-    // 清除之前加载的插件状态，重新评估所有插件的启用状态
-    this.clear();
-
-    // 重新加载所有启用的插件
-    Array.from(Plugins._plugins.entries())
-      .filter(([id, plugin]) => {
-        // 获取配置值，undefined 表示未配置
-        const configValue = Plugins._pluginsEnabled[id];
-        // 如果有配置，使用配置值；否则使用默认值
-        const isEnabled =
-          configValue !== undefined ? configValue : (plugin.enabledByDefault ?? true);
-        return isEnabled;
-      })
-      .forEach(([, plugin]) => {
-        plugin.onLoad();
-        this._loadedPluginIds.add(plugin.id);
-      });
-  }
-
-  clear() {
     this._loadedPluginIds.clear();
+
     Patches.clear();
     Tags.clear();
     ChoiceParser.clear();
     Parser.clear();
     ExternalFunctions.clear();
+
+    for (const [id, plugin] of Plugins._plugins) {
+      const configValue = Plugins._pluginsEnabled[id];
+      const isEnabled = configValue !== undefined ? configValue : (plugin.enabledByDefault ?? true);
+      if (isEnabled) {
+        plugin.onLoad();
+        this._loadedPluginIds.add(id);
+      }
+    }
+  }
+
+  clear() {
+    this._loadedPluginIds.clear();
   }
 
   static getAllPlugins() {
@@ -69,5 +63,78 @@ export class Plugins {
 
   getLoadedPlugins() {
     return Array.from(this._loadedPluginIds);
+  }
+
+  /**
+   * 解析插件启用配置中的依赖级联关系：
+   * - 启用某插件时，自动启用其所有依赖（依赖优先于禁用）
+   * - 禁用某插件时，自动禁用所有依赖它的插件（但显式启用的除外）
+   */
+  static resolveDependencies(pluginConfig: Record<string, boolean>): Record<string, boolean> {
+    const resolved = { ...pluginConfig };
+
+    // Build dependency graphs from registered plugins
+    const deps: Record<string, string[]> = {};
+    const rdeps: Record<string, string[]> = {};
+    for (const [id, plugin] of Plugins._plugins) {
+      deps[id] = plugin.dependencies || [];
+      if (!rdeps[id]) rdeps[id] = [];
+    }
+    for (const [id, plugin] of Plugins._plugins) {
+      for (const dep of plugin.dependencies || []) {
+        if (!rdeps[dep]) rdeps[dep] = [];
+        rdeps[dep].push(id);
+      }
+    }
+
+    const bfs = (start: string, edges: Record<string, string[]>): Set<string> => {
+      const found = new Set<string>();
+      const seen = new Set<string>();
+      const queue = [start];
+      let head = 0;
+      while (head < queue.length) {
+        const id = queue[head++];
+        if (!id || seen.has(id)) continue;
+        seen.add(id);
+        for (const next of edges[id] || []) {
+          if (!found.has(next)) {
+            found.add(next);
+            queue.push(next);
+          }
+        }
+      }
+      return found;
+    };
+
+    // Phase 1: enable dependencies of explicitly enabled plugins,
+    // but skip dependencies that were explicitly disabled
+    for (const [id, enabled] of Object.entries(pluginConfig)) {
+      if (enabled) {
+        for (const dep of bfs(id, deps)) {
+          if (!(dep in pluginConfig && !pluginConfig[dep])) {
+            resolved[dep] = true;
+          }
+        }
+      }
+    }
+
+    // Phase 2: disable cascades — disable dependents of explicitly disabled plugins,
+    // but only if they weren't explicitly enabled in the original config
+    for (const [id, enabled] of Object.entries(pluginConfig)) {
+      if (!enabled) {
+        for (const dep of bfs(id, rdeps)) {
+          if (!(dep in pluginConfig && pluginConfig[dep])) {
+            if (resolved[dep] !== false) {
+              console.warn(
+                `InkWeave: plugin "${dep}" implicitly disabled because "${id}" is disabled`,
+              );
+            }
+            resolved[dep] = false;
+          }
+        }
+      }
+    }
+
+    return resolved;
   }
 }
