@@ -22,7 +22,7 @@ jobs:
         run: bun install
 
       - name: Build packages
-        run: bun run build
+        run: bun run build:pkg && bun run build:web
 
       - name: Check
         run: bun run check
