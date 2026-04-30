@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("CD Button Plugin", () => {
   test.beforeEach(async ({ page }) => {
@@ -20,23 +20,17 @@ test.describe("CD Button Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
 
   test("should allow normal choice to work immediately", async ({ page }) => {
-    const normalChoice = page.locator(
-      '.inkweave-choice:has-text("Normal Choice")',
-    );
+    const normalChoice = page.locator('.inkweave-choice:has-text("Normal Choice")');
     await normalChoice.click();
 
     const contents = page.locator(".inkweave-contents");
-    await expect(contents).toContainText(
-      "This is a normal choice that works immediately.",
-    );
+    await expect(contents).toContainText("This is a normal choice that works immediately.");
   });
 
   test("should execute cd button and loop back", async ({ page }) => {
@@ -74,9 +68,7 @@ test.describe("CD Button Plugin", () => {
     await expect(contents).toContainText("Counter is now 2");
   });
 
-  test("should increment counter correctly across multiple loops", async ({
-    page,
-  }) => {
+  test("should increment counter correctly across multiple loops", async ({ page }) => {
     const cdButton = page.locator('.inkweave-choice:has-text("CD Button")');
     const contents = page.locator(".inkweave-contents");
 

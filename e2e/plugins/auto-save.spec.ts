@@ -1,8 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Auto Save Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=plugins/auto-save.ink&plugins=auto-save,memory");
+    await page.goto(
+      "/e2e/fixtures/index.html?story=plugins/auto-save.ink&plugins=auto-save,memory",
+    );
     await page.waitForSelector("#inkweave-story");
   });
 
@@ -20,9 +22,7 @@ test.describe("Auto Save Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
@@ -52,7 +52,10 @@ test.describe("Auto Save Plugin", () => {
     const slot1Button = modal.getByRole("button", { name: /Auto-Save/i });
     const firstText = await slot1Button.textContent();
     expect(firstText).not.toContain("Empty");
-    await modal.getByRole("button", { name: /close|×|Close/i }).first().click();
+    await modal
+      .getByRole("button", { name: /close|×|Close/i })
+      .first()
+      .click();
     await expect(modal).not.toBeVisible();
 
     // Click again to trigger another auto-save

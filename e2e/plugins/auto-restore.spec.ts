@@ -1,8 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Auto Restore Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=plugins/auto-restore.ink&plugins=auto-restore,memory");
+    await page.goto(
+      "/e2e/fixtures/index.html?story=plugins/auto-restore.ink&plugins=auto-restore,memory",
+    );
     await page.waitForSelector("#inkweave-story");
   });
 
@@ -20,9 +22,7 @@ test.describe("Auto Restore Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
@@ -35,9 +35,7 @@ test.describe("Auto Restore Plugin", () => {
     await expect(contents).toContainText("Total: 1");
   });
 
-  test("should auto-restore to last choice state after page reload", async ({
-    page,
-  }) => {
+  test("should auto-restore to last choice state after page reload", async ({ page }) => {
     const clickChoice = page.locator('.inkweave-choice:has-text("Click me")');
     await clickChoice.click();
     await clickChoice.click();
@@ -54,9 +52,7 @@ test.describe("Auto Restore Plugin", () => {
     await expect(contents).toContainText("Total: 3");
   });
 
-  test("should restore last choice state, not loaded save state", async ({
-    page,
-  }) => {
+  test("should restore last choice state, not loaded save state", async ({ page }) => {
     const clickChoice = page.locator('.inkweave-choice:has-text("Click me")');
     await clickChoice.click();
     await clickChoice.click();

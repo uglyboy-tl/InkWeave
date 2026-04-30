@@ -45,12 +45,12 @@ test.describe("ink syntax - logic operators", () => {
 
   test("greater than comparison works", async ({ page }) => {
     const choiceTexts = await page.locator(".inkweave-choice").allTextContents();
-    expect(choiceTexts.some(t => t.includes("Low score option"))).toBe(true);
-    expect(choiceTexts.some(t => t.includes("High score option"))).toBe(false);
+    expect(choiceTexts.some((t) => t.includes("Low score option"))).toBe(true);
+    expect(choiceTexts.some((t) => t.includes("High score option"))).toBe(false);
   });
 
   test("less than or equal comparison works", async ({ page }) => {
     const choiceTexts = await page.locator(".inkweave-choice").allTextContents();
-    expect(choiceTexts.some(t => t.includes("Low score option"))).toBe(true);
+    expect(choiceTexts.some((t) => t.includes("Low score option"))).toBe(true);
   });
 });

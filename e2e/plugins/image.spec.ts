@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Image Plugin", () => {
   test.beforeEach(async ({ page }) => {
@@ -20,9 +20,7 @@ test.describe("Image Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
@@ -43,7 +41,9 @@ test.describe("Image Plugin", () => {
     await nonExistentChoice.click();
 
     const contentsAfterNonExistent = page.locator(".inkweave-contents");
-    await expect(contentsAfterNonExistent).toContainText("The image should not display, but content should continue.");
+    await expect(contentsAfterNonExistent).toContainText(
+      "The image should not display, but content should continue.",
+    );
     await expect(contentsAfterNonExistent).toContainText("This is a test for complete image flow.");
 
     const imageAfterNonExistent = page.locator("#inkweave-image");
@@ -58,7 +58,9 @@ test.describe("Image Plugin", () => {
     await replaceChoice.click();
 
     const contentsAfterReplace = page.locator(".inkweave-contents");
-    await expect(contentsAfterReplace).toContainText("The original image should be replaced with a different one.");
+    await expect(contentsAfterReplace).toContainText(
+      "The original image should be replaced with a different one.",
+    );
 
     const imageAfterReplace = page.locator("#inkweave-image");
     await expect(imageAfterReplace).toBeVisible();

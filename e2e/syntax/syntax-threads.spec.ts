@@ -33,13 +33,13 @@ test.describe("ink syntax - threads", () => {
 
   test("choices from conversation thread appear", async ({ page }) => {
     const choiceTexts = await page.locator(".inkweave-choice").allTextContents();
-    expect(choiceTexts.some(t => t.includes("What did you have"))).toBe(true);
-    expect(choiceTexts.some(t => t.includes("Nice weather"))).toBe(true);
+    expect(choiceTexts.some((t) => t.includes("What did you have"))).toBe(true);
+    expect(choiceTexts.some((t) => t.includes("Nice weather"))).toBe(true);
   });
 
   test("choices from walking thread appear", async ({ page }) => {
     const choiceTexts = await page.locator(".inkweave-choice").allTextContents();
-    expect(choiceTexts.some(t => t.includes("Keep walking"))).toBe(true);
+    expect(choiceTexts.some((t) => t.includes("Keep walking"))).toBe(true);
   });
 
   test("choosing thread option continues story", async ({ page }) => {

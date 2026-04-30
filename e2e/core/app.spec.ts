@@ -11,7 +11,10 @@ test.describe("modal functionality", () => {
     await expect(saveModal).toBeVisible();
     await expect(saveModal.locator("#inkweave-modal-title")).toHaveText("Save Game");
 
-    await saveModal.getByRole("button", { name: /close|×|Save/i }).first().click();
+    await saveModal
+      .getByRole("button", { name: /close|×|Save/i })
+      .first()
+      .click();
     await expect(saveModal).not.toBeVisible();
   });
 
@@ -20,7 +23,10 @@ test.describe("modal functionality", () => {
     const loadModal = page.locator("dialog");
     await expect(loadModal).toBeVisible();
 
-    await loadModal.getByRole("button", { name: /close|×|Cancel/i }).first().click();
+    await loadModal
+      .getByRole("button", { name: /close|×|Cancel/i })
+      .first()
+      .click();
     await expect(loadModal).not.toBeVisible();
   });
 

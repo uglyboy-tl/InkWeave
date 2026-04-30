@@ -20,9 +20,7 @@ test.describe("Class Tag Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
@@ -30,17 +28,13 @@ test.describe("Class Tag Plugin", () => {
   test("should apply CSS class 'highlight' to content", async ({ page }) => {
     const highlightedContent = page.locator(".inkweave-contents .highlight");
     await expect(highlightedContent).toBeVisible();
-    await expect(highlightedContent).toContainText(
-      "Hello, this text should be highlighted!",
-    );
+    await expect(highlightedContent).toContainText("Hello, this text should be highlighted!");
   });
 
   test("should apply multiple CSS classes to content", async ({ page }) => {
     const multiClassContent = page.locator(".inkweave-contents .bold.italic");
     await expect(multiClassContent).toBeVisible();
-    await expect(multiClassContent).toContainText(
-      "This text should be bold and italic.",
-    );
+    await expect(multiClassContent).toContainText("This text should be bold and italic.");
   });
 
   test("should apply CSS class 'center' to content", async ({ page }) => {

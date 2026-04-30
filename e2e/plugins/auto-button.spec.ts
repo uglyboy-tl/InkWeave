@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Auto Button Plugin", () => {
   test.beforeEach(async ({ page }) => {
@@ -20,9 +20,7 @@ test.describe("Auto Button Plugin", () => {
     await page.waitForSelector("#inkweave-story");
 
     const hasCompilationError = consoleMessages.some(
-      (msg) =>
-        msg.text.includes("Failed to initialize") ||
-        msg.text.includes("Compilation failed"),
+      (msg) => msg.text.includes("Failed to initialize") || msg.text.includes("Compilation failed"),
     );
     expect(hasCompilationError).toBe(false);
   });
@@ -38,7 +36,9 @@ test.describe("Auto Button Plugin", () => {
     await expect(manualChoice).toBeVisible();
   });
 
-  test("should handle multiple consecutive auto buttons with different delays", async ({ page }) => {
+  test("should handle multiple consecutive auto buttons with different delays", async ({
+    page,
+  }) => {
     const basicChoice = page.locator('.inkweave-choice:has-text("Basic Auto Sequence")');
     await basicChoice.click();
 
@@ -76,6 +76,8 @@ test.describe("Auto Button Plugin", () => {
     await loopChoice.click();
 
     const contents = page.locator(".inkweave-contents");
-    await expect(contents).toContainText("Auto loop completed! Final counter: 3", { timeout: 2000 });
+    await expect(contents).toContainText("Auto loop completed! Final counter: 3", {
+      timeout: 2000,
+    });
   });
 });
