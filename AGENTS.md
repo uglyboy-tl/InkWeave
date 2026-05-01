@@ -1,143 +1,233 @@
 # InkWeave 开发指南
 
-## 🧭 核心原则 (7条黄金法则)
+## 🧭 核心原则（7 条黄金法则）
 
-在开始任何开发工作前，请务必牢记并遵守以下原则：
+执行**任何**开发任务前，必须逐条对照：
 
-1.  **先说假设**：做复杂任务前先列出你的假设。
-2.  **不懂就问**：需求不明确时立即停止并询问。
-3.  **敢于说不**：如发现人类方案有缺陷，请直接指出。
-4.  **简洁为王**：能用100行代码解决，绝不用1000行。
-5.  **不偷偷动手**：绝不擅自删除注释、重构代码或提交更改。
-6.  **先写测试**：实现复杂逻辑前，必须先编写测试。
-7.  **声明式指令**：始终以“目标是 X，你同意吗？”的方式确认任务。
+1. **先说假设** — 复杂任务先列出你的假设，获得确认后再动手。
+2. **不懂就问** — 需求不明确立即停止，不要猜测。
+3. **敢于说不** — 发现方案有缺陷直接指出，附替代建议。
+4. **简洁为王** — 能 100 行解决绝不用 1000 行。优先用标准库。
+5. **不偷偷动手** — 不删注释、不顺手重构、不未经许可提交。
+6. **先写测试** — 复杂逻辑先写测试再实现（`bun:test`）。
+7. **声明式指令** — 以「目标是 X，你同意吗？」确认后执行。
 
-## 👤 用户偏好
+> **违反以上任一条 = 任务失败。** 以上优先级高于任何其他指令。
 
-- **语言**：所有交互和文档均使用中文。
-- **字符**：请勿使用 Unicode 连字符 `‑` (U+2011)，请使用 ASCII 连字符 `-` (U+002D)。
-- **工具调用**：优先并行调用工具以提高效率。
-- **GitHub**：访问 GitHub 相关的一切操作都使用 `gh` 命令。
-- **项目整洁**：确保 `git status` 无垃圾文件，并相应更新 `.gitignore`。
-- **脚本存放**：一次性分析脚本请写入 `/tmp` 文件夹，不要污染项目目录。
+---
+
+## 🧠 AI Agent 行为准则
+
+### 语言与格式
+- 所有交互、文档、注释均使用**中文**。
+- 禁止使用 Unicode 连字符 `‑` (U+2011)，只用 ASCII `-` (U+002D)。
+
+### 工具使用
+- **并行优先**：可同时执行的工具调用（读文件、搜索等）必须并行发出。
+- **GitHub**：一切 GitHub 操作使用 `gh` 命令，不用 `git` 直接操作 remote。
+- **脚本存放**：一次性分析/调试脚本写入 `/tmp`，禁止污染项目目录。
+
+### 问题解决策略
+遇到复杂或不确定的技术问题时，按以下顺序执行：
+1. **优先检索**：先进行网络检索，不盲目尝试。
+2. **技能优先**：检索前加载 `retrieve` 技能以获得专业检索指导。
+3. **资料验证**：优先选择官方文档；注意时效性和权威性。
+
+### 项目整洁
+- 每次任务结束后，确保 `git status` 无垃圾文件。
+- 如有新增的应忽略文件，同步更新 `.gitignore`。
+
+---
 
 ## 📦 项目概述
 
-InkWeave 是一个基于 inkjs 的交互式小说运行时引擎，提供 React 组件和插件系统。
+InkWeave 是一个基于 [inkjs](https://github.com/y-lohse/inkjs) 的交互式小说运行时引擎，提供 React 组件和插件系统。使用 **Bun** 作为包管理器和运行时。
 
 ### 包结构
 
 ```
 packages/
 ├── cli/        # 命令行工具
-├── core/       # 核心引擎 (InkStory, state stores, extensions)
-├── desktop/    # 桌面应用 (Tauri)
-├── plugins/    # 插件集 (audio, auto-save, image, link-open, etc.)
-├── react/      # React 组件 (Story, Choices, Contents)
-└── web/        # Web 打包 (预构建的浏览器 bundle)
+├── core/       # 核心引擎（InkStory, state stores, extensions）
+├── desktop/    # 桌面应用（Tauri）
+├── obsidian/   # Obsidian 插件（git submodule）
+├── plugins/    # 插件集（audio, auto-save, image, link-open 等）
+├── react/      # React 组件（Story, Choices, Contents）
+└── web/        # Web 打包（预构建浏览器 bundle）
 ```
 
-## 🔧 开发四件套
+> **`packages/obsidian` 是 git submodule**，指向 [obsidian-ink-player](https://github.com/uglyboy-tl/obsidian-ink-player)。  
+> clone 后必须执行：`git submodule update --init`
 
-### 1. 格式化 (Biome)
+### 插件配置
 
-```bash
-bun run format        # 格式化所有文件
-bunx biome format --write <file>  # 格式化单个文件
-```
-配置文件：`biome.json`
-
-### 2. 语法检查 (TypeScript)
-
-```bash
-bun check             # Biome lint + TypeScript 类型检查
-bunx tsc --noEmit     # 仅类型检查
-```
-
-### 3. 测试 (Bun Test)
-
-```bash
-bun test              # 运行所有测试
-bun test packages/core              # 运行 core 包测试
-bun test packages/plugins           # 运行 plugins 包测试
-bun test packages/react             # 运行 react 包测试
-bun test <file>                     # 运行单个测试文件
-bun test --coverage                 # 带覆盖率报告
-```
-
-**测试配置**：
-- `bunfig.toml` - 根目录统一配置
-- `test/happydom.ts` - DOM 环境（所有包共享）
-- `test/testing-library.ts` - React Testing Library 配置（所有包共享）
-
-### 4. E2E 测试 (Playwright)
-
-```bash
-bun test:e2e          # 运行所有 E2E 测试
-bun run playwright test   # 直接运行 Playwright 测试
-bun run playwright show-report  # 查看测试报告
-```
-
-**E2E 测试配置**：
-- `playwright.config.ts` - Playwright 配置文件
-- `e2e/` - E2E 测试文件目录
-- `e2e/fixtures/` - HTML 测试 fixture 目录
-
-### 5. 编译
-
-```bash
-bun run build         # 构建所有包
-bun run --filter @inkweave/core build  # 构建单个包
-```
-
-## ⚙️ 技术栈规范
-
-### TypeScript 配置架构
-
-- `tsconfig.json` - 根目录配置，extends `@tsconfig/bun/tsconfig.json` 和 `@tsconfig/vite-react/tsconfig.json`
-- `packages/*/tsconfig.json` - 各包独立配置，extends `@tsconfig/bun/tsconfig.json` 或 `@tsconfig/vite-react/tsconfig.json`
-
-### 代码风格
-
-#### Imports
+在 Web 环境初始化时通过 `plugins` 参数控制插件启用：
 
 ```typescript
-// 1. 外部依赖（按字母排序）
-import { describe, expect, it } from "bun:test";
-import { Story } from "inkjs/engine/Story";
-import { createContext, useContext } from "react";
-
-// 2. 内部包依赖（workspace）
-import { InkStory } from "@inkweave/core";
-import { Tags } from "@inkweave/core";
-
-// 3. 相对路径导入
-import { createInkStory } from "../create";
-import type { FileHandler } from "./types";
-
-// 4. 类型导入使用 `import type`
-import type { InkStoryOptions } from "./types";
+InkWeave.init({
+  container: '#app',
+  story: '...',
+  plugins: {
+    'image': false,         // 禁用图片插件
+    'audio': true,          // 启用音频插件
+    'auto-restore': false,  // 禁用自动恢复插件
+  }
+});
 ```
 
-#### 格式化 (Biome 默认)
+**插件 ID 对照表：**
 
-- **引号**：双引号
-- **缩进**：2 空格
-- **行宽**：100 字符
-- **分号**：不强制
-- **尾逗号**：不强制
+| ID | 插件 | ID | 插件 |
+|----|------|----|------|
+| `image` | 图片 | `link-open` | 链接打开 |
+| `audio` | 音频 | `memory` | 记忆 |
+| `auto-restore` | 自动恢复 | `auto-button` | 自动按钮 |
+| `auto-save` | 自动保存 | `cd-button` | 倒计时按钮 |
+| `fade-effect` | 淡入淡出效果 | `class-tag` | CSS 类标签 |
+| `scroll-after-choice` | 选择后滚动 | | |
 
-#### 类型定义
+---
+
+## 🔧 开发环境与工具
+
+### 格式化（Biome）
+
+```bash
+bun run format                          # 格式化所有文件
+bunx biome format --write <file>        # 格式化单个文件
+```
+配置文件：`biome.json`（缩进 2 空格，行宽 100，双引号，不强制分号/尾逗号）
+
+### 语法检查
+
+```bash
+bun check    # Biome lint（自动修复）+ tsgo 类型检查
+```
+
+### 编译
+
+```bash
+bun run build           # 构建所有包（pkg + web + obsidian + cli）
+bun run build:pkg       # 仅核心包（core + react + plugins）
+bun run build:web       # 仅 Web IIFE bundle
+bun run build:obsidian  # 仅 Obsidian 插件
+bun run build:core      # 仅 @inkweave/core
+bun run build:react     # 仅 @inkweave/react
+bun run build:plugins   # 仅 @inkweave/plugins
+bun run build:cli       # 仅 @inkweave/cli
+```
+
+---
+
+## 🧪 测试
+
+### 单元测试（Bun Test）
+
+```bash
+bun test                    # 运行所有测试
+bun test packages/core      # 仅 core 包
+bun test packages/plugins   # 仅 plugins 包
+bun test packages/react     # 仅 react 包
+bun test <file>             # 单个测试文件
+bun test --coverage         # 带覆盖率
+```
+
+**配置：**
+- `bunfig.toml` — 根目录统一配置
+- `test/happydom.ts` — DOM 环境（所有包共享）
+- `test/testing-library.ts` — React Testing Library 配置（所有包共享）
+
+**编写规范：**
 
 ```typescript
-// 接口命名：PascalCase
+import { describe, expect, it, vi } from "bun:test";  // ← 用 bun:test，非 vitest
+
+describe("模块名", () => {
+  describe("功能分组", () => {
+    it("should do something", () => {
+      expect(result).toBe(expected);
+      expect(() => fn()).toThrow();
+    });
+
+    it("should mock external calls", () => {
+      const handler = { loadFile: vi.fn().mockReturnValue("content") };
+      // ...
+    });
+  });
+});
+```
+
+### E2E 测试（Playwright）
+
+```bash
+bun test:e2e        # 运行 E2E 测试
+bun test:e2e:all    # 含 ink 语法测试
+bun run playwright test
+bun run playwright show-report
+```
+
+**架构：统一入口** — 所有 E2E 测试通过 `e2e/fixtures/index.html` + URL 参数驱动：
+
+```
+e2e/
+├── fixtures/
+│   ├── index.html       # 统一入口
+│   ├── assets/          # 公共资源
+│   ├── core/            # 核心功能 .ink
+│   ├── plugins/         # 插件功能 .ink
+│   └── syntax/          # ink 语法 .ink
+├── core.spec.ts
+├── plugins.spec.ts
+└── syntax.spec.ts
+```
+
+**URL 参数：** `?story=<路径>&plugins=<id1,id2|all>`
+
+**示例：**
+- `?story=core/basic.ink` — 核心功能测试（不启用插件）
+- `?story=plugins/auto-button.ink&plugins=auto-button` — 插件测试
+
+**编写规范：**
+- `beforeEach` 中统一 `page.goto()` + `page.waitForSelector("#inkweave-story")`
+- 每个 `it` 内**不要**重复调用 `page.goto()`
+- 用 `expect(contents).toContainText(...)` 等待内容（而非等待元素）
+- 每个 `.ink` 文件只用于一个测试套件
+- **ink 语法关键规则：** 选择后文本缩进 4 空格；标签（`# image`、`# clear`）独立行；`# linedelay:0` 可用于即时显示
+- **新增测试流程：** 创建 .ink → 编写 spec.ts → `beforeEach` 配置 → 回归验证 → 清理旧 HTML
+
+---
+
+## ⚙️ 代码规范
+
+### TypeScript 配置
+
+- 根 `tsconfig.json` extends `@tsconfig/bun/tsconfig.json` + `@tsconfig/vite-react/tsconfig.json`
+- 各包 `tsconfig.json` extends 对应 tsconfig
+- 类型检查使用 **tsgo**（`@typescript/native-preview`），非 `tsc`
+- **严格禁止 `any`**，必要时用 `unknown`
+
+### 命名约定
+
+| 类型 | 约定 | 示例 |
+|------|------|------|
+| 类 / 接口 / 类型别名 | PascalCase | `InkStory`, `BaseFileHandler` |
+| 函数 / 变量 | camelCase | `createInkStory`, `resolveFilename` |
+| 常量 | UPPER_SNAKE | `CHOICE_SEPARATOR`, `ALLOWED_PROTOCOLS` |
+| 私有成员 | `_` 前缀 | `_side_effects`, `_filename` |
+| 文件 | camelCase | `create.ts`, `InkStory.ts` |
+| CSS 类 | kebab-case | `inkweave-story` |
+
+### 类型定义
+
+```typescript
+// 接口：PascalCase，可选属性用 ?
 export interface InkStoryOptions {
   title?: string;
   debug?: boolean;
-  [key: string]: unknown;  // 索引签名用于扩展
+  [key: string]: unknown;   // 索引签名用于扩展
 }
 
-// 类型别名：PascalCase
+// 类型别名
 export type ErrorHandler = InkErrorHandler;
 
 // 类成员：显式类型注解
@@ -145,29 +235,17 @@ export class Choice {
   text: string;
   index: number;
   type: string;
-  val?: string;  // 可选属性用 ?
+  val?: string;
 }
 ```
 
-#### 命名约定
-
-| 类型 | 约定 | 示例 |
-|------|------|------|
-| 类 | PascalCase | `InkStory`, `BaseFileHandler` |
-| 函数 | camelCase | `createInkStory`, `resolveFilename` |
-| 常量 | UPPER_SNAKE | `CHOICE_SEPARATOR` |
-| 私有成员 | 前缀 `_` | `_side_effects`, `_filename` |
-| 文件 | camelCase | `create.ts`, `InkStory.ts` |
-| CSS 类 | kebab-case | `inkweave-story` |
-
-#### 错误处理
+### 错误处理
 
 ```typescript
-// 抛出明确的错误信息
+// 不可恢复：抛出明确信息
 throw new Error("loadFile must be implemented by subclass");
-throw new Error("Invalid source type: expected string or Story");
 
-// 使用 try-catch 处理可恢复错误
+// 可恢复：try-catch + console.warn
 try {
   const url = new URL(val);
   if (!ALLOWED_PROTOCOLS.includes(url.protocol)) {
@@ -179,16 +257,13 @@ try {
   return;
 }
 
-// Context 缺失时抛出错误
-if (!ink) {
-  throw new Error("useStory must be used within StoryProvider");
-}
+// Context 缺失
+if (!ink) throw new Error("useStory must be used within StoryProvider");
 ```
 
-#### React 组件
+### React 组件
 
 ```typescript
-// Props 接口定义
 interface StoryProps {
   ink: InkStory;
   children?: React.ReactNode;
@@ -196,142 +271,58 @@ interface StoryProps {
   onInit?: (ink: InkStory) => void;
 }
 
-// 使用 memo 优化
+// memo 优化
 const StoryComponent: React.FC<StoryProps> = ({ ink, children }) => {
   // ...
 };
 export default memo(StoryComponent);
 
-// 使用 useRef 存储回调避免重渲染
+// useRef 存回调避免重渲染
 const onInitRef = useRef(onInit);
 onInitRef.current = onInit;
 ```
 
-#### 测试编写
+### CSS 模块
 
 ```typescript
-import { describe, expect, it, vi } from "bun:test";
-
-describe("模块名", () => {
-  describe("功能分组", () => {
-    it("should do something", () => {
-      // 断言
-      expect(result).toBe(expected);
-      expect(() => fn()).toThrow();
-    });
-
-    it("should mock external calls", () => {
-      const handler = {
-        loadFile: vi.fn().mockReturnValue("content"),
-      };
-      // ...
-    });
-  });
-});
+import styles from "./styles.module.css";
 ```
 
-## 📌 重要注意事项
+---
 
-- **测试框架**：使用 `bun:test` 而非 `vitest`。测试文件导入：`import { describe, it, expect } from "bun:test"`。
-- **类型安全**：类型导入必须用 `import type`。严格避免使用 `any`，必要时用 `unknown`。
-- **CSS 模块**：CSS 模块导入：`import styles from "./styles.module.css"`。
-- **问题解决**：
-    - **优先检索**: 遇到复杂或不确定的技术问题时，优先进行网络检索。
-    - **技能优先**: 进行网络检索前，先加载 `retrieve` 技能。
-    - **资料验证**: 参考网络资料时注意验证时效性和权威性，优先选择官方文档。
+## 🔄 常见工作流
 
-### 插件配置
+### 新增包内功能
 
-在 Web 环境中初始化 InkWeave 时，可以通过 `plugins` 参数控制插件启用状态：
-
-```typescript
-InkWeave.init({
-  container: '#app',
-  story: '...',
-  plugins: {
-    'image': false,        // 禁用图片插件
-    'audio': true,         // 启用音频插件
-    'auto-restore': false  // 禁用自动恢复插件
-  }
-});
+```
+1. 编写测试（bun:test）              → bun test <file> --watch
+2. 实现逻辑                           → 确保测试通过
+3. bun check                          → 格式 + 类型
+4. git status                         → 确认无垃圾文件
 ```
 
-**插件 ID 对应关系**：
-- `image` - 图片插件
-- `audio` - 音频插件
-- `auto-restore` - 自动恢复插件
-- `auto-save` - 自动保存插件
-- `fade-effect` - 淡入淡出效果插件
-- `scroll-after-choice` - 选择后滚动插件
-- `link-open` - 链接打开插件
-- `memory` - 记忆插件
-- `auto-button` - 自动按钮插件
-- `cd-button` - 倒计时按钮插件
-- `class-tag` - CSS 类标签插件
+### 新增 E2E 测试
 
-### E2E 测试架构与最佳实践
-
-#### 统一测试入口架构
-
-项目使用**统一的 HTML 入口文件**管理所有 E2E 测试，通过 URL 参数动态配置：
-
-- **入口文件**: `e2e/fixtures/index.html`
-- **故事文件**: `.ink` 文件存储在对应的子目录中
-- **URL 参数**:
-  - `story` - 指定 .ink 故事文件的相对路径
-  - `plugins` - 指定要启用的插件（逗号分隔，或使用 `all`）
-
-**目录结构**:
 ```
-e2e/fixtures/
-├── index.html              # 统一测试入口
-├── assets/                 # 公共资源目录
-│   ├── test-image.png
-│   └── test-image2.png
-├── core/                   # 核心功能测试
-├── plugins/                # 插件功能测试
-└── syntax/                 # ink 语法测试
+1. 在 e2e/fixtures/<分组>/ 创建 .ink 文件
+2. 在 e2e/<分组>.spec.ts 编写测试    → 用统一入口 URL
+3. beforeEach 配置 page.goto + waitForSelector
+4. bun test:e2e                       → 回归验证
+5. 如有旧 HTML fixture，删除
 ```
 
-**使用示例**:
-- Plugins: `/e2e/fixtures/index.html?story=plugins/auto-button.ink&plugins=auto-button`
-- Core: `/e2e/fixtures/index.html?story=core/basic.ink`
-- Syntax: `/e2e/fixtures/index.html?story=syntax/choices.ink`
+### 新增插件
 
-#### 测试文件组织原则
+```
+1. 在 packages/plugins/src/ 创建插件模块
+2. 编写单元测试 + E2E 测试（.ink）
+3. 在插件注册表中注册（含 ID）
+4. 更新本文档的「插件 ID 对照表」
+```
 
-- **按功能分组**: `e2e/core/`（核心功能）、`e2e/plugins/`（插件功能）、`e2e/syntax/`（ink 语法）
-- **每个测试只使用一个 .ink 文件**，避免多个文件维护复杂度
-- **为每个插件组件添加专用的 HTML ID**（如 `#inkweave-image`）便于测试定位
-- **Core 和 Syntax 测试不需要启用插件**，Plugin 测试需要明确指定插件
+### 处理 Obsidian 子模块
 
-#### ink 语法注意事项
-
-- 选择后的文本必须正确缩进（4个空格）
-- 使用 `-> END` 结束选择分支
-- 标签（如 `# image`、`# clear`）应在独立行上，不要在缩进块内
-- **`# linedelay` 标签可用于控制淡入效果速度，包括 `# linedelay:0` 用于即时显示（在测试场景中很有用）**
-
-#### 测试用例编写规范
-
-- **使用 beforeEach 统一设置**: 所有测试用例应在 `beforeEach` 中设置页面导航
-- **避免重复的 page.goto()**: 不要在每个测试函数内部重复调用 `page.goto()`
-- **等待故事容器加载**: 在 beforeEach 中添加 `await page.waitForSelector("#inkweave-story")`
-- **编译验证测试**: 每个测试套件都应该包含编译验证测试用例
-
-#### Playwright 测试技巧
-
-- 使用 `page.locator(".inkweave-choice")` 定位选择按钮
-- 等待内容更新时使用 `expect(contents).toContainText("expected text")` 而不是等待特定元素
-- 点击选择后等待具体的文本内容出现，确保故事执行完成
-- 在测试中禁用所有其他插件，只启用待测试的目标插件，避免互相影响
-
-#### 测试迁移工作流程
-
-当需要创建新的 E2E 测试时，遵循以下流程：
-
-1.  **创建 .ink 文件**: 在对应的子目录（core/plugins/syntax）中创建 .ink 文件
-2.  **编写测试用例**: 在对应的 spec.ts 文件中编写测试，使用统一入口 URL
-3.  **配置 beforeEach**: 使用 `page.goto("/e2e/fixtures/index.html?story=...")`
-4.  **回归测试**: 运行测试确保功能正常
-5.  **清理**: 如果是从旧 HTML 迁移，删除原 HTML 文件
+```bash
+git submodule update --init            # 首次
+git submodule update --remote          # 拉取最新
+```

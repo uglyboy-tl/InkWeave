@@ -11,6 +11,8 @@ InkWeave 是一个交互式小说播放器，基于 [ink](https://github.com/ink
 @inkweave/react     → React 组件
 @inkweave/plugins   → 可选功能模块
 @inkweave/web       → 开箱即用的 IIFE 产物
+@inkweave/cli       → 命令行工具
+ink-player          → Obsidian 插件 (git submodule)
 ```
 
 按需引入：
@@ -19,6 +21,7 @@ InkWeave 是一个交互式小说播放器，基于 [ink](https://github.com/ink
 - 需要 React UI？加上 `@inkweave/react`
 - 需要存档、音频等功能？引入 `@inkweave/plugins`
 - 只想直接用？使用 `@inkweave/web`
+- 在 Obsidian 中阅读交互式小说？安装 [ink-player](https://github.com/uglyboy-tl/obsidian-ink-player)
 
 ## 扩展系统
 
@@ -35,7 +38,7 @@ InkWeave 是一个交互式小说播放器，基于 [ink](https://github.com/ink
 
 ## 插件
 
-内置 9 个插件：image、audio、memory、fadeEffect、autoButton、cdButton、linkopen、scrollafterchoice、autosave。
+内置 11 个插件：image、audio、memory、fadeEffect、autoButton、cdButton、linkopen、scrollafterchoice、autosave、autoRestore、classTag。
 
 详见 [packages/plugins/README.md](packages/plugins/README.md)。
 
@@ -45,8 +48,9 @@ InkWeave 是一个交互式小说播放器，基于 [ink](https://github.com/ink
 - **Zustand 5** - 状态管理
 - **inkjs 2.3** - ink 脚本解析引擎
 - **TypeScript 5** - 类型安全
-- **Vite 6** - 构建工具
+- **Vite 8** - 构建工具
 - **Bun** - 包管理和测试
+- **Biome 2** - 格式化和 lint
 
 ## 相关链接
 
