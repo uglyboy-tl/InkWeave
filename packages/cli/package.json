@@ -4,7 +4,7 @@
   "description": "CLI tool to run Ink story files",
   "type": "module",
   "bin": {
-    "inkweave": "./dist/cli.js"
+    "inkweave": "./dist/inkweave"
   },
   "files": [
     "dist"
