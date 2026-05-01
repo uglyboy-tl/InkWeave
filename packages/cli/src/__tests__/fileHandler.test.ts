@@ -43,6 +43,24 @@ describe("NodeFileHandler", () => {
       const handler = new NodeFileHandler(mainFile);
       expect(() => handler.loadFile("nonexistent.ink")).toThrow();
     });
+
+    it("should reject path traversal with ../", () => {
+      const handler = new NodeFileHandler(mainFile);
+      expect(() => handler.loadFile("../etc/passwd")).toThrow("Security: Path traversal detected");
+    });
+
+    it("should reject absolute paths", () => {
+      const handler = new NodeFileHandler(mainFile);
+      expect(() => handler.loadFile("/etc/passwd")).toThrow("Security: Path traversal detected");
+    });
+
+    it("should allow legitimate subdirectory files", () => {
+      mkdirSync(join(testDir, "sub"), { recursive: true });
+      writeFileSync(join(testDir, "sub/deep.ink"), "Deep content.");
+      const handler = new NodeFileHandler(mainFile);
+      const content = handler.loadFile("sub/deep.ink");
+      expect(content).toBe("Deep content.");
+    });
   });
 
   describe("constructor", () => {
