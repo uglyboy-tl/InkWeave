@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, mock, vi } from "bun:test";
-import { createInkStory } from "@inkweave/core";
+import { CHOICE_SEPARATOR, createInkStory } from "@inkweave/core";
 import { runStory } from "../runner";
 
 const promptsMock = mock();
@@ -153,7 +153,7 @@ The end.
 
       const calls = stdoutWriteSpy.mock.calls as string[][];
       const writtenContent = calls.map((call) => call[0]).join("");
-      expect(writtenContent).not.toContain("[*]");
+      expect(writtenContent).not.toContain(CHOICE_SEPARATOR);
     });
   });
 });
