@@ -1,0 +1,21 @@
+LIST MOVE=({{joinKeysFirst moves}})
+
+== function get_move_power(_move)
+{_move:
+{{#each moves}}
+  - {{@key}}:
+    ~ return {{this.power}}
+{{/each}}
+  - else:
+    ~ return 0
+}
+
+== function get_move_type(_move)
+~ temp _type = Normal
+{_move:
+{{#each moves}}
+  - {{@key}}:
+    ~ _type = {{this.type}}
+{{/each}}
+}
+~ return _type

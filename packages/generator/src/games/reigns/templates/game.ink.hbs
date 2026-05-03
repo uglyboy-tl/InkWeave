@@ -1,0 +1,46 @@
+INCLUDE {{cardsFile}}
+INCLUDE {{utilsFile}}
+
+== loop(card)
+# CLEAR
+{get_content(card)}
++ [{get_left_option(card)}]
+~ process_left_option(card)
++ [{get_right_option(card)}]
+~ process_right_option(card)
+
+- -> check() -> loop(next_card(card))
+
+= check()
+~ temp game_over = check_game_over()
+{ game_over != "":
+  -> end(game_over)
+- else:
+  ->->
+}
+
+= end(reason)
+{reason:
+- "church_low":
+  信仰过低，教会势力衰退
+- "people_low":
+  民众造反，王朝覆灭
+- "army_low":
+  敌国入侵，国家沦陷
+- "money_low":
+  资本家夺权，王室倾覆
+- "church_high":
+  教会权力过大，架空王权
+- "people_high":
+  民众力量过强，民主革命
+- "army_high":
+  军队暴乱，军事政变
+- "money_high":
+  财富引发觊觎，外敌入侵
+}
+
++ [重新开始]
+  #RESTART
+  -> DONE
++ [结束游戏]
+  -> END

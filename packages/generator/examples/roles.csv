@@ -1,0 +1,6 @@
+name,type1,type2,hp,atk,def,spAtk,spDef,spd
+皮卡丘,Electric,,35,55,40,50,50,90
+喷火龙,Fire,Flying,78,84,78,109,85,100
+妙蛙草,Grass,Poison,60,62,63,80,80,60
+杰尼龟,Water,,44,48,65,50,64,43
+卡比兽,Normal,,160,110,65,65,110,30

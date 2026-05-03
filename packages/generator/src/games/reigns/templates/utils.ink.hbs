@@ -1,0 +1,45 @@
+VAR Church = {{config.initialChurch}}
+VAR People = {{config.initialPeople}}
+VAR Army = {{config.initialArmy}}
+VAR Money = {{config.initialMoney}}
+
+== function next_card(card)
+{ CARD_LIST? card:
+~ CARD_LIST -= card
+~ temp random_card = LIST_RANDOM(CARD_LIST)
+~ CARD_LIST += card
+~ return random_card
+
+- else:
+  ~ return LIST_RANDOM(CARD_LIST)
+  }
+
+== function check_game_over()
+{
+- Church <= 0:
+  信仰过低
+  ~ return "church_low"
+- People <= 0:
+  民众造反
+  ~ return "people_low"
+- Army <= 0:
+  敌国入侵
+  ~ return "army_low"
+- Money <= 0:
+  资本家夺权
+  ~ return "money_low"
+- Church > {{config.maxAttribute}}:
+  教会夺权
+  ~ return "church_high"
+- People > {{config.maxAttribute}}:
+  遭受神罚
+  ~ return "people_high"
+- Army > {{config.maxAttribute}}:
+  军队暴乱
+  ~ return "army_high"
+- Money > {{config.maxAttribute}}:
+  财富引发觊觎
+  ~ return "money_high"
+- else:
+  ~ return ""
+}

@@ -1,0 +1,7 @@
+name,type,power,category
+十万伏特,Electric,90,Special
+火焰喷射,Fire,90,Special
+水枪,Water,40,Special
+飞叶快刀,Grass,55,Special
+撞击,Normal,40,Physical
+咬咬,Normal,60,Physical

@@ -1,0 +1,27 @@
+CONST MAX_LEVEL = {{maxLevel}}
+
+== function calculate_damage(_level, atk, def, power, times)
+~ temp _damage = 0
+~ temp rand = RANDOM(85, 100)
+~ _damage = INT(((2.0 * _level / 5.0 + 2.0) * power * atk / FLOAT(def) / 50.0 + 2.0) * times * rand / 100.0)
+~ return _damage
+
+== function calculate_hp(_level, base, iv, ev)
+~ return FLOOR((2.0*base + iv + INT(ev/4.0)) * FLOAT(_level)/ MAX_LEVEL) + _level + 10
+
+== function calculate_stat(_level, base, iv, ev, nature)
+~ return FLOOR((FLOOR((2.0 * base + iv + INT(ev/4.0)) * FLOAT(_level)/ MAX_LEVEL) + 5) * nature)
+
+== function calculate_times(_move, _hero, _enemy)
+~ temp _times = 1.0
+~ temp _move_type = get_move_type(_move)
+~ temp hero_type1 = get_Type1(_hero)
+~ temp hero_type2 = get_Type2(_hero)
+~ temp enemy_type1 = get_Type1(_enemy)
+~ temp enemy_type2 = get_Type2(_enemy)
+{_move_type == hero_type1 || _move_type == hero_type2:
+  ~ _times = _times * 1.5
+}
+~ _times = _times * type_chart(_move_type, enemy_type1)
+~ _times = _times * type_chart(_move_type, enemy_type2)
+~ return _times

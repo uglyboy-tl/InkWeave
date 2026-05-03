@@ -1,0 +1,73 @@
+LIST CARD_LIST= ({{joinKeysFirst cards}})
+
+== function get_content(name)
+{name:
+{{#each cards}}
+  - {{@key}}:
+    ~ return "{{this.Content}}"
+{{/each}}
+  - else:
+    ~ return "什么也没有"
+}
+
+== function get_left_option(name)
+{name:
+{{#each cards}}
+  - {{@key}}:
+    ~ return "{{this.Left}}"
+{{/each}}
+  - else:
+    ~ return "左划"
+}
+
+== function get_right_option(name)
+{name:
+{{#each cards}}
+  - {{@key}}:
+    ~ return "{{this.Right}}"
+{{/each}}
+  - else:
+    ~ return "右划"
+}
+
+== function process_left_option(name)
+{name:
+{{#each cards}}
+{{#if (hasLeftEffect this)}}
+  - {{@key}}:
+{{#if this.LC}}    ~ Church {{{parseEffect this.LC}}}
+{{/if}}
+{{#if this.LP}}    ~ People {{{parseEffect this.LP}}}
+{{/if}}
+{{#if this.LA}}    ~ Army {{{parseEffect this.LA}}}
+{{/if}}
+{{#if this.LM}}    ~ Money {{{parseEffect this.LM}}}
+{{/if}}
+{{#if this.LN}}    ~ CARD_LIST += ({{this.LN}})
+{{/if}}
+{{#if this.LR}}    ~ CARD_LIST -= ({{this.LR}})
+{{/if}}
+{{/if}}
+{{/each}}
+}
+
+== function process_right_option(name)
+{name:
+{{#each cards}}
+{{#if (hasRightEffect this)}}
+  - {{@key}}:
+{{#if this.RC}}    ~ Church {{{parseEffect this.RC}}}
+{{/if}}
+{{#if this.RP}}    ~ People {{{parseEffect this.RP}}}
+{{/if}}
+{{#if this.RA}}    ~ Army {{{parseEffect this.RA}}}
+{{/if}}
+{{#if this.RM}}    ~ Money {{{parseEffect this.RM}}}
+{{/if}}
+{{#if this.RN}}    ~ CARD_LIST += ({{this.RN}})
+{{/if}}
+{{#if this.RR}}    ~ CARD_LIST -= ({{this.RR}})
+{{/if}}
+{{/if}}
+{{/each}}
+}

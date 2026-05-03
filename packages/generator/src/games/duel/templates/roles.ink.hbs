@@ -1,0 +1,69 @@
+LIST HERO_NAME= ({{joinKeysFirst roles}})
+
+== function get_HP(name)
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ return {{this.hp}}
+{{/each}}
+}
+
+== function get_Atk(name)
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ return {{this.atk}}
+{{/each}}
+}
+
+== function get_Def(name)
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ return {{this.def}}
+{{/each}}
+}
+
+== function get_SpAtk(name)
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ return {{this.spAtk}}
+{{/each}}
+}
+
+== function get_SpDef(name)
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ return {{this.spDef}}
+{{/each}}
+}
+
+== function get_Spd(name)
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ return {{this.spd}}
+{{/each}}
+}
+
+== function get_Type1(name)
+~ temp type = None
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ type = {{this.type1}}
+{{/each}}
+}
+~ return type
+
+== function get_Type2(name)
+~ temp type = None
+{name:
+{{#each roles}}
+  - {{@key}}:
+    ~ type = {{#if this.type2}}{{this.type2}}{{else}}None{{/if}}
+{{/each}}
+}
+~ return type

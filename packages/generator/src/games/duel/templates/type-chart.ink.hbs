@@ -1,0 +1,18 @@
+LIST TYPE_LIST= {{joinKeys typeChart}}, None
+
+== function type_chart(type1, type2)
+~ temp times = 1.0
+{type1:
+{{#eachEntries typeChart}}
+- {{key}}:
+  {type2:
+{{#each value}}
+  {{#if (neq this 1)}}
+  - {{@key}}:
+    ~ times = {{this}}
+  {{/if}}
+{{/each}}
+  }
+{{/eachEntries}}
+}
+~ return times

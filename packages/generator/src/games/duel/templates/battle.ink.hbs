@@ -1,0 +1,56 @@
+LIST STATS_NAME = HP, Atk, Def, SpAtk, SpDef, Spd
+
+INCLUDE {{roleFile}}
+INCLUDE {{moveFile}}
+INCLUDE {{typeFile}}
+INCLUDE {{utilsFile}}
+
+== function get_damage(_level, _hero, _enemy_level, _enemy, _move)
+~ temp _damage = 0
+~ temp _atk = 1
+~ temp _def = 1
+~ temp _atk_base = 0
+~ temp _def_base = 0
+~ temp _power = 0
+~ temp _times = 1
+{ MOVE?_move:
+  ~ _atk_base = get_Atk(_hero)
+  ~ _def_base = get_Def(_enemy)
+- else:
+  ~ _atk_base = get_SpAtk(_hero)
+  ~ _def_base = get_SpDef(_enemy)
+}
+~ _atk = calculate_stat(_level, _atk_base, 31, 252, 1)
+~ _def = calculate_stat(_enemy_level, _def_base, RANDOM(0, 31), 0, 1)
+~ _times = calculate_times(_move, _hero, _enemy)
+~ _power = get_move_power(_move)
+~ _damage = calculate_damage(_level, _atk, _def, _power, _times)
+~ return _damage
+
+== function get_mana(_move)
+~ return get_move_power(_move)
+
+== function _get_stat(_type, _name, _level, iv, ev, nature)
+~ temp _stat = 0
+{_type:
+  - HP:
+  ~ _stat = get_HP(_name)
+  ~ return calculate_hp(_level, _stat, iv, ev)
+  - Atk:
+  ~ _stat = get_Atk(_name)
+  - Def:
+  ~ _stat = get_Def(_name)
+  - SpAtk:
+  ~ _stat = get_SpAtk(_name)
+  - SpDef:
+  ~ _stat = get_SpDef(_name)
+  - Spd:
+  ~ _stat = get_Spd(_name)
+}
+~ return calculate_stat(_level, _stat, iv, ev, nature)
+
+== function get_stat(_type, _name, _level)
+~ return _get_stat(_type, _name, _level, 31, 0, 1)
+
+== function get_enemy_stat(_type, _name, _level)
+~ return _get_stat(_type, _name, _level, RANDOM(0, 31), 0, 1)

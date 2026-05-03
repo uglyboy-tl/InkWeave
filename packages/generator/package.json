@@ -1,0 +1,49 @@
+{
+  "name": "@inkweave/generator",
+  "repository": "https://github.com/uglyboy-tl/InkWeave.git",
+  "version": "0.1.0",
+  "description": "Ink script generator for various game types - data-driven ink code generation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./cli": {
+      "types": "./dist/src/cli/index.d.ts",
+      "import": "./dist/cli.js",
+      "require": "./dist/cli.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "inkweave-gen": "./dist/cli.js"
+  },
+  "scripts": {
+    "check": "biome check --write --error-on-warnings . && tsgo -b",
+    "build": "bun run build.ts",
+    "dev": "bun src/cli/index.ts"
+  },
+  "keywords": [
+    "ink",
+    "generator",
+    "game-template",
+    "inkweave"
+  ],
+  "author": "Uglyboy",
+  "license": "MIT",
+  "dependencies": {
+    "handlebars": "^4.7.8",
+    "papaparse": "^5.4.1",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.3.14"
+  }
+}

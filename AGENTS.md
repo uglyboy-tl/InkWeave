@@ -50,13 +50,14 @@ packages/
 ├── cli/        # 命令行工具
 ├── core/       # 核心引擎（InkStory, state stores, extensions）
 ├── desktop/    # 桌面应用（Tauri）
+├── generator/  # Ink 脚本生成器（数据驱动）
 ├── obsidian/   # Obsidian 插件（git submodule）
 ├── plugins/    # 插件集（audio, auto-save, image, link-open 等）
 ├── react/      # React 组件（Story, Choices, Contents）
 └── web/        # Web 打包（预构建浏览器 bundle）
 ```
 
-> **`packages/obsidian` 是 git submodule**，指向 [obsidian-ink-player](https://github.com/uglyboy-tl/obsidian-ink-player)。  
+> **`packages/obsidian` 是 git submodule**，指向 [obsidian-ink-player](https://github.com/uglyboy-tl/obsidian-ink-player)。
 > clone 后必须执行：`git submodule update --init`
 
 ### 插件配置
@@ -326,3 +327,30 @@ import styles from "./styles.module.css";
 git submodule update --init            # 首次
 git submodule update --remote          # 拉取最新
 ```
+
+### Ink 编译测试
+
+用于快速验证 `.ink` 文件的语法是否正确，调试 ink 模板时非常有用。
+
+```bash
+# 用法
+bun check:ink <ink文件路径>
+
+# 示例：测试 /tmp 下的 ink 文件
+bun check:ink /tmp/test.ink
+
+# 示例：测试生成的 ink 文件
+bun check:ink examples/ink/问卷/arithmetic_quiz.ink
+```
+
+**使用场景：**
+- 修改 `*.ink.hbs` 模板后，验证生成的 ink 语法
+- 调试 ink 编译错误，获取详细错误信息（行号、错误类型）
+- 快速验证 ink 语法实验（先写到 `/tmp/test.ink`，再编译）
+
+**工作流：**
+1. 将测试 ink 代码写入 `/tmp/test.ink`
+2. 运行 `bun check:ink /tmp/test.ink`
+3. 根据错误信息修改代码
+4. 重复直到编译成功
+5. 将正确的语法应用到 `*.ink.hbs` 模板
