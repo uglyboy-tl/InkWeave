@@ -1,30 +1,30 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { Commands } from "../index";
+import { CommandRegistry } from "../CommandRegistry";
 
-describe("Commands Basic Functionality", () => {
+describe("CommandRegistry", () => {
   beforeEach(() => {
-    Commands.clear();
+    CommandRegistry.clear();
   });
 
   afterEach(() => {
-    Commands.clear();
+    CommandRegistry.clear();
   });
 
   it("should register and retrieve commands", () => {
-    Commands.add("test", {
+    CommandRegistry.add("test", {
       name: "Test Command",
       description: "This is a test command",
       handler: () => {},
     });
 
-    const command = Commands.get("test");
+    const command = CommandRegistry.get("test");
     expect(command).toBeDefined();
     if (command) {
       expect(command.name).toBe("Test Command");
       expect(command.description).toBe("This is a test command");
     }
 
-    const allCommands = Commands.getAll();
+    const allCommands = CommandRegistry.getAll();
     expect(allCommands).toHaveLength(1);
     if (allCommands[0]) {
       expect(allCommands[0].name).toBe("Test Command");
@@ -33,13 +33,13 @@ describe("Commands Basic Functionality", () => {
 
   it("should store translation keys in commands", () => {
     const testHandler = () => {};
-    Commands.add("test-restart", {
+    CommandRegistry.add("test-restart", {
       name: "menu_restart",
       description: "menu_restart_aria",
       handler: testHandler,
     });
 
-    const cmd = Commands.get("test-restart");
+    const cmd = CommandRegistry.get("test-restart");
     expect(cmd).toBeDefined();
     if (cmd) {
       expect(cmd.name).toBe("menu_restart");

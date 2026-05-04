@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
 import type { Story } from "inkjs/engine/Story";
-import { ExternalFunctions } from "../../extensions/ExternalFunctions";
-import { Parser } from "../../extensions/Parser";
-import { Tags } from "../../extensions/Tags";
 import choicesStore from "../../state/choices";
 import contentsStore from "../../state/contents";
+import { ContentParser } from "../ContentParser";
+import { Externals } from "../Externals";
 import { InkStory } from "../InkStory";
+import { TagHandler } from "../TagHandler";
 
 describe("InkStory", () => {
   let mockStory: Story;
@@ -28,9 +28,9 @@ describe("InkStory", () => {
 
     contentsStore.getState().setContents([]);
     choicesStore.getState().clear();
-    Tags.clear();
-    Parser.clear();
-    ExternalFunctions.clear();
+    TagHandler.clear();
+    ContentParser.clear();
+    Externals.clear();
   });
 
   describe("constructor", () => {
@@ -138,7 +138,7 @@ describe("InkStory", () => {
 
     it("should process tags", () => {
       const tagFn = vi.fn();
-      Tags.add("custom", tagFn);
+      TagHandler.add("custom", tagFn);
       let callCount = 0;
       (mockStory as unknown as Record<string, unknown>).currentTags = ["custom: value"];
       (mockStory.Continue as ReturnType<typeof vi.fn>).mockImplementation(() => {
@@ -156,7 +156,7 @@ describe("InkStory", () => {
     });
 
     it("should process text with parser", () => {
-      Parser.tag("uppercase", (line: { text: string }) => {
+      ContentParser.tag("uppercase", (line: { text: string }) => {
         line.text = line.text.toUpperCase();
       });
       let callCount = 0;

@@ -23,7 +23,7 @@ describe("Patches", () => {
     it("should apply patches to story", () => {
       const mockFn = vi.fn();
       Patches.add(mockFn, { key: "value" });
-      const story = { options: {} };
+      const story = { options: {} } as Parameters<typeof Patches.apply>[0];
       Patches.apply(story, "");
       expect(mockFn).toHaveBeenCalled();
       expect(story.options).toEqual({ key: "value" });

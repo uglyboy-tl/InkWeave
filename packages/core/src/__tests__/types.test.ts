@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { BaseFileHandler, type FileHandler } from "../types";
+import { BaseFileHandler, type FileHandler } from "../file/FileHandler";
 
 describe("BaseFileHandler", () => {
   describe("constructor", () => {

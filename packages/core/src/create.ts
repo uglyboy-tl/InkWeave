@@ -1,30 +1,9 @@
 import { Compiler } from "inkjs/compiler/Compiler";
 import { CompilerOptions } from "inkjs/compiler/CompilerOptions";
 import { Story } from "inkjs/engine/Story";
+import { InkjsFileHandler } from "./file/InkjsFileHandler";
 import { InkStory } from "./story/InkStory";
-import type { FileHandler, InkStoryOptions } from "./types";
-import { BaseFileHandler } from "./types";
-
-class InkjsFileHandler {
-  private handler: FileHandler;
-  private resolve: (filename: string) => string;
-
-  constructor(handler: FileHandler) {
-    this.handler = handler;
-    this.resolve =
-      handler instanceof BaseFileHandler
-        ? (f: string) => handler.resolveFilename(f)
-        : (f: string) => f;
-  }
-
-  readonly ResolveInkFilename = (filename: string): string => {
-    return this.resolve(filename);
-  };
-
-  readonly LoadInkFileContents = (filename: string): string => {
-    return this.handler.loadFile(filename);
-  };
-}
+import type { InkStoryOptions } from "./types";
 
 function isCompiledJson(input: string): boolean {
   const trimmed = input.trim();

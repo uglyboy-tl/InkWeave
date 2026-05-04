@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { CHOICE_SEPARATOR } from "../../types";
+import { CHOICE_SEPARATOR } from "../../constants";
 import contentsStore from "../contents";
 
 describe("contentsStore", () => {

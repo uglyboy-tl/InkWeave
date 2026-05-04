@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "bun:test";
 import { Story } from "inkjs/engine/Story";
 import { createInkStory } from "../create";
-import type { FileHandler } from "../types";
-import { BaseFileHandler } from "../types";
+import type { FileHandler } from "../file/FileHandler";
+import { BaseFileHandler } from "../file/FileHandler";
 
 describe("createInkStory", () => {
   describe("input type detection", () => {

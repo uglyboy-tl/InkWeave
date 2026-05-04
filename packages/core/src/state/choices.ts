@@ -1,8 +1,7 @@
 import type { Choice as InkChoice } from "inkjs/engine/Choice";
 import { create } from "zustand";
-import { ChoiceParser } from "../extensions/ChoiceParser";
+import { ChoiceHandler } from "../story/ChoiceHandler";
 import { Choice } from "../types";
-import createSelectors from "./createSelectors";
 
 type StoryChoices = {
   choices: Choice[];
@@ -16,7 +15,7 @@ const choicesStore = create<StoryChoices>((set) => ({
     const choices = ink_choices.map((choice) => {
       const new_choice = new Choice(choice.text, choice.index);
       if (choice.tags?.length) {
-        ChoiceParser.process(choice, new_choice);
+        ChoiceHandler.process(choice, new_choice);
       }
       return new_choice;
     });
@@ -25,4 +24,4 @@ const choicesStore = create<StoryChoices>((set) => ({
   clear: () => set({ choices: [] }),
 }));
 
-export default createSelectors(choicesStore);
+export default choicesStore;

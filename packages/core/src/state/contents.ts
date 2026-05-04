@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import type { ContentItem } from "../types";
-import createSelectors from "./createSelectors";
 
 type StoryContent = {
   contents: ContentItem[];
@@ -20,4 +19,4 @@ const contentsStore = create<StoryContent>((set) => ({
   clear: () => set({ contents: [] }),
 }));
 
-export default createSelectors(contentsStore);
+export default contentsStore;

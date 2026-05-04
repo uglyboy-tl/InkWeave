@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
-import { EventEmitter } from "../extensions/EventEmitter";
+import { EventEmitter } from "../events/EventEmitter";
 
 // Simple mock function implementation for testing
 type MockFunction = {

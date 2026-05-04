@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "bun:test";
 import { Choice } from "../../types";
-import { ChoiceParser } from "../ChoiceParser";
+import { ChoiceHandler } from "../ChoiceHandler";
 
-describe("ChoiceParser", () => {
+describe("ChoiceHandler", () => {
   describe("Choice", () => {
     it("should create choice with default type", () => {
       const choice = new Choice("Test", 0);
@@ -25,22 +25,22 @@ describe("ChoiceParser", () => {
   describe("add", () => {
     it("should register tag handler", () => {
       const fn = vi.fn();
-      ChoiceParser.add("custom", fn);
-      expect(ChoiceParser.tags.has("custom")).toBe(true);
+      ChoiceHandler.add("custom", fn);
+      expect(ChoiceHandler.handlers.has("custom")).toBe(true);
     });
   });
 
   describe("process", () => {
     it("should process choice with tags", () => {
       const fn = vi.fn();
-      ChoiceParser.add("custom", fn);
+      ChoiceHandler.add("custom", fn);
       const inkChoice = {
         text: "Test",
         index: 0,
         tags: ["custom:value"],
-      } as unknown as Parameters<typeof ChoiceParser.process>[0];
+      } as unknown as Parameters<typeof ChoiceHandler.process>[0];
       const choice = new Choice("Test", 0);
-      ChoiceParser.process(inkChoice, choice);
+      ChoiceHandler.process(inkChoice, choice);
       expect(fn).toHaveBeenCalled();
     });
 
@@ -49,9 +49,9 @@ describe("ChoiceParser", () => {
         text: "Test",
         index: 0,
         tags: null,
-      } as unknown as Parameters<typeof ChoiceParser.process>[0];
+      } as unknown as Parameters<typeof ChoiceHandler.process>[0];
       const choice = new Choice("Test", 0);
-      ChoiceParser.process(inkChoice, choice);
+      ChoiceHandler.process(inkChoice, choice);
     });
 
     it("should handle choice with empty tags", () => {
@@ -59,9 +59,9 @@ describe("ChoiceParser", () => {
         text: "Test",
         index: 0,
         tags: [],
-      } as unknown as Parameters<typeof ChoiceParser.process>[0];
+      } as unknown as Parameters<typeof ChoiceHandler.process>[0];
       const choice = new Choice("Test", 0);
-      ChoiceParser.process(inkChoice, choice);
+      ChoiceHandler.process(inkChoice, choice);
     });
 
     it("should handle choice without text", () => {
@@ -69,9 +69,9 @@ describe("ChoiceParser", () => {
         text: "",
         index: 0,
         tags: null,
-      } as unknown as Parameters<typeof ChoiceParser.process>[0];
+      } as unknown as Parameters<typeof ChoiceHandler.process>[0];
       const choice = new Choice("", 0);
-      ChoiceParser.process(inkChoice, choice);
+      ChoiceHandler.process(inkChoice, choice);
     });
   });
 
@@ -81,23 +81,23 @@ describe("ChoiceParser", () => {
         text: "Test",
         index: 0,
         tags: ["unclickable"],
-      } as unknown as Parameters<typeof ChoiceParser.process>[0];
+      } as unknown as Parameters<typeof ChoiceHandler.process>[0];
       const choice = new Choice("Test", 0);
-      ChoiceParser.process(inkChoice, choice);
+      ChoiceHandler.process(inkChoice, choice);
       expect(choice.type).toBe("unclickable");
     });
   });
 
   describe("clear", () => {
     it("should clear custom tags", () => {
-      ChoiceParser.add("custom", vi.fn());
-      ChoiceParser.clear();
-      expect(ChoiceParser.tags.has("custom")).toBe(false);
+      ChoiceHandler.add("custom", vi.fn());
+      ChoiceHandler.clear();
+      expect(ChoiceHandler.handlers.has("custom")).toBe(false);
     });
 
     it("should keep unclickable tag", () => {
-      ChoiceParser.clear();
-      expect(ChoiceParser.tags.has("unclickable")).toBe(true);
+      ChoiceHandler.clear();
+      expect(ChoiceHandler.handlers.has("unclickable")).toBe(true);
     });
   });
 });

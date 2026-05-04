@@ -1,58 +1,45 @@
 import type { Story } from "inkjs/engine/Story";
-import { EventEmitter } from "../extensions/EventEmitter";
-import { ExternalFunctions } from "../extensions/ExternalFunctions";
-import { Parser } from "../extensions/Parser";
-import { Patches } from "../extensions/Patches";
-import { Plugins } from "../extensions/Plugins";
-import { Tags } from "../extensions/Tags";
+import { CHOICE_SEPARATOR, DEFAULT_STORY_OPTIONS, Events } from "../constants";
+import { EventEmitter } from "../events/EventEmitter";
+import { PluginLoader } from "../plugin/PluginLoader";
 import choicesStore from "../state/choices";
 import contentsStore from "../state/contents";
 import variablesStore from "../state/variables";
-import type {
-  ContentItem,
-  EventEmitterInterface,
-  InkStoryContext,
-  InkStoryOptions,
-} from "../types";
-import { CHOICE_SEPARATOR, DEFAULT_STORY_OPTIONS, Events } from "../types";
+import type { ContentItem, InkStoryContext, InkStoryOptions } from "../types";
+import { ContentParser } from "./ContentParser";
+import { Externals } from "./Externals";
+import { Patches } from "./Patches";
+import { TagHandler } from "./TagHandler";
 
 export class InkStory implements InkStoryContext {
   title: string;
   story: Story;
   options: InkStoryOptions;
-  eventEmitter: EventEmitterInterface;
-  plugins: Plugins;
-  _save_label: string[] = ["contents"];
+  eventEmitter: EventEmitter;
+  pluginLoader: PluginLoader;
+  save_label: string[] = ["contents"];
   [key: string]: unknown;
 
   constructor(story: Story, title: string, options?: InkStoryOptions) {
     this.options = { ...DEFAULT_STORY_OPTIONS, ...options };
     this.story = story;
     this.title = title;
-    this.eventEmitter = new EventEmitter() as EventEmitterInterface;
-    this.plugins = new Plugins(this);
+    this.eventEmitter = new EventEmitter();
+    this.pluginLoader = new PluginLoader(this);
     const content = this.story.ToJson();
     if (content) {
       Patches.apply(this, content);
       this.bindExternalFunctions(content);
     }
 
-    // 使用事件系统来清除内容（清屏操作）
     const unsubscribeClear = this.eventEmitter.on(Events.STORY_CLEARED, () => {
       contentsStore.getState().clear();
     });
 
-    /**
-     * 注册 story.dispose 监听器来自动清理 story.cleared 监听器
-     * 这是唯一注册后不移除的监听器，因为它的生命周期与 InkStory 实例相同
-     * 当 dispose 被调用时，unsub 会自动取消 story.cleared 的监听器
-     */
     this.eventEmitter.on(Events.STORY_DISPOSE, () => {
       unsubscribeClear();
     });
 
-    // 发射初始化事件，让插件可以扩展或自定义行为
-    // 延迟到构造函数末尾，确保实例完全初始化
     this.eventEmitter.emit(Events.STORY_INITIALIZED, { story: this });
   }
 
@@ -64,7 +51,6 @@ export class InkStory implements InkStoryContext {
     const oldContents = this.contents.length > 0 ? [...this.contents] : [];
     contentsStore.getState().setContents(newContent);
 
-    // 发射内容变更事件
     this.eventEmitter.emit(Events.CONTENTS_CHANGED, {
       story: this,
       oldContents,
@@ -77,12 +63,7 @@ export class InkStory implements InkStoryContext {
     return choicesStore.getState().choices;
   }
 
-  get save_label() {
-    return this._save_label;
-  }
-
   continue = () => {
-    // 发射故事继续前事件
     this.eventEmitter.emit(Events.STORY_CONTINUE_START, { story: this, state: this.story.state });
 
     const newContent: ContentItem[] = [];
@@ -91,13 +72,13 @@ export class InkStory implements InkStoryContext {
       let current_content: ContentItem = { text: this.story.Continue() || "" };
       if (this.story.currentTags) {
         this.story.currentTags.forEach((tag) => {
-          Tags.process(this, tag);
-          if (tag === "clear" || tag === "restart") {
+          TagHandler.process(this, tag);
+          if (TagHandler.isFlushTag(tag)) {
             newContent.length = 0;
           }
         });
         if (current_content.text && this.story.currentTags.length) {
-          current_content = Parser.process(current_content.text, this.story.currentTags);
+          current_content = ContentParser.process(current_content.text, this.story.currentTags);
         }
       }
 
@@ -109,7 +90,6 @@ export class InkStory implements InkStoryContext {
     choicesStore.getState().setChoices(currentChoices);
     variablesStore.getState().setGlobalVars(variablesState);
 
-    // 发射故事继续后事件
     this.eventEmitter.emit(Events.STORY_CONTINUE_END, {
       story: this,
       state: this.story.state,
@@ -123,7 +103,6 @@ export class InkStory implements InkStoryContext {
     const preChoices = [...this.choices];
     const preSelectedChoice = preChoices[index];
 
-    // 发射选择前事件
     this.eventEmitter.emit(Events.CHOICE_SELECTING, {
       story: this,
       index,
@@ -135,7 +114,6 @@ export class InkStory implements InkStoryContext {
     contentsStore.getState().add([{ text: CHOICE_SEPARATOR }]);
     this.continue();
 
-    // 发射选择后事件 - 使用 continue 前的快照，避免拿到新一轮的选择列表
     this.eventEmitter.emit(Events.CHOICE_SELECTED, {
       story: this,
       index,
@@ -152,16 +130,15 @@ export class InkStory implements InkStoryContext {
     this.eventEmitter.emit(Events.STORY_RESTART_START, { story: this });
 
     this.story.ResetState();
-    this.clear(); // this will emit story.clear.start and story.clear.end
+    this.clear();
     this.continue();
 
     this.eventEmitter.emit(Events.STORY_RESTART_END, { story: this });
   };
 
   dispose = () => {
-    this.clear(); // 清理显示内容
+    this.clear();
     this.eventEmitter.emit(Events.STORY_DISPOSE, { story: this });
-    // 清理其他状态
     variablesStore.setState({ variables: new Map<string, unknown>() });
     this.eventEmitter.clear();
   };
@@ -185,7 +162,7 @@ export class InkStory implements InkStoryContext {
 
       findExternalFunctions(jsonContent);
       externalIds.forEach((id) => {
-        ExternalFunctions.bind(this, id);
+        Externals.bind(this, id);
       });
     } catch (error) {
       console.warn("Failed to parse story content for external functions:", error);

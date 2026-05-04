@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "bun:test";
-import { splitAtCharacter, Tags } from "../Tags";
+import { TagHandler } from "../TagHandler";
+import { splitAtCharacter } from "../utils";
 
-describe("Tags", () => {
+describe("TagHandler", () => {
   describe("splitAtCharacter", () => {
     it("should split at colon", () => {
       const result = splitAtCharacter("image: path.png", ":");
@@ -38,49 +39,53 @@ describe("Tags", () => {
   describe("add", () => {
     it("should register and process custom tag", () => {
       const mockFn = vi.fn();
-      Tags.add("test", mockFn);
-      Tags.process({} as unknown as Parameters<typeof Tags.process>[0], "test: value");
+      TagHandler.add("test", mockFn);
+      TagHandler.process({} as unknown as Parameters<typeof TagHandler.process>[0], "test: value");
       expect(mockFn).toHaveBeenCalledWith("value", expect.anything());
     });
 
     it("should register tag without after value", () => {
       const mockFn = vi.fn();
-      Tags.add("test2", mockFn);
-      Tags.process({} as unknown as Parameters<typeof Tags.process>[0], "test2");
+      TagHandler.add("test2", mockFn);
+      TagHandler.process({} as unknown as Parameters<typeof TagHandler.process>[0], "test2");
       expect(mockFn).toHaveBeenCalledWith(undefined, expect.anything());
     });
   });
 
   describe("process", () => {
     it("should update options with number value", () => {
-      const story = { options: { linedelay: 0 } } as unknown as Parameters<typeof Tags.process>[0];
-      Tags.process(story, "linedelay: 0.1");
+      const story = { options: { linedelay: 0 } } as unknown as Parameters<
+        typeof TagHandler.process
+      >[0];
+      TagHandler.process(story, "linedelay: 0.1");
       expect(story.options.linedelay).toBe(0.1);
     });
 
     it("should update options with boolean value", () => {
-      const story = { options: { debug: false } } as unknown as Parameters<typeof Tags.process>[0];
-      Tags.process(story, "debug: true");
+      const story = { options: { debug: false } } as unknown as Parameters<
+        typeof TagHandler.process
+      >[0];
+      TagHandler.process(story, "debug: true");
       expect(story.options.debug).toBe(true);
     });
 
     it("should handle unknown tag", () => {
-      const story = { options: {} } as unknown as Parameters<typeof Tags.process>[0];
-      Tags.process(story, "unknown: value");
+      const story = { options: {} } as unknown as Parameters<typeof TagHandler.process>[0];
+      TagHandler.process(story, "unknown: value");
     });
   });
 
   describe("clear", () => {
     it("should clear custom tags", () => {
-      Tags.add("custom", vi.fn());
-      Tags.clear();
-      expect(Tags.functions.has("custom")).toBe(false);
+      TagHandler.add("custom", vi.fn());
+      TagHandler.clear();
+      expect(TagHandler.handlers.has("custom")).toBe(false);
     });
 
     it("should keep default tags", () => {
-      Tags.clear();
-      expect(Tags.functions.has("clear")).toBe(true);
-      expect(Tags.functions.has("restart")).toBe(true);
+      TagHandler.clear();
+      expect(TagHandler.handlers.has("clear")).toBe(true);
+      expect(TagHandler.handlers.has("restart")).toBe(true);
     });
   });
 });
