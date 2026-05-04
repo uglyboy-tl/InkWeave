@@ -1,5 +1,5 @@
 import type { Plugin } from "@inkweave/core";
-import { Events, type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
+import { Events, type FileHandler, type InkStory, Patches, TagHandler } from "@inkweave/core";
 import { create } from "zustand";
 import { AudioController } from "./AudioController";
 
@@ -28,7 +28,7 @@ export const audioPlugin: Plugin = {
   onLoad: () => {
     // 在这里不能直接访问ink实例，因为onLoad没有参数
     // 我们需要通过标签和补丁系统来工作，它们会在运行时接收ink实例
-    Tags.add("sound", (val: string | null | undefined, ink: InkStory) => {
+    TagHandler.add("sound", (val: string | null | undefined, ink: InkStory) => {
       if (val) {
         AudioController.cleanupSound();
         AudioController.set_sound(getPath(val, ink.options.fileHandler));
@@ -37,7 +37,7 @@ export const audioPlugin: Plugin = {
       }
     });
 
-    Tags.add("music", (val: string | null | undefined, ink: InkStory) => {
+    TagHandler.add("music", (val: string | null | undefined, ink: InkStory) => {
       if (val) {
         AudioController.cleanupMusic();
         AudioController.set_music(getPath(val, ink.options.fileHandler));

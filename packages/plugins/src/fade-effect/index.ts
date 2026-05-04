@@ -1,134 +1,104 @@
-import type { ContentItem } from "@inkweave/core";
-import {
-  contentsStore,
-  createSelectors,
-  Events,
-  type InkStoryContext,
-  Patches,
-  Tags,
-} from "@inkweave/core";
+import type { ContentItem, Plugin } from "@inkweave/core";
+import { contentsStore, Events, type InkStoryContext, Patches, TagHandler } from "@inkweave/core";
 import { create } from "zustand";
-
-const options = {
-  // 控制文字显示延迟速度（秒），可通过初始化时传入 linedelay 参数修改
-  // 或在 Ink 中使用 #linedelay:0.2 动态调整
-  linedelay: 0.05,
-};
 
 type ContentComplete = {
   contentComplete: boolean;
   last_content: string;
-  setContentComplete: (contentComplete: boolean) => void;
-  setLastContent: (contents: ContentItem[]) => void;
+  setContentComplete: (v: boolean) => void;
+  setLastContent: (c: ContentItem[]) => void;
 };
 
-const useContentComplete = create<ContentComplete>((set) => ({
+export const useContentComplete = create<ContentComplete>((set) => ({
   contentComplete: false,
   last_content: "",
-  setContentComplete: (contentComplete) => set({ contentComplete }),
+  setContentComplete: (v) => set({ contentComplete: v }),
   setLastContent: (contents) => {
-    if (contents.length === 0) {
-      set({ last_content: "" });
-      return;
-    }
-    const lastItem = contents[contents.length - 1];
-    set({ last_content: lastItem?.text });
+    const lastItem = contents.length > 0 ? contents[contents.length - 1] : null;
+    set({ last_content: lastItem?.text ?? "" });
   },
 }));
 
-export { useContentComplete };
+export function createFadeEffectPlugin(
+  setupChoicesCanShow: (ink: InkStoryContext) => void,
+): Plugin {
+  const options = { linedelay: 0.05 };
 
-export const fadeEffectPlugin = {
-  id: "fade-effect",
-  name: "Fade Effect Plugin",
-  description: "Provides text fade-in effect with configurable line delay",
-  enabledByDefault: true,
-  onLoad: () => {
-    Tags.add("linedelay", (val: string | null | undefined, ink) => {
-      if (val != null) {
-        const value = parseFloat(val);
-        if (!Number.isNaN(value)) {
-          ink.options.linedelay = value;
-          if (value === 0) {
-            useContentComplete.getState().setContentComplete(true);
+  return {
+    id: "fade-effect",
+    name: "Fade Effect Plugin",
+    description: "Provides text fade-in effect with configurable line delay",
+    enabledByDefault: true,
+    onLoad: () => {
+      TagHandler.add("linedelay", (val: string | null | undefined, ink) => {
+        if (val != null) {
+          const v = parseFloat(val);
+          if (!Number.isNaN(v)) {
+            ink.options.linedelay = v;
+            if (v === 0) useContentComplete.getState().setContentComplete(true);
           }
         }
-      }
-    });
-
-    Patches.add(function (this: InkStoryContext) {
-      const originalChoose = this.choose as (index: number) => void;
-      const self = this;
-      this.choose = (index: number) => {
-        if (self.options.linedelay !== 0) {
-          useContentComplete.getState().setContentComplete(false);
-          useContentComplete.getState().setLastContent(self.contents as ContentItem[]);
-        }
-        return originalChoose.call(self, index);
-      };
-
-      // Define linedelay property that maps to options.linedelay
-      Object.defineProperty(this, "linedelay", {
-        get() {
-          return this.options.linedelay;
-        },
-        set(value: number) {
-          this.options.linedelay = value;
-        },
-        enumerable: true,
       });
 
-      // Add linedelay to save_label for persistence
-      this.save_label.push("linedelay");
-
-      Object.defineProperty(this, "visibleLines", {
-        get() {
-          const last_content = useContentComplete.getState().last_content;
-          if (!last_content) return -1;
-          const contents = self.contents as ContentItem[];
-          // 性能优化：添加空数组检查
-          if (contents.length === 0) return -1;
-          // 从后向前搜索，找到最后一个匹配的项
-          for (let i = contents.length - 1; i >= 0; i--) {
-            if (contents[i]?.text === last_content) {
-              return i;
-            }
+      Patches.add(function (this: InkStoryContext) {
+        const orig = this.choose as (i: number) => void;
+        this.choose = (i: number) => {
+          if (this.options.linedelay !== 0) {
+            useContentComplete.getState().setContentComplete(false);
+            useContentComplete.getState().setLastContent(this.contents as ContentItem[]);
           }
-          return -1;
-        },
-      });
-      Object.defineProperty(this, "choicesCanShow", {
-        get() {
-          return createSelectors(useContentComplete).use.contentComplete();
-        },
-      });
+          return orig.call(this, i);
+        };
 
-      let timer: ReturnType<typeof setTimeout> | null = null;
-      const unsub = contentsStore.subscribe(() => {
-        if (timer) clearTimeout(timer);
-        if (self.options.linedelay === 0) {
-          useContentComplete.getState().setContentComplete(true);
-          return;
-        }
-        const visible = self.visibleLines as number;
-        const delayLines = visible >= 0 ? (self.contents as ContentItem[]).length - visible : 0;
-        timer = setTimeout(
-          () => {
-            useContentComplete.getState().setContentComplete(true);
+        Object.defineProperty(this, "linedelay", {
+          get() {
+            return this.options.linedelay;
           },
-          Math.max(0, delayLines * (self.options.linedelay as number) * 1000),
-        );
-      });
+          set(v: number) {
+            this.options.linedelay = v;
+          },
+          enumerable: true,
+        });
+        this.save_label.push("linedelay");
 
-      this.eventEmitter.on(Events.STORY_DISPOSE, () => {
-        unsub();
-        if (timer) clearTimeout(timer);
-      });
+        Object.defineProperty(this, "visibleLines", {
+          get() {
+            const last = useContentComplete.getState().last_content;
+            if (!last) return -1;
+            const c = this.contents as ContentItem[];
+            for (let i = c.length - 1; i >= 0; i--) {
+              if (c[i]?.text === last) return i;
+            }
+            return -1;
+          },
+        });
 
-      this.eventEmitter.on(Events.STORY_CLEARED, () => {
-        if (self.options.linedelay !== 0) useContentComplete.getState().setContentComplete(false);
-        useContentComplete.getState().setLastContent([]);
-      });
-    }, options);
-  },
-};
+        setupChoicesCanShow(this);
+
+        let timer: ReturnType<typeof setTimeout> | null = null;
+        const unsub = contentsStore.subscribe(() => {
+          if (timer) clearTimeout(timer);
+          if (this.options.linedelay === 0) {
+            useContentComplete.getState().setContentComplete(true);
+            return;
+          }
+          const visible = this.visibleLines as number;
+          const lines = visible >= 0 ? (this.contents as ContentItem[]).length - visible : 0;
+          timer = setTimeout(
+            () => useContentComplete.getState().setContentComplete(true),
+            Math.max(0, lines * (this.options.linedelay as number) * 1000),
+          );
+        });
+
+        this.eventEmitter.on(Events.STORY_DISPOSE, () => {
+          unsub();
+          if (timer) clearTimeout(timer);
+        });
+        this.eventEmitter.on(Events.STORY_CLEARED, () => {
+          if (this.options.linedelay !== 0) useContentComplete.getState().setContentComplete(false);
+          useContentComplete.getState().setLastContent([]);
+        });
+      }, options);
+    },
+  };
+}

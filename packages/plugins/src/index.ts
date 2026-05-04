@@ -1,12 +1,16 @@
-export { audioPlugin } from "./audio";
-export { autoButtonPlugin } from "./auto-button";
+// Framework-agnostic plugin exports
+
+// ---- pure logic plugins ----
+export { audioPlugin, useStoryMusic } from "./audio";
 export { autoRestorePlugin } from "./auto-restore";
 export { autoSavePlugin } from "./auto-save";
-export { cdButtonPlugin } from "./cd-button";
 export { classTagPlugin } from "./class-tag";
-export { fadeEffectPlugin } from "./fade-effect";
-export { Image, imagePlugin, useStoryImage } from "./image";
+// ---- zustand stores ----
+export { useContentComplete } from "./fade-effect";
+// ---- image ----
+export { imagePlugin, useStoryImage } from "./image";
 export { linkOpenPlugin } from "./link-open";
 export type { SaveSlot } from "./memory";
-export { memory, memoryPlugin } from "./memory";
+// ---- memory ----
+export { getSlotLabelKey, isSlotReserved, memory, reserveSlot } from "./memory";
 export { scrollAfterChoicePlugin } from "./scroll-after-choice";

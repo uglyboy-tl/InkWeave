@@ -1,5 +1,4 @@
-import type { InkStory } from "@inkweave/core";
-import type { TranslationFunction } from "@inkweave/react";
+import type { InkStory, TranslationFunction } from "@inkweave/core";
 import { memo, useCallback } from "react";
 import { getSlotLabelKey, isSlotReserved, memory } from "../index";
 import type { SaveSlot } from "../storage";

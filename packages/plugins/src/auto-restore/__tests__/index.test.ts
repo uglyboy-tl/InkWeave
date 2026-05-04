@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
-import { Events, Patches, Tags } from "@inkweave/core";
+import { Events, Patches, TagHandler } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
 import type { SaveSlot } from "../../memory";
 import { memory } from "../../memory";
@@ -8,7 +8,7 @@ import { autoRestorePlugin as plugin } from "../index";
 describe("autorestore plugin", () => {
   beforeEach(() => {
     Patches.clear();
-    Tags.clear();
+    TagHandler.clear();
     vi.clearAllMocks();
   });
 

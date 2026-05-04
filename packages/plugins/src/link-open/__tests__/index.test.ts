@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, mock } from "bun:test";
-import { Tags } from "@inkweave/core";
+import { TagHandler } from "@inkweave/core";
 import { linkOpenPlugin as plugin } from "../index";
 
 describe("linkopen", () => {
   describe("load", () => {
     it("should register linkopen tag", () => {
       plugin.onLoad();
-      expect(Tags.functions.has("linkopen")).toBe(true);
+      expect(TagHandler.handlers.has("linkopen")).toBe(true);
     });
   });
 
@@ -26,8 +26,8 @@ describe("linkopen", () => {
     it("should open http URLs", () => {
       plugin.onLoad();
 
-      Tags.process(
-        {} as unknown as Parameters<typeof Tags.process>[0],
+      TagHandler.process(
+        {} as unknown as Parameters<typeof TagHandler.process>[0],
         "linkopen: http://example.com",
       );
 
@@ -37,8 +37,8 @@ describe("linkopen", () => {
     it("should open https URLs", () => {
       plugin.onLoad();
 
-      Tags.process(
-        {} as unknown as Parameters<typeof Tags.process>[0],
+      TagHandler.process(
+        {} as unknown as Parameters<typeof TagHandler.process>[0],
         "linkopen: https://example.com",
       );
 
@@ -55,8 +55,8 @@ describe("linkopen", () => {
       const originalWarn = console.warn;
       console.warn = warnSpy;
 
-      Tags.process(
-        {} as unknown as Parameters<typeof Tags.process>[0],
+      TagHandler.process(
+        {} as unknown as Parameters<typeof TagHandler.process>[0],
         "linkopen: javascript:alert(1)",
       );
 
@@ -72,7 +72,10 @@ describe("linkopen", () => {
       const originalWarn = console.warn;
       console.warn = warnSpy;
 
-      Tags.process({} as unknown as Parameters<typeof Tags.process>[0], "linkopen: not a url");
+      TagHandler.process(
+        {} as unknown as Parameters<typeof TagHandler.process>[0],
+        "linkopen: not a url",
+      );
 
       expect(mockOpen).not.toHaveBeenCalled();
       expect(warnSpy).toHaveBeenCalled();

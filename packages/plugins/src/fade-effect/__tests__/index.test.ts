@@ -1,11 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
-import { contentsStore, Patches, Tags } from "@inkweave/core";
+import { contentsStore, Patches, TagHandler } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
-import { fadeEffectPlugin as plugin, useContentComplete } from "../index";
+import { createFadeEffectPlugin, useContentComplete } from "../index";
+
+const plugin = createFadeEffectPlugin((ink) => {
+  Object.defineProperty(ink, "choicesCanShow", {
+    get() {
+      return true;
+    },
+  });
+});
 
 describe("fadeEffect", () => {
   beforeEach(() => {
-    Patches.patches = [];
+    Patches.clear();
     useContentComplete.setState({ contentComplete: true, last_content: "" });
   });
 
@@ -17,7 +25,7 @@ describe("fadeEffect", () => {
 
     it("should register linedelay tag", () => {
       plugin.onLoad();
-      expect(Tags.functions.has("linedelay")).toBe(true);
+      expect(TagHandler.handlers.has("linedelay")).toBe(true);
     });
   });
 
@@ -25,28 +33,28 @@ describe("fadeEffect", () => {
     it("should set linedelay option from tag value", () => {
       plugin.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as never, "linedelay: 0.1");
+      TagHandler.process(mockStory as never, "linedelay: 0.1");
       expect(mockStory.options.linedelay).toBe(0.1);
     });
 
     it("should handle linedelay 0", () => {
       plugin.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as never, "linedelay: 0");
+      TagHandler.process(mockStory as never, "linedelay: 0");
       expect(mockStory.options.linedelay).toBe(0);
     });
 
     it("should handle invalid linedelay value", () => {
       plugin.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as never, "linedelay: invalid");
+      TagHandler.process(mockStory as never, "linedelay: invalid");
       expect(mockStory.options.linedelay).toBeUndefined();
     });
 
     it("should handle null linedelay value", () => {
       plugin.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as never, "linedelay:");
+      TagHandler.process(mockStory as never, "linedelay:");
       expect(mockStory.options.linedelay).toBeUndefined();
     });
   });

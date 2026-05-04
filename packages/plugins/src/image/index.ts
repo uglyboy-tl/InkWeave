@@ -1,5 +1,5 @@
 import type { Plugin } from "@inkweave/core";
-import { Events, type FileHandler, type InkStory, Patches, Tags } from "@inkweave/core";
+import { Events, type FileHandler, type InkStory, Patches, TagHandler } from "@inkweave/core";
 import { create } from "zustand";
 
 declare module "@inkweave/core" {
@@ -19,9 +19,7 @@ export const useStoryImage = create<StoryImage>((set) => ({
 }));
 
 const getPath = (path: string, fileHandler?: FileHandler) => {
-  if (fileHandler?.resolveFilename) {
-    return fileHandler.resolveFilename(path);
-  }
+  if (fileHandler?.resolveFilename) return fileHandler.resolveFilename(path);
   return path;
 };
 
@@ -31,20 +29,18 @@ export const imagePlugin: Plugin = {
   description: "Provides image display functionality for ink stories",
   enabledByDefault: true,
   onLoad: () => {
-    Tags.add("image", (val: string | null | undefined, ink: InkStory) => {
+    TagHandler.add("image", (val: string | null | undefined, ink: InkStory) => {
       if (val) {
         useStoryImage.getState().setImage(getPath(val, ink.options.fileHandler));
       } else {
         useStoryImage.getState().setImage("");
       }
     });
-
     Patches.add(function () {
       Object.defineProperty(this, "image", {
         get() {
           return useStoryImage.getState().image;
         },
-
         set(path: string) {
           useStoryImage.getState().setImage(path);
         },
@@ -56,5 +52,3 @@ export const imagePlugin: Plugin = {
     }, {});
   },
 };
-
-export { default as Image } from "./Image";

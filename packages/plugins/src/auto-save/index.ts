@@ -1,6 +1,5 @@
 import type { InkStory, Plugin } from "@inkweave/core";
-import { Tags } from "@inkweave/core";
-import { Commands } from "@inkweave/react";
+import { CommandRegistry, TagHandler } from "@inkweave/core";
 import { memory, reserveSlot } from "../memory";
 
 export const autoSavePlugin: Plugin = {
@@ -9,11 +8,11 @@ export const autoSavePlugin: Plugin = {
   description: "Automatically saves game state when autosave tag is encountered",
   enabledByDefault: true,
   onLoad: () => {
-    Tags.add("autosave", (_: string | null | undefined, ink: InkStory) => {
+    TagHandler.add("autosave", (_: string | null | undefined, ink: InkStory) => {
       memory.save(1, ink);
     });
     reserveSlot(1, "modal_slot_auto");
-    Commands.addTranslations({ modal_slot_auto: "Auto-Save" });
+    CommandRegistry.addTranslations({ modal_slot_auto: "Auto-Save" });
   },
   dependencies: ["memory"],
 };

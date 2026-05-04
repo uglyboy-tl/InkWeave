@@ -1,5 +1,5 @@
 import type { Plugin } from "@inkweave/core";
-import { Tags } from "@inkweave/core";
+import { TagHandler } from "@inkweave/core";
 
 const ALLOWED_PROTOCOLS = ["http:", "https:"];
 
@@ -9,7 +9,7 @@ export const linkOpenPlugin: Plugin = {
   description: "Provides functionality to open links from ink stories",
   enabledByDefault: true,
   onLoad: () => {
-    Tags.add("linkopen", (val: string | null | undefined) => {
+    TagHandler.add("linkopen", (val: string | null | undefined) => {
       if (!val) return;
       let url: URL;
       try {

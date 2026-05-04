@@ -1,23 +1,21 @@
-import type { Plugin } from "@inkweave/core";
-import { ChoiceParser, Patches } from "@inkweave/core";
-import { ChoiceRegistry } from "@inkweave/react";
-import CooldownChoice from "./CdButton";
+import type { ChoiceRenderer, Plugin } from "@inkweave/core";
+import { ChoiceHandler, Patches } from "@inkweave/core";
 
-const options = {
-  cdTemplate: "{text} ({time})",
-};
+export function createCdButtonPlugin(choiceRenderer: ChoiceRenderer, component: unknown): Plugin {
+  const options = { cdTemplate: "{text} ({time})" };
 
-export const cdButtonPlugin: Plugin = {
-  id: "cd-button",
-  name: "Cooldown Button Plugin",
-  description: "Provides cooldown choice button functionality for ink stories",
-  enabledByDefault: true,
-  onLoad: () => {
-    ChoiceParser.add("cd", (new_choice, val) => {
-      new_choice.type = "cd";
-      new_choice.val = val;
-    });
-    ChoiceRegistry.register("cd", CooldownChoice);
-    Patches.add(null, options);
-  },
-};
+  return {
+    id: "cd-button",
+    name: "Cooldown Button Plugin",
+    description: "Provides cooldown choice button functionality for ink stories",
+    enabledByDefault: true,
+    onLoad: () => {
+      ChoiceHandler.add("cd", (choice, val) => {
+        choice.type = "cd";
+        choice.val = val;
+      });
+      choiceRenderer.register("cd", component);
+      Patches.add(null, options);
+    },
+  };
+}

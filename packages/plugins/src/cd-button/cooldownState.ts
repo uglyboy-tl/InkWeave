@@ -1,5 +1,4 @@
-// 存储所有 cd 按钮的冷却状态
-const cooldownStates = new Map<string, number>();
+export const cooldownStates = new Map<string, number>();
 
 export function getCooldownKey(choice: { type: string; text: string; val?: string }): string {
   return `${choice.type}_${choice.text}_${choice.val || ""}`;

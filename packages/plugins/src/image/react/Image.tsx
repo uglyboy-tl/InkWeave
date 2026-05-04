@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { useStoryImage } from "./index";
-import styles from "./styles.module.css";
+import { useStoryImage } from "../index";
+import styles from "./Image.module.css";
 
 interface ImageProps {
   className?: string;

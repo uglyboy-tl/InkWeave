@@ -1,19 +1,19 @@
-import type { Plugin } from "@inkweave/core";
-import { ChoiceParser, Patches } from "@inkweave/core";
-import { ChoiceRegistry } from "@inkweave/react";
-import AutoChoice from "./AutoButton";
+import type { ChoiceRenderer, Plugin } from "@inkweave/core";
+import { ChoiceHandler, Patches } from "@inkweave/core";
 
-export const autoButtonPlugin: Plugin = {
-  id: "auto-button",
-  name: "Auto Button Plugin",
-  description: "Provides auto choice button functionality for ink stories",
-  enabledByDefault: true,
-  onLoad: () => {
-    ChoiceParser.add("auto", (new_choice, val) => {
-      new_choice.type = "auto";
-      new_choice.val = val;
-    });
-    ChoiceRegistry.register("auto", AutoChoice);
-    Patches.add(null, {});
-  },
-};
+export function createAutoButtonPlugin(choiceRenderer: ChoiceRenderer, component: unknown): Plugin {
+  return {
+    id: "auto-button",
+    name: "Auto Button Plugin",
+    description: "Provides auto choice button functionality for ink stories",
+    enabledByDefault: true,
+    onLoad: () => {
+      ChoiceHandler.add("auto", (choice, val) => {
+        choice.type = "auto";
+        choice.val = val;
+      });
+      choiceRenderer.register("auto", component);
+      Patches.add(null, {});
+    },
+  };
+}

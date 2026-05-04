@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { useStoryImage } from "../../index";
 import Image from "../Image";
-import { useStoryImage } from "../index";
 
 describe("Image", () => {
   beforeEach(() => {

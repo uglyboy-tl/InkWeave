@@ -6,7 +6,7 @@ import {
   getRemainingSeconds,
   isCooldownActive,
   setCooldown,
-} from "./cooldownState";
+} from "../cooldownState";
 
 const CooldownChoice: React.FC<ChoiceComponentProps> = ({
   choice,

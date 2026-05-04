@@ -1,18 +1,18 @@
 import { beforeEach, describe, expect, it, mock } from "bun:test";
-import { Patches, Tags } from "@inkweave/core";
+import { Patches, TagHandler } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
 import { imagePlugin as load, useStoryImage } from "../index";
 
 describe("image", () => {
   beforeEach(() => {
-    Patches.patches = [];
+    Patches.clear();
     useStoryImage.getState().setImage("");
   });
 
   describe("load", () => {
     it("should register image tag", () => {
       load.onLoad();
-      expect(Tags.functions.has("image")).toBe(true);
+      expect(TagHandler.handlers.has("image")).toBe(true);
     });
 
     it("should register patch", () => {
@@ -48,14 +48,20 @@ describe("image", () => {
       const mockStory = createMockStory({
         options: { fileHandler: mockFileHandler },
       });
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "image: test.png");
+      TagHandler.process(
+        mockStory as unknown as Parameters<typeof TagHandler.process>[0],
+        "image: test.png",
+      );
       expect(useStoryImage.getState().image).toBe("/base/test.png");
     });
 
     it("should handle path without fileHandler", () => {
       load.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "image: test.png");
+      TagHandler.process(
+        mockStory as unknown as Parameters<typeof TagHandler.process>[0],
+        "image: test.png",
+      );
       expect(useStoryImage.getState().image).toBe("test.png");
     });
 
@@ -63,7 +69,7 @@ describe("image", () => {
       load.onLoad();
       useStoryImage.getState().setImage("existing.png");
       const mockStory = createMockStory();
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "image");
+      TagHandler.process(mockStory as unknown as Parameters<typeof TagHandler.process>[0], "image");
       expect(useStoryImage.getState().image).toBe("");
     });
   });

@@ -6,10 +6,13 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
-      name: "InkWeavePlugins",
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+        "react/index": resolve(__dirname, "src/react/index.ts"),
+      },
       formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
+      fileName: (format, entryName) =>
+        `${entryName}.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: [

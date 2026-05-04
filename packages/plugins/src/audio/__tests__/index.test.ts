@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, mock, vi } from "bun:test";
-import { Patches, Tags } from "@inkweave/core";
+import { Patches, TagHandler } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
 import { AudioController } from "../AudioController";
 import { audioPlugin as load } from "../index";
@@ -8,18 +8,18 @@ describe("audio", () => {
   beforeEach(() => {
     AudioController.cleanupSound();
     AudioController.cleanupMusic();
-    Patches.patches = [];
+    Patches.clear();
   });
 
   describe("load", () => {
     it("should register sound tag", () => {
       load.onLoad();
-      expect(Tags.functions.has("sound")).toBe(true);
+      expect(TagHandler.handlers.has("sound")).toBe(true);
     });
 
     it("should register music tag", () => {
       load.onLoad();
-      expect(Tags.functions.has("music")).toBe(true);
+      expect(TagHandler.handlers.has("music")).toBe(true);
     });
 
     it("should register patch", () => {
@@ -109,13 +109,13 @@ describe("audio", () => {
     it("should process sound tag with null", () => {
       load.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound");
+      TagHandler.process(mockStory as unknown as Parameters<typeof TagHandler.process>[0], "sound");
     });
 
     it("should process music tag with null", () => {
       load.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "music");
+      TagHandler.process(mockStory as unknown as Parameters<typeof TagHandler.process>[0], "music");
     });
   });
 
@@ -129,7 +129,10 @@ describe("audio", () => {
       const mockStory = createMockStory({
         options: { fileHandler: mockFileHandler },
       });
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound: click.mp3");
+      TagHandler.process(
+        mockStory as unknown as Parameters<typeof TagHandler.process>[0],
+        "sound: click.mp3",
+      );
       expect(mockFileHandler.resolveFilename).toHaveBeenCalledWith("click.mp3");
     });
 
@@ -142,14 +145,20 @@ describe("audio", () => {
       const mockStory = createMockStory({
         options: { fileHandler: mockFileHandler },
       });
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "music: bgm.mp3");
+      TagHandler.process(
+        mockStory as unknown as Parameters<typeof TagHandler.process>[0],
+        "music: bgm.mp3",
+      );
       expect(mockFileHandler.resolveFilename).toHaveBeenCalledWith("bgm.mp3");
     });
 
     it("should handle path without fileHandler", () => {
       load.onLoad();
       const mockStory = createMockStory();
-      Tags.process(mockStory as unknown as Parameters<typeof Tags.process>[0], "sound: click.mp3");
+      TagHandler.process(
+        mockStory as unknown as Parameters<typeof TagHandler.process>[0],
+        "sound: click.mp3",
+      );
     });
   });
 
