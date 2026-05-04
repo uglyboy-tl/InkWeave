@@ -1,4 +1,4 @@
-import { Plugins } from "@inkweave/core";
+import { PluginRegistry } from "@inkweave/core";
 import {
   audioPlugin,
   autoButtonPlugin,
@@ -11,22 +11,22 @@ import {
   linkOpenPlugin,
   memoryPlugin,
   scrollAfterChoicePlugin,
-} from "@inkweave/plugins";
+} from "@inkweave/plugins/react";
 
 export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
-  Plugins.register(imagePlugin);
-  Plugins.register(audioPlugin);
-  Plugins.register(autoRestorePlugin);
-  Plugins.register(autoSavePlugin);
-  Plugins.register(fadeEffectPlugin);
-  Plugins.register(scrollAfterChoicePlugin);
-  Plugins.register(linkOpenPlugin);
-  Plugins.register(memoryPlugin);
-  Plugins.register(autoButtonPlugin);
-  Plugins.register(cdButtonPlugin);
-  Plugins.register(classTagPlugin);
+  PluginRegistry.register(imagePlugin);
+  PluginRegistry.register(audioPlugin);
+  PluginRegistry.register(autoRestorePlugin);
+  PluginRegistry.register(autoSavePlugin);
+  PluginRegistry.register(fadeEffectPlugin);
+  PluginRegistry.register(scrollAfterChoicePlugin);
+  PluginRegistry.register(linkOpenPlugin);
+  PluginRegistry.register(memoryPlugin);
+  PluginRegistry.register(autoButtonPlugin);
+  PluginRegistry.register(cdButtonPlugin);
+  PluginRegistry.register(classTagPlugin);
 
   if (pluginConfig) {
-    Plugins.setPluginsEnabled(pluginConfig);
+    PluginRegistry.setEnabled(pluginConfig);
   }
 };

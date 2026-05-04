@@ -1,5 +1,4 @@
-import { createInkStory, type ErrorHandler } from "@inkweave/core";
-import type { TranslationFunction } from "@inkweave/react";
+import { createInkStory, type ErrorHandler, type TranslationFunction } from "@inkweave/core";
 import type { Root } from "react-dom/client";
 import { createRoot } from "react-dom/client";
 import pkg from "../package.json";

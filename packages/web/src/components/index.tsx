@@ -1,6 +1,5 @@
-import type { InkStory } from "@inkweave/core";
-import { Image } from "@inkweave/plugins";
-import type { TranslationFunction } from "@inkweave/react";
+import type { InkStory, TranslationFunction } from "@inkweave/core";
+import { Image } from "@inkweave/plugins/react";
 import { CommandBar, Story } from "@inkweave/react";
 import { StrictMode } from "react";
 import type { Root } from "react-dom/client";

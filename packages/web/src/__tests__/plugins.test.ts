@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { createInkStory, Patches, Plugins } from "@inkweave/core";
+import { createInkStory, Patches, PluginRegistry } from "@inkweave/core";
 import {
   audioPlugin,
   autoRestorePlugin,
@@ -7,67 +7,52 @@ import {
   imagePlugin,
   linkOpenPlugin,
   scrollAfterChoicePlugin,
-} from "@inkweave/plugins";
+} from "@inkweave/plugins/react";
 import { initPlugins } from "../utils/plugins";
 
-describe("Plugins configuration", () => {
+describe("PluginRegistry configuration", () => {
   it("should load only enabled plugins when configuration is provided", () => {
-    // Clear existing state
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._plugins.clear();
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._pluginsEnabled = {};
+    PluginRegistry.clear();
     Patches.clear();
 
-    // Register plugins
-    Plugins.register(imagePlugin);
-    Plugins.register(audioPlugin);
-    Plugins.register(autoRestorePlugin);
-    Plugins.register(fadeEffectPlugin);
-    Plugins.register(scrollAfterChoicePlugin);
-    Plugins.register(linkOpenPlugin);
+    PluginRegistry.register(imagePlugin);
+    PluginRegistry.register(audioPlugin);
+    PluginRegistry.register(autoRestorePlugin);
+    PluginRegistry.register(fadeEffectPlugin);
+    PluginRegistry.register(scrollAfterChoicePlugin);
+    PluginRegistry.register(linkOpenPlugin);
 
-    // Configure plugins
-    Plugins.setPluginsEnabled({
-      image: false, // disable image plugin
-      audio: true, // enable audio plugin
-      "auto-restore": false, // disable auto-restore plugin
-      "fade-effect": true, // enable fade-effect plugin
+    PluginRegistry.setEnabled({
+      image: false,
+      audio: true,
+      "auto-restore": false,
+      "fade-effect": true,
     });
 
     const ink = createInkStory("");
-    const loadedPlugins = ink.plugins.getLoadedPlugins().sort();
+    const loadedPlugins = ink.pluginLoader.loadedIds.sort();
 
-    // Expected: audio, fade-effect, scroll-after-choice, link-open
-    // NOT loaded: image, auto-restore
     const expectedPlugins = ["audio", "fade-effect", "link-open", "scroll-after-choice"].sort();
 
     expect(loadedPlugins).toEqual(expectedPlugins);
 
-    // Clean up
     ink.dispose();
   });
 
   it("should load all plugins when no configuration is provided", () => {
-    // Clear existing state
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._plugins.clear();
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._pluginsEnabled = {};
+    PluginRegistry.clear();
     Patches.clear();
 
-    // Register plugins
-    Plugins.register(imagePlugin);
-    Plugins.register(audioPlugin);
-    Plugins.register(autoRestorePlugin);
-    Plugins.register(fadeEffectPlugin);
-    Plugins.register(scrollAfterChoicePlugin);
-    Plugins.register(linkOpenPlugin);
+    PluginRegistry.register(imagePlugin);
+    PluginRegistry.register(audioPlugin);
+    PluginRegistry.register(autoRestorePlugin);
+    PluginRegistry.register(fadeEffectPlugin);
+    PluginRegistry.register(scrollAfterChoicePlugin);
+    PluginRegistry.register(linkOpenPlugin);
 
     const ink = createInkStory("");
-    const loadedPlugins = ink.plugins.getLoadedPlugins().sort();
+    const loadedPlugins = ink.pluginLoader.loadedIds.sort();
 
-    // All plugins have enabledByDefault: true
     const expectedPlugins = [
       "audio",
       "auto-restore",
@@ -79,71 +64,54 @@ describe("Plugins configuration", () => {
 
     expect(loadedPlugins).toEqual(expectedPlugins);
 
-    // Clean up
     ink.dispose();
   });
 
   it("should handle partial configuration correctly", () => {
-    // Clear existing state
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._plugins.clear();
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._pluginsEnabled = {};
+    PluginRegistry.clear();
     Patches.clear();
 
-    // Register plugins
-    Plugins.register(imagePlugin);
-    Plugins.register(audioPlugin);
-    Plugins.register(autoRestorePlugin);
-    Plugins.register(fadeEffectPlugin);
+    PluginRegistry.register(imagePlugin);
+    PluginRegistry.register(audioPlugin);
+    PluginRegistry.register(autoRestorePlugin);
+    PluginRegistry.register(fadeEffectPlugin);
 
-    // Only configure one plugin
-    Plugins.setPluginsEnabled({
+    PluginRegistry.setEnabled({
       image: false,
     });
 
     const ink = createInkStory("");
-    const loadedPlugins = ink.plugins.getLoadedPlugins().sort();
+    const loadedPlugins = ink.pluginLoader.loadedIds.sort();
 
-    // All plugins except 'image' should be loaded
     const expectedPlugins = ["audio", "auto-restore", "fade-effect"].sort();
 
     expect(loadedPlugins).toEqual(expectedPlugins);
 
-    // Clean up
     ink.dispose();
   });
 
   it("should work with initPlugins function as used in web initialization", () => {
-    // Clear existing state
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._plugins.clear();
-    // biome-ignore lint/suspicious/noExplicitAny: Testing private members
-    (Plugins as any)._pluginsEnabled = {};
+    PluginRegistry.clear();
     Patches.clear();
 
-    // Use the actual initPlugins function that web uses
     const config = {
-      image: false, // disable image plugin
-      audio: true, // enable audio plugin
-      "auto-restore": false, // disable auto-restore plugin
-      "fade-effect": false, // disable fade-effect plugin
+      image: false,
+      audio: true,
+      "auto-restore": false,
+      "fade-effect": false,
     };
 
     initPlugins(config);
 
     const ink = createInkStory("");
-    const loadedPlugins = ink.plugins.getLoadedPlugins();
+    const loadedPlugins = ink.pluginLoader.loadedIds;
 
-    // Verify explicitly enabled plugins are in the loaded list
     expect(loadedPlugins).toContain("audio");
 
-    // Verify explicitly disabled plugins are NOT in the loaded list
     expect(loadedPlugins).not.toContain("image");
     expect(loadedPlugins).not.toContain("auto-restore");
     expect(loadedPlugins).not.toContain("fade-effect");
 
-    // Clean up
     ink.dispose();
   });
 });
