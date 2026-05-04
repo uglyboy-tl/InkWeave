@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - TURNS query", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/turns-query.ink");
+    await gotoFixture(page, "story=syntax/turns-query.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

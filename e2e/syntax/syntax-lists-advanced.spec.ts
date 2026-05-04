@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - advanced list operations", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/lists-advanced.ink");
+    await gotoFixture(page, "story=syntax/lists-advanced.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

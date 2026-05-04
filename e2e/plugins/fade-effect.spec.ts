@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("Fade Effect Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=plugins/fade-effect.ink&plugins=fade-effect");
+    await gotoFixture(page, "story=plugins/fade-effect.ink&plugins=fade-effect");
     await page.waitForSelector("#inkweave-story");
   });
 

@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("Class Tag Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=plugins/class-tag.ink&plugins=class-tag");
+    await gotoFixture(page, "story=plugins/class-tag.ink&plugins=class-tag");
     await page.waitForSelector("#inkweave-story");
   });
 

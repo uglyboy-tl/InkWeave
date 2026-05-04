@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unified E2E Test Fixture</title>
-  <link rel="stylesheet" href="../../packages/web/dist/inkweave.min.css">
+  <link id="framework-css" rel="stylesheet" href="">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,7 +17,6 @@
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    /* Class Tag Plugin Styles */
     .highlight { color: red; font-weight: bold; }
     .bold { font-weight: bold; }
     .italic { font-style: italic; }
@@ -26,75 +25,66 @@
 </head>
 <body>
   <div id="app"></div>
-
-  <script src="../../packages/web/dist/inkweave.min.js"></script>
   <script>
-    // Parse URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const storyPath = urlParams.get('story') || 'default.ink';
-    const pluginsParam = urlParams.get('plugins') || '';
+    var urlParams = new URLSearchParams(window.location.search);
+    var framework = urlParams.get('framework') || 'react';
+    var storyPath = urlParams.get('story') || 'default.ink';
+    var pluginsParam = urlParams.get('plugins') || '';
 
-    // Default plugin configuration (all disabled)
-    const defaultPlugins = {
-      'auto-button': false,
-      'cd-button': false,
-      'image': false,
-      'audio': false,
-      'auto-restore': false,
-      'auto-save': false,
-      'fade-effect': false,
-      'scroll-after-choice': false,
-      'link-open': false,
-      'memory': false,
-      'class-tag': false
-    };
+    var base = framework === 'svelte'
+      ? '../../packages/web-svelte'
+      : '../../packages/web';
 
-    // Parse plugins parameter (comma-separated list of enabled plugins)
-    const pluginsConfig = { ...defaultPlugins };
-    if (pluginsParam) {
-      if (pluginsParam === 'all') {
-        // Enable all plugins
-        Object.keys(pluginsConfig).forEach(plugin => {
-          pluginsConfig[plugin] = true;
-        });
-      } else {
-        const enabledPlugins = pluginsParam.split(',').map(p => p.trim());
-        enabledPlugins.forEach(plugin => {
-          if (Object.hasOwn(pluginsConfig, plugin)) {
-            pluginsConfig[plugin] = true;
-          }
-        });
-      }
+    document.getElementById('framework-css').setAttribute('href', base + '/dist/inkweave.min.css');
+
+    function loadScript(src, onLoad) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = onLoad;
+      document.head.appendChild(s);
     }
 
-    // Validate storyPath to prevent path traversal and ensure it's a .ink file
-    if (!storyPath.match(/^[a-zA-Z0-9\-_/.]+\.ink$/) || storyPath.includes('..')) {
-      throw new Error('Invalid story path: must be a .ink file in fixtures directory');
-    }
+    function initApp() {
+      var defaultPlugins = {
+        'auto-button': false, 'cd-button': false, 'image': false,
+        'audio': false, 'auto-restore': false, 'auto-save': false,
+        'fade-effect': false, 'scroll-after-choice': false,
+        'link-open': false, 'memory': false, 'class-tag': false
+      };
 
-    // Fetch the ink file content
-    fetch(storyPath)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Failed to load story file: ${storyPath}`);
+      var pluginsConfig = {};
+      for (var key in defaultPlugins) { pluginsConfig[key] = defaultPlugins[key]; }
+      if (pluginsParam) {
+        if (pluginsParam === 'all') {
+          for (var k in pluginsConfig) { pluginsConfig[k] = true; }
+        } else {
+          var enabled = pluginsParam.split(',').map(function(p) { return p.trim(); });
+          enabled.forEach(function(p) {
+            if (Object.hasOwn(pluginsConfig, p)) pluginsConfig[p] = true;
+          });
         }
-        return response.text();
-      })
-      .then(storyContent => {
-        InkWeave.init({
-          container: '#app',
-          story: storyContent,
-          plugins: pluginsConfig
+      }
+
+      if (!storyPath.match(/^[a-zA-Z0-9\-_/.]+\.ink$/) || storyPath.indexOf('..') !== -1) {
+        throw new Error('Invalid story path');
+      }
+
+      fetch(storyPath)
+        .then(function(response) {
+          if (!response.ok) throw new Error('Failed to load: ' + storyPath);
+          return response.text();
+        })
+        .then(function(storyContent) {
+          InkWeave.init({ container: '#app', story: storyContent, plugins: pluginsConfig });
+        })
+        .catch(function(error) {
+          console.error(error);
+          var el = document.getElementById('app');
+          if (el) el.textContent = 'Error: ' + error.message;
         });
-      })
-      .catch(error => {
-        console.error('Error loading story:', error);
-        const errorDiv = document.createElement('div');
-        errorDiv.style.color = 'red';
-        errorDiv.style.padding = '20px';
-        errorDiv.textContent = `Error: ${error.message}`;
-        document.getElementById('app').appendChild(errorDiv);
-      });
+    }
+
+    loadScript(base + '/dist/inkweave.min.js', initApp);
   </script>
 </body>
 </html>

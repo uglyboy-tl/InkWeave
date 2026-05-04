@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - fallback choices", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/fallback.ink");
+    await gotoFixture(page, "story=syntax/fallback.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

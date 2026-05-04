@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - weave gathers", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/weave-gather.ink");
+    await gotoFixture(page, "story=syntax/weave-gather.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - international characters", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/international-chars.ink");
+    await gotoFixture(page, "story=syntax/international-chars.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

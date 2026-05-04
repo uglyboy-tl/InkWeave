@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - conditional blocks", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/conditional-blocks.ink");
+    await gotoFixture(page, "story=syntax/conditional-blocks.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

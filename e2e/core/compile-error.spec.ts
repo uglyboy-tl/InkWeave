@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("compile error handling", () => {
   test("should show error in console and not render story container when story has syntax errors", async ({
@@ -19,7 +20,7 @@ test.describe("compile error handling", () => {
       pageErrors.push(err.toString());
     });
 
-    await page.goto("/e2e/fixtures/index.html?story=core/compile-error.ink");
+    await gotoFixture(page, "story=core/compile-error.ink");
 
     // Wait a bit for potential errors to appear
     await page.waitForTimeout(1000);

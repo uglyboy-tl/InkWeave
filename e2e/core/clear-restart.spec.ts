@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("clear and restart tags", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=core/clear-restart.ink");
+    await gotoFixture(page, "story=core/clear-restart.ink");
   });
 
   test("clear tag should clear previous content", async ({ page }) => {

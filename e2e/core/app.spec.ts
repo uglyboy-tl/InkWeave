@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("modal functionality", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=core/basic.ink&plugins=memory");
+    await gotoFixture(page, "story=core/basic.ink&plugins=memory");
   });
 
   test("save modal opens and closes", async ({ page }) => {

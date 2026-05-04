@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - list invert and all", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/lists-invert-all.ink");
+    await gotoFixture(page, "story=syntax/lists-invert-all.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("Memory Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=plugins/memory.ink&plugins=memory");
+    await gotoFixture(page, "story=plugins/memory.ink&plugins=memory");
     await page.waitForSelector("#inkweave-story");
   });
 

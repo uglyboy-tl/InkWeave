@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("ink syntax - temp variables and constants", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=syntax/temp-constants.ink");
+    await gotoFixture(page, "story=syntax/temp-constants.ink");
     await page.waitForSelector("#inkweave-story");
   });
 

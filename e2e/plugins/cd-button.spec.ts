@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("CD Button Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/e2e/fixtures/index.html?story=plugins/cd-button.ink&plugins=cd-button");
+    await gotoFixture(page, "story=plugins/cd-button.ink&plugins=cd-button");
     await page.waitForSelector("#inkweave-story");
   });
 
