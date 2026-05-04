@@ -1,4 +1,4 @@
-import type { Choice, InkStory } from "@inkweave/core";
+import type { Choice, InkStory, TranslationFunction } from "@inkweave/core";
 import type { FC } from "react";
 
 export interface ChoiceComponentProps {
@@ -9,25 +9,6 @@ export interface ChoiceComponentProps {
 }
 
 export type ChoiceComponent = FC<ChoiceComponentProps>;
-
-export type TranslationFunction = (content: string | undefined) => string | undefined;
-
-export interface ModalContentProps {
-  ink: InkStory;
-  onClose: () => void;
-  t: TranslationFunction;
-}
-
-export interface Command {
-  id: string;
-  name: string;
-  priority?: number; // 越小越靠前，默认为0
-  description?: string;
-  title?: string;
-  icon?: string;
-  handler: (ink: InkStory) => void | Promise<void>;
-  getModalContent?: (props: ModalContentProps) => React.ReactNode;
-}
 
 export interface CommandButtonProps {
   commandId: string;

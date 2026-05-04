@@ -1,5 +1,6 @@
+import { CommandRegistry } from "@inkweave/core";
+import type { ReactNode } from "react";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Commands } from "../../commands";
 import type { CommandBarProps } from "../../types";
 import CommandButton from "./CommandButton";
 import { t as default_t } from "./i18n";
@@ -67,22 +68,22 @@ const CommandBar = ({
     };
   }, [modalId]);
 
-  const getModalContent = () => {
+  const getModalContent = (): ReactNode => {
     if (!modalId) return null;
-    const command = Commands.get(modalId);
+    const command = CommandRegistry.get(modalId);
     if (command?.getModalContent) {
       return command.getModalContent({
         ink,
         onClose: closeModal,
         t,
-      });
+      }) as ReactNode;
     }
     return null;
   };
 
   const sortedButtons = useMemo(
     () =>
-      Commands.getAll()
+      CommandRegistry.getAll()
         .sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))
         .map((command) => (
           <CommandButton
@@ -99,7 +100,7 @@ const CommandBar = ({
 
   const modalTitle = useMemo(() => {
     if (!modalId) return "Command";
-    const command = Commands.get(modalId);
+    const command = CommandRegistry.get(modalId);
     return t(command?.title) ?? "Command";
   }, [modalId, t]);
 

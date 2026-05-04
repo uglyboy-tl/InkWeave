@@ -1,5 +1,5 @@
+import { CommandRegistry } from "@inkweave/core";
 import { memo, useCallback } from "react";
-import { Commands } from "../../commands";
 import type { CommandButtonProps } from "../../types";
 
 const CommandButton: React.FC<CommandButtonProps> = ({
@@ -9,7 +9,7 @@ const CommandButton: React.FC<CommandButtonProps> = ({
   onRequestOpenModal,
   t,
 }) => {
-  const command = Commands.get(commandId);
+  const command = CommandRegistry.get(commandId);
 
   const handleClick = useCallback(() => {
     if (!command) return;
@@ -19,7 +19,7 @@ const CommandButton: React.FC<CommandButtonProps> = ({
       onRequestOpenModal(commandId);
     } else {
       // Execute default handler
-      Commands.execute(commandId, ink);
+      CommandRegistry.execute(commandId, ink);
     }
   }, [commandId, ink, command, onRequestOpenModal]);
 

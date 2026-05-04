@@ -1,7 +1,7 @@
-import { Commands } from "../../commands";
-import type { TranslationFunction } from "../../types";
+import type { TranslationFunction } from "@inkweave/core";
+import { CommandRegistry } from "@inkweave/core";
 
 export const t: TranslationFunction = (key) => {
   if (!key) return undefined;
-  return Commands.getTranslations(key) ?? key;
+  return CommandRegistry.getTranslation(key) ?? key;
 };
