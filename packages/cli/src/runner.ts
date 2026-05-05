@@ -13,8 +13,10 @@ function resolveDelay(value: unknown, defaultMs: number): number {
 }
 
 function getNewContents(contents: ContentItem[]): ContentItem[] {
-  const i = contents.findLastIndex((item) => item.text === CHOICE_SEPARATOR);
-  return i === -1 ? contents : contents.slice(i + 1);
+  for (let i = contents.length - 1; i >= 0; i--) {
+    if (contents[i]?.text === CHOICE_SEPARATOR) return contents.slice(i + 1);
+  }
+  return contents;
 }
 
 export async function runStory(story: InkStory): Promise<void> {
