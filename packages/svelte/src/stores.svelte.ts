@@ -2,12 +2,8 @@ import type { Choice, ContentItem } from "@inkweave/core";
 import { choicesStore, contentsStore } from "@inkweave/core";
 
 /**
- * 标准 zustand → Svelte $state 桥接工具。
- * 自动处理初始同步 + 持续订阅，避免手动同步导致的初始值不一致问题。
- *
- * 使用示例：
- *   const state = syncZustand(someStore, s => s.someField);
- *   // state.value 始终与 zustand 同步，初始值来自 store.getState()
+ * Standard zustand → Svelte $state bridge.
+ * Automatically handles initial sync + subscription, avoiding manual sync issues.
  */
 export function syncZustand<T, U>(
   store: { getState: () => T; subscribe: (fn: (s: T) => void) => () => void },
