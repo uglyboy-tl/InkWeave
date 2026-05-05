@@ -20,6 +20,6 @@ onMount(() => {
 });
 </script>
 
-<button type="button" class={className} style="display: none" aria-hidden="true">
+<a href="#" class={className} style="display: none" aria-hidden="true">
   {choice.text}
-</button>
+</a>

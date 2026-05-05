@@ -74,6 +74,15 @@ export const fadeEffectPlugin = createFadeEffectPlugin((ink) => {
   const choicesCanShow = useChoicesCanShow();
   const lineDelay = useLineDelay();
 
+  // Make ink.choicesCanShow reactive by using a Svelte store
+  Object.defineProperty(ink, "choicesCanShow", {
+    get() {
+      return choicesCanShow.value;
+    },
+  });
+
+  choicesCanShow.value = useContentComplete.getState().contentComplete;
+
   useContentComplete.subscribe((state) => {
     choicesCanShow.value = state.contentComplete;
   });

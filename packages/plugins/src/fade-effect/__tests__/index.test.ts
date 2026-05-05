@@ -33,6 +33,8 @@ describe("fadeEffect", () => {
     it("should set linedelay option from tag value", () => {
       plugin.onLoad();
       const mockStory = createMockStory();
+      const patch = Patches.patches[0];
+      patch?.call(mockStory as never, "");
       TagHandler.process(mockStory as never, "linedelay: 0.1");
       expect(mockStory.options.linedelay).toBe(0.1);
     });
@@ -40,6 +42,8 @@ describe("fadeEffect", () => {
     it("should handle linedelay 0", () => {
       plugin.onLoad();
       const mockStory = createMockStory();
+      const patch = Patches.patches[0];
+      patch?.call(mockStory as never, "");
       TagHandler.process(mockStory as never, "linedelay: 0");
       expect(mockStory.options.linedelay).toBe(0);
     });

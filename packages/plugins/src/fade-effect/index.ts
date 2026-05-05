@@ -34,7 +34,7 @@ export function createFadeEffectPlugin(
         if (val != null) {
           const v = parseFloat(val);
           if (!Number.isNaN(v)) {
-            ink.options.linedelay = v;
+            ink.linedelay = v;
             if (v === 0) useContentComplete.getState().setContentComplete(true);
           }
         }

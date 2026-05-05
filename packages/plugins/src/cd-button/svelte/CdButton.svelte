@@ -14,10 +14,17 @@ let { choice, onClick, className = "" }: ChoiceComponentProps = $props();
 const ink = getStoryContext();
 const cd = $derived(parseFloat(choice.val || "0"));
 const key = $derived(getCooldownKey(choice));
-const isDisabled = $derived(isCooldownActive(key));
-const remainingSeconds = $derived(getRemainingSeconds(key));
 
 let tick = $state(0);
+
+const isDisabled = $derived.by(() => {
+  void tick;
+  return isCooldownActive(key);
+});
+const remainingSeconds = $derived.by(() => {
+  void tick;
+  return getRemainingSeconds(key);
+});
 
 const buttonClass = $derived(isDisabled ? `${className} disabled`.trim() : className);
 
@@ -29,7 +36,8 @@ const displayText = $derived(
     : choice.text,
 );
 
-function handleClick() {
+function handleClick(e: MouseEvent) {
+  e.preventDefault();
   if (isDisabled) return;
   onClick();
   setCooldown(key, cd);
@@ -44,6 +52,6 @@ onMount(() => {
 });
 </script>
 
-<button type="button" class={buttonClass} onclick={handleClick} aria-disabled={isDisabled}>
+<a href="#" class={buttonClass} onclick={handleClick} aria-disabled={isDisabled}>
   {displayText}
-</button>
+</a>
