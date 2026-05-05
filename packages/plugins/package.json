@@ -18,6 +18,11 @@
       "import": "./dist/react/index.js",
       "require": "./dist/react/index.cjs"
     },
+    "./svelte": {
+      "types": "./dist/src/svelte/index.d.ts",
+      "import": "./dist/svelte/index.js",
+      "require": "./dist/svelte/index.cjs"
+    },
     "./plugins.css": "./dist/plugins.css"
   },
   "files": [
@@ -38,12 +43,15 @@
   "peerDependencies": {
     "@inkweave/core": "^2.0.0",
     "@inkweave/react": "^2.0.0",
+    "@inkweave/svelte": "^2.0.0",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "svelte": "^5.0.0",
     "zustand": "catalog:"
   },
   "devDependencies": {
     "@types/react": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:"
   }

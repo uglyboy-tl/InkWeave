@@ -58,6 +58,7 @@ export function createFadeEffectPlugin(
             this.options.linedelay = v;
           },
           enumerable: true,
+          configurable: true,
         });
         this.save_label.push("linedelay");
 

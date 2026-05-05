@@ -1,5 +1,6 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
@@ -9,6 +10,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, "src/index.ts"),
         "react/index": resolve(__dirname, "src/react/index.ts"),
+        "svelte/index": resolve(__dirname, "src/svelte/index.ts"),
       },
       formats: ["es", "cjs"],
       fileName: (format, entryName) =>
@@ -18,8 +20,11 @@ export default defineConfig({
       external: [
         "@inkweave/core",
         "@inkweave/react",
+        "@inkweave/svelte",
         "react",
         "react/jsx-runtime",
+        "svelte",
+        "svelte/*",
         "zustand",
         /^zustand\//,
       ],
@@ -27,7 +32,9 @@ export default defineConfig({
         globals: {
           "@inkweave/core": "InkWeaveCore",
           "@inkweave/react": "InkWeaveReact",
+          "@inkweave/svelte": "InkWeaveSvelte",
           react: "React",
+          svelte: "svelte",
           zustand: "zustand",
         },
       },
@@ -35,8 +42,9 @@ export default defineConfig({
     sourcemap: true,
   },
   plugins: [
+    svelte(),
     dts({
-      include: ["src/**/*.ts", "src/**/*.tsx"],
+      include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.svelte"],
       exclude: ["src/**/__tests__/**"],
       outDir: "dist",
     }),
