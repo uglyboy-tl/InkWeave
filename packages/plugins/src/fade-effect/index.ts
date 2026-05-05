@@ -84,7 +84,10 @@ export function createFadeEffectPlugin(
             return;
           }
           const visible = this.visibleLines as number;
-          const lines = visible >= 0 ? (this.contents as ContentItem[]).length - visible : 0;
+          const total = (this.contents as ContentItem[]).length;
+          // When visible is -1 (no previous content), treat all lines as new
+          const lines = visible >= 0 ? total - visible : total;
+          useContentComplete.getState().setContentComplete(false);
           timer = setTimeout(
             () => useContentComplete.getState().setContentComplete(true),
             Math.max(0, lines * (this.options.linedelay as number) * 1000),

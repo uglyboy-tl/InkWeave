@@ -306,4 +306,82 @@ test.describe("Fade Effect Plugin", () => {
       expect(parseFloat(opacity)).toBeCloseTo(1, 0.1);
     }).toPass({ timeout: 550 });
   });
+
+  test("should hide choices during content fade-in after save load", async ({ page }) => {
+    // Navigate with fade-effect + memory plugins
+    await page.goto(
+      "/e2e/fixtures/index.html?story=plugins/fade-effect.ink&plugins=fade-effect,memory",
+    );
+    await page.waitForSelector("#inkweave-story");
+
+    const contents = page.locator(".inkweave-contents");
+    const choices = page.locator(".inkweave-choices");
+
+    // Wait for initial content with fade effect to load
+    await expect(contents).toContainText(
+      "This is the beginning of a story to test the fade effect plugin.",
+    );
+    await page.waitForTimeout(1500);
+    await expect(choices).toBeVisible();
+
+    // Save the current state
+    await page.getByRole("button", { name: "Save game" }).click();
+    const saveModal = page.locator("dialog");
+    await expect(saveModal).toBeVisible();
+    await saveModal.getByRole("button", { name: /Slot 1/i }).click();
+
+    // Navigate to different section to clear context
+    await page
+      .locator(".inkweave-choice", {
+        hasText: "Continue with more fade effect content",
+      })
+      .click();
+    await expect(contents).toContainText("Additional content after making a choice.");
+
+    // Load the saved game
+    await page.getByRole("button", { name: "Restore saved game" }).click();
+    const loadModal = page.locator("dialog");
+    await expect(loadModal).toBeVisible();
+
+    // Check choices BEFORE clicking load — they should be visible (from current section)
+    await expect(choices).toBeVisible();
+
+    // Click load and immediately capture the earliest visibility state
+    const visibilityPromise = page.evaluate(() => {
+      return new Promise<string>((resolve) => {
+        const check = () => {
+          const el = document.querySelector(".inkweave-choices");
+          if (el) {
+            const vis = window.getComputedStyle(el).visibility;
+            if (vis === "hidden") {
+              resolve(vis);
+            } else {
+              requestAnimationFrame(check);
+            }
+          } else {
+            requestAnimationFrame(check);
+          }
+        };
+        requestAnimationFrame(check);
+      });
+    });
+
+    await loadModal.getByRole("button", { name: /Slot 1/i }).click();
+
+    // The promise should resolve with "hidden", meaning choices were hidden
+    // during the content fade-in phase (contentComplete = false)
+    const earliestVisibility = await visibilityPromise;
+    expect(earliestVisibility).toBe("hidden");
+
+    // Wait for content and choices to fully appear
+    await expect(contents).toContainText(
+      "This is the beginning of a story to test the fade effect plugin.",
+    );
+    await page.waitForTimeout(1500);
+
+    // After fade completes, choices should be visible
+    await expect(choices).toBeVisible();
+    const finalOpacity = await choices.evaluate((el) => window.getComputedStyle(el).opacity);
+    expect(parseFloat(finalOpacity)).toBeCloseTo(1, 0.1);
+  });
 });

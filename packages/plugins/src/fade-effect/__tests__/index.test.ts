@@ -232,7 +232,7 @@ describe("fadeEffect", () => {
       expect(useContentComplete.getState().contentComplete).toBe(true);
     });
 
-    it("should unsubscribe on cleanup", () => {
+    it("should unsubscribe on cleanup", async () => {
       plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -243,6 +243,8 @@ describe("fadeEffect", () => {
       mockStory.eventEmitter.emit("story.cleared");
       contentsStore.setState({ contents: [{ text: "new" }] });
 
+      // Wait for the contentComplete timer to fire
+      await new Promise((r) => setTimeout(r, 100));
       expect(useContentComplete.getState().contentComplete).toBe(true);
     });
   });
