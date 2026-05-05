@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.2.0 (2026-05-05)
+
+### Features
+- **core**: emit CONTENTS_CHANGED event on text update
+- **plugins**: add Svelte component exports for all plugins
+- **svelte**: add Svelte UI component library package
+- **generator**: add generator package and ink check
+- **cli**: add chardelay option and use Bun.sleep
+
+### Bug Fixes
+- **cd-button**: fix countdown reactivity after story loop rebuild
+- **fade-effect**: correct line count and contentComplete state reset
+- **scroll-after-choice**: refine scroll timing and add clear/save load E2E tests
+- **plugins**: resolve Svelte 5 reactivity issues in choice buttons and fade-effect
+
+### Refactoring
+- **web**: unify CSS into shared global stylesheet and default to Svelte
+- **svelte**: extract syncZustand bridge and improve component reactivity
+- **web**: split entry points into React and Svelte bundles
+- **e2e**: introduce framework-switchable test helper
+- **web**: adapt to PluginRegistry API and plugins/react entry
+- **plugins**: adopt factory pattern and decouple from React
+- **react**: use CommandRegistry and types from @inkweave/core
+- **core**: modularize extensions into subdirectories
+
+### Documentation
+- **core**: add adapter development guide
+- **svelte**: translate syncZustand JSDoc to English
+- **core**: add architecture and extension documentation
+- restructure AGENTS.md and update README
+
+### Styles
+- **auto-button**: suppress a11y_invalid_attribute warning
+
+### Tests
+- **cd-button**: add unit and E2E tests for countdown behavior
+- **e2e**: support framework switching between React and Svelte
+
+### Chores
+- **release**: add svelte package to publish workflow
+- **config**: default E2E framework to Svelte and update lockfile
+- **plugins**: use regex patterns for Vite externals configuration
+- **config**: add Svelte workspace support
+- **obsidian**: update submodule reference
+- **config**: relax dependency constraints and fix cli bin entry
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.1.0...v2.2.0
+
 ## v2.1.0 (2026-04-30)
 
 ### Features
