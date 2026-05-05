@@ -17,6 +17,7 @@ const input = process.argv[2] || "patch";
 const packages = [
   "packages/core/package.json",
   "packages/react/package.json",
+  "packages/svelte/package.json",
   "packages/plugins/package.json",
   "packages/web/package.json",
 ];
