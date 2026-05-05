@@ -1,9 +1,10 @@
 import { createInkStory, type ErrorHandler, type TranslationFunction } from "@inkweave/core";
 import type { Root } from "react-dom/client";
 import { createRoot } from "react-dom/client";
-import pkg from "../package.json";
+import pkg from "../../package.json";
+import { FetchFileHandler } from "../utils/fileHandler";
 import { render } from "./components";
-import { FetchFileHandler, initPlugins } from "./utils";
+import { initPlugins } from "./plugins";
 
 interface InkWeaveOptions {
   container: string | HTMLElement;
@@ -53,7 +54,6 @@ export const init = (
       currentRoot.unmount();
       currentRoot = null;
     }
-    (containerEl as HTMLElement).innerHTML = "";
     const root = createRoot(containerEl as HTMLElement);
     currentRoot = root;
     render(root, ink, options.translations);
@@ -68,7 +68,6 @@ export const init = (
           currentRoot.unmount();
           currentRoot = null;
         }
-        (containerEl as HTMLElement).innerHTML = "";
       },
     };
   } catch (error) {

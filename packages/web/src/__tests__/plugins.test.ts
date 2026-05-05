@@ -8,7 +8,7 @@ import {
   linkOpenPlugin,
   scrollAfterChoicePlugin,
 } from "@inkweave/plugins/react";
-import { initPlugins } from "../utils/plugins";
+import { initPlugins } from "../react/plugins";
 
 describe("PluginRegistry configuration", () => {
   it("should load only enabled plugins when configuration is provided", () => {

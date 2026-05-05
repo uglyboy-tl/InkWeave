@@ -3,26 +3,26 @@
   "version": "2.1.0",
   "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or as an npm module",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "browser": "./dist/inkweave.min.js",
-  "unpkg": "./dist/inkweave.min.js",
-  "jsdelivr": "./dist/inkweave.min.js",
+  "main": "./dist/inkweave-react.min.js",
+  "module": "./dist/inkweave-react.min.js",
   "files": [
     "dist",
     "README.md"
   ],
   "exports": {
-    ".": {
-      "browser": "./dist/inkweave.min.js"
+    "./react": {
+      "browser": "./dist/inkweave-react.min.js"
     },
-    "./min": "./dist/inkweave.min.js",
-    "./inkweave-web.css": "./dist/inkweave.min.css"
+    "./svelte": {
+      "browser": "./dist/inkweave-svelte.min.js"
+    },
+    "./react.css": "./dist/inkweave-react.min.css",
+    "./svelte.css": "./dist/inkweave-svelte.min.css"
   },
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts",
     "preview": "vite preview"
   },
   "keywords": [
@@ -43,6 +43,7 @@
   "dependencies": {
     "@inkweave/core": "^2.0.0",
     "@inkweave/react": "^2.0.0",
+    "@inkweave/svelte": "^2.0.0",
     "@inkweave/plugins": "^2.0.0",
     "react": "catalog:",
     "react-dom": "catalog:"
@@ -51,6 +52,8 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "svelte": "^5.0.0",
     "esbuild": "catalog:",
     "vite": "catalog:"
   }
