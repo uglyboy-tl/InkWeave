@@ -114,7 +114,7 @@ const sortedCommands = $derived(
   onclose={closeModal}
   onclick={handleBackdropClick}
   onkeydown={handleKeyDown}
-  class={modalClass}
+  class="modal {modalClass}"
 >
   <div id="inkweave-modal-header" class="header">
     <span id="inkweave-modal-title" class="title">{modalTitle}</span>
@@ -132,6 +132,45 @@ const sortedCommands = $derived(
 </dialog>
 
 <style>
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: 320px;
+    max-width: calc(100vw - 2rem);
+    height: fit-content;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.12),
+      0 2px 4px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .modal[open] {
+    display: flex;
+    flex-direction: column;
+    animation: slide-in 0.2s ease-out;
+  }
+
+  .modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .header {
     display: flex;
     justify-content: space-between;

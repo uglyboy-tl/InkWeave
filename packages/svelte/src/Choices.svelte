@@ -1,15 +1,12 @@
 <script lang="ts">
 import { ChoiceRegistry } from "./ChoiceRegistry";
 import { getStoryContext } from "./context";
-import { useChoices, useChoicesCanShow } from "./stores.svelte";
+import { useChoices } from "./stores.svelte";
 
 const ink = getStoryContext();
 const store = useChoices();
-const choicesCanShow = useChoicesCanShow();
 
-const canShow = $derived(
-  typeof ink.choicesCanShow === "boolean" ? ink.choicesCanShow : choicesCanShow.value,
-);
+const canShow = $derived(typeof ink.choicesCanShow === "boolean" ? ink.choicesCanShow : true);
 
 function getClassName(choice: { classes: string[]; type: string }): string {
   const classList = [...choice.classes, buttonClass, "inkweave-choice"];
@@ -29,6 +26,7 @@ const buttonClass = "button";
 const disabledClass = "disabled";
 </script>
 
+{#key canShow}
 <ul
   data-inkweave="choices"
   class="inkweave-choices choices"
@@ -44,8 +42,9 @@ const disabledClass = "disabled";
           className={getClassName(choice)}
         />
       {:else}
-        <button
-          type="button"
+        <!-- svelte-ignore a11y_invalid_attribute -->
+        <a
+          href="#"
           onclick={(e) => {
             e.preventDefault();
             handleClick(choice);
@@ -54,11 +53,12 @@ const disabledClass = "disabled";
           aria-disabled={choice.type === "unclickable"}
         >
           {choice.text}
-        </button>
+        </a>
       {/if}
     </li>
   {/each}
 </ul>
+{/key}
 
 <style>
   .choices {

@@ -8,15 +8,16 @@ const ink = getStoryContext();
 const store = useContents();
 const lineDelayStore = useLineDelay();
 
-const visibleLines = $derived(
-  typeof ink.visibleLines === "number" ? ink.visibleLines : store.contents.length,
-);
+const visibleLines = $derived.by(() => {
+  const len = store.contents.length;
+  const v = ink.visibleLines;
+  return typeof v === "number" ? v : len;
+});
 const lineDelay = $derived(lineDelayStore.value);
 </script>
 
 <section class="inkweave-contents contents">
-  {#key lineDelay}
-  {#each store.contents as item, i (i)}
+  {#each store.contents as item, i (item.text === CHOICE_SEPARATOR ? `d_${i}` : `${item.text.slice(0, 30)}_${i}`)}
     {@const delay = `${(i > visibleLines ? i - visibleLines : 0) * lineDelay}s`}
     {#if item.text === CHOICE_SEPARATOR}
       <div
@@ -34,7 +35,6 @@ const lineDelay = $derived(lineDelayStore.value);
       </div>
     {/if}
   {/each}
-  {/key}
 </section>
 
 <style>

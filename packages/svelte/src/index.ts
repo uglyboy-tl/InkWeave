@@ -4,7 +4,13 @@ export { default as CommandBar } from "./CommandBar.svelte";
 export { default as Contents } from "./Contents.svelte";
 export { getStoryContext, setStoryContext } from "./context";
 export { default as Story } from "./Story.svelte";
-export { useChoices, useChoicesCanShow, useContents, useLineDelay } from "./stores.svelte";
+export {
+  syncZustand,
+  useChoices,
+  useChoicesCanShow,
+  useContents,
+  useLineDelay,
+} from "./stores.svelte";
 export type {
   ChoiceComponent,
   ChoiceComponentProps,
