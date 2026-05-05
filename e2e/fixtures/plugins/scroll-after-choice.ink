@@ -13,6 +13,9 @@ The purpose of this test is to create enough content to fill the viewport and re
 + [Second Choice - Short Content] 
   -> second_choice
 
++ [Test clear functionality]
+  -> clear_test
+
 -> END
 
 === first_choice ===
@@ -62,6 +65,22 @@ This should definitely require scrolling to see the choices at the bottom.
 
 === end_story ===
 The story has ended. Thank you for testing the scroll-after-choice plugin!
+
+-> END
+
+=== clear_test ===
+# clear
+
+Content after clear tag.
+
+This content appears after the screen was cleared.
+
+{repeat_text()}
+
+Now you should be scrolled down to see this new content.
+
++ [End the story]
+  -> end_story
 
 -> END
 

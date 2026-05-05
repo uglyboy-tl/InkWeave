@@ -186,4 +186,154 @@ test.describe("Scroll After Choice Plugin", () => {
     // Should also scroll during second playthrough after restart
     expect(secondFinalScroll).toBeGreaterThan(secondInitialScroll + 100);
   });
+
+  test("should scroll to bottom after clear tag", async ({ page }) => {
+    // Scroll to top to ensure clean state
+    await page.evaluate(() => {
+      const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+      if (storyElement) storyElement.scrollTo({ top: 0 });
+    });
+    await page.waitForTimeout(100);
+
+    const initialScrollTop = await page.evaluate(() => {
+      const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+      return storyElement ? storyElement.scrollTop : 0;
+    });
+
+    // Click the choice that goes to clear_test section (has # clear tag)
+    const clearChoice = page.locator(".inkweave-choice", {
+      hasText: "Test clear functionality",
+    });
+    await clearChoice.click();
+
+    // Wait for content after clear to appear
+    const contents = page.locator(".inkweave-contents");
+    await expect(contents).toContainText("Content after clear tag.");
+
+    // Give time for smooth scroll to complete
+    await page.waitForTimeout(100);
+
+    const finalScrollTop = await page.evaluate(() => {
+      const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+      return storyElement ? storyElement.scrollTop : 0;
+    });
+
+    // After clear, new content appears and should cause scrolling
+    expect(finalScrollTop).toBeGreaterThan(initialScrollTop + 20);
+  });
+
+  test("should scroll to choices after clear tag with fade-effect enabled", async ({ page }) => {
+    // Navigate with both scroll-after-choice and fade-effect plugins
+    await page.goto(
+      "/e2e/fixtures/index.html?story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice,fade-effect",
+    );
+    await page.waitForSelector("#inkweave-story");
+
+    // Wait for initial content + choices to fully appear (fade-in takes time)
+    await page.waitForTimeout(2000);
+
+    // Scroll to top
+    await page.evaluate(() => {
+      const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+      if (storyElement) storyElement.scrollTo({ top: 0 });
+    });
+    await page.waitForTimeout(100);
+
+    const initialScrollTop = await page.evaluate(() => {
+      const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+      return storyElement ? storyElement.scrollTop : 0;
+    });
+
+    // Click the clear-test choice
+    const clearChoice = page.locator(".inkweave-choice", {
+      hasText: "Test clear functionality",
+    });
+    await clearChoice.click();
+
+    // Wait for content after clear to appear AND choices to become visible
+    const contents = page.locator(".inkweave-contents");
+    await expect(contents).toContainText("Content after clear tag.");
+
+    // Wait for fade-effect to complete and choices to appear
+    const choices = page.locator(".inkweave-choices");
+    await expect(choices).toBeVisible({ timeout: 5000 });
+    await page.waitForTimeout(500);
+
+    const finalScrollTop = await page.evaluate(() => {
+      const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+      return storyElement ? storyElement.scrollTop : 0;
+    });
+
+    // After clear with fade-effect, the page should scroll to show choices
+    expect(finalScrollTop).toBeGreaterThan(initialScrollTop + 20);
+  });
+});
+
+test("should scroll to bottom after loading a save", async ({ page }) => {
+  // Navigate with scroll-after-choice + memory plugins
+  await page.goto(
+    "/e2e/fixtures/index.html?story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice,memory",
+  );
+  await page.waitForSelector("#inkweave-story");
+
+  const contents = page.locator(".inkweave-contents");
+
+  // Click first choice to advance the story
+  const firstChoice = page.locator(".inkweave-choice", {
+    hasText: "First Choice - Long Content",
+  });
+  await firstChoice.click();
+  await expect(contents).toContainText(
+    "You selected the first choice which generates a lot of content.",
+  );
+
+  // Wait for content to load fully
+  await page.waitForTimeout(500);
+
+  // Save current state
+  await page.getByRole("button", { name: "Save game" }).click();
+  const saveModal = page.locator("dialog");
+  await expect(saveModal).toBeVisible();
+  await saveModal.getByRole("button", { name: /Slot 1/i }).click();
+
+  // Go back to start
+  const backChoice = page.locator(".inkweave-choice", {
+    hasText: "Continue with more content",
+  });
+  await backChoice.click();
+  await expect(contents).toContainText("Even more content to ensure scrolling is needed.");
+  await page.waitForTimeout(500);
+
+  // Scroll to top to reset position
+  await page.evaluate(() => {
+    const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+    if (storyElement) storyElement.scrollTo({ top: 0 });
+  });
+  await page.waitForTimeout(100);
+
+  const initialScrollTop = await page.evaluate(() => {
+    const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+    return storyElement ? storyElement.scrollTop : 0;
+  });
+
+  // Load the saved game
+  await page.getByRole("button", { name: "Restore saved game" }).click();
+  const loadModal = page.locator("dialog");
+  await expect(loadModal).toBeVisible();
+  await loadModal.getByRole("button", { name: /Slot 1/i }).click();
+
+  // Wait for loaded content to appear
+  await expect(contents).toContainText(
+    "You selected the first choice which generates a lot of content.",
+  );
+  // Wait for smooth scroll to complete
+  await page.waitForTimeout(500);
+
+  const finalScrollTop = await page.evaluate(() => {
+    const storyElement = document.querySelector('[data-inkweave="story"]') as HTMLElement;
+    return storyElement ? storyElement.scrollTop : 0;
+  });
+
+  // After loading a save, content appears and should cause scrolling
+  expect(finalScrollTop).toBeGreaterThan(initialScrollTop + 20);
 });
