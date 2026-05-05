@@ -35,7 +35,7 @@ test.describe("CD Button Plugin", () => {
   });
 
   test("should execute cd button and loop back", async ({ page }) => {
-    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")');
+    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")').first();
     await cdButton.click();
 
     const contents = page.locator(".inkweave-contents");
@@ -44,7 +44,7 @@ test.describe("CD Button Plugin", () => {
   });
 
   test("should prevent cd button clicks during cooldown", async ({ page }) => {
-    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")');
+    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")').first();
     await cdButton.click();
 
     const contents = page.locator(".inkweave-contents");
@@ -57,7 +57,7 @@ test.describe("CD Button Plugin", () => {
   });
 
   test("should allow cd button click after cooldown expires", async ({ page }) => {
-    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")');
+    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")').first();
     await cdButton.click();
 
     const contents = page.locator(".inkweave-contents");
@@ -70,7 +70,7 @@ test.describe("CD Button Plugin", () => {
   });
 
   test("should increment counter correctly across multiple loops", async ({ page }) => {
-    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")');
+    const cdButton = page.locator('.inkweave-choice:has-text("CD Button")').first();
     const contents = page.locator(".inkweave-contents");
 
     await cdButton.click();
@@ -83,5 +83,28 @@ test.describe("CD Button Plugin", () => {
     await expect(cdButton).toBeEnabled({ timeout: 1000 });
     await cdButton.click();
     await expect(contents).toContainText("Counter is now 3");
+  });
+
+  test("should show countdown and recover for cd:3", async ({ page }) => {
+    const contents = page.locator(".inkweave-contents");
+    const slowButton = page.locator('.inkweave-choice:has-text("Slow CD Button")');
+
+    // 点击 cd:3 按钮，此时还没有 countdown 文本（首次挂载）
+    await slowButton.click();
+    await expect(contents).toContainText("Counter is now 1");
+
+    // 循环回来后按钮显示倒计时文本（如 "(3)"）
+    const countdownLocator = page.locator('.inkweave-choice:has-text("Slow CD Button (")');
+    await expect(countdownLocator).toBeAttached({ timeout: 1000 });
+
+    // cooldown 期满后按钮文本应恢复（不含括号）
+    await expect(async () => {
+      const text = await slowButton.textContent();
+      expect(text).not.toContain("(");
+    }).toPass({ timeout: 4000 });
+
+    // 恢复后可再次点击
+    await slowButton.click();
+    await expect(contents).toContainText("Counter is now 2");
   });
 });

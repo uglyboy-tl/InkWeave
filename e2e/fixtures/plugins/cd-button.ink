@@ -19,3 +19,7 @@ Counter is now {counter}.
 + [CD Button#cd:0.5]
   You clicked the cooldown button!
   ->circle
+
++ [Slow CD Button#cd:3]
+  You clicked the slow cooldown button!
+  ->circle
