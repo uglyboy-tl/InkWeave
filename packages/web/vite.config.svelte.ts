@@ -33,12 +33,5 @@ export default defineConfig({
     sourcemap: false,
     minify: "esbuild",
   },
-  resolve: {
-    alias: {
-      "@inkweave/core": resolve(__dirname, "../core/src/index.ts"),
-      "@inkweave/plugins/svelte": resolve(__dirname, "../plugins/src/svelte/index.ts"),
-      "@inkweave/svelte": resolve(__dirname, "../svelte/src/index.ts"),
-    },
-  },
   plugins: [svelte()],
 });

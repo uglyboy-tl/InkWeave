@@ -5,18 +5,18 @@ import { StrictMode } from "react";
 import type { Root } from "react-dom/client";
 import "@inkweave/react/react.css";
 import "@inkweave/plugins/plugins.css";
-import styles from "./styles.module.css";
+import "../global.css";
 
 export const render = (root: Root, ink: InkStory, translations?: TranslationFunction) => {
   root.render(
     <StrictMode>
-      <div id="inkweave-player" className={styles.container}>
-        <nav className={styles.nav}>
+      <div id="inkweave-player">
+        <nav>
           <CommandBar
             ink={ink}
-            className={styles.actions}
-            buttonClassName={styles.btn}
-            modalClassName={styles.modal}
+            className="inkweave-command-bar"
+            buttonClassName="inkweave-cmd-btn"
+            modalClassName="modal"
             t={translations}
           />
         </nav>

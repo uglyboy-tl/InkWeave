@@ -33,10 +33,5 @@ export default defineConfig({
     sourcemap: false,
     minify: "esbuild",
   },
-  resolve: {
-    alias: {
-      "@inkweave/core": resolve(__dirname, "../core/src/index.ts"),
-    },
-  },
   plugins: [react()],
 });

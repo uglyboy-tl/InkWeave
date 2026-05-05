@@ -1,4 +1,4 @@
-.container {
+#inkweave-player {
   max-width: 680px;
   height: calc(90vh - 3rem);
   margin: 1.5rem auto;
@@ -13,11 +13,11 @@
   overflow: hidden;
 }
 
-:global(#inkweave-story) {
+#inkweave-story {
   padding: 1.5rem;
 }
 
-:global(.inkweave-divider) {
+.inkweave-divider {
   border: none;
   border-top: 1px dashed;
   border-color: inherit;
@@ -25,7 +25,7 @@
   opacity: 0.3;
 }
 
-.nav {
+#inkweave-player nav {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -37,11 +37,39 @@
   transition: opacity 0.15s ease;
 }
 
-.nav:hover {
+#inkweave-player nav:hover {
   opacity: 1;
 }
 
-/* Modal styling */
+.inkweave-command-bar {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.inkweave-cmd-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.inkweave-cmd-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.inkweave-cmd-btn:hover {
+  background: rgba(128, 128, 128, 0.15);
+}
+
+/* dialog 模态框 */
 .modal {
   display: none;
   position: fixed;
@@ -65,7 +93,6 @@
   animation: slide-in 0.2s ease-out;
 }
 
-/* Backdrop styling for modal */
 .modal::backdrop {
   background-color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
@@ -82,30 +109,39 @@
   }
 }
 
-.btn {
+/* choices 选择项 */
+.inkweave-choices {
+  padding: 0.75rem 0 0 0;
+  text-align: left;
+}
+
+.inkweave-choices li {
+  padding: 0.2rem 0;
+  padding-left: 1rem;
+}
+
+.inkweave-choice::before {
+  content: "\25B8 ";
+  opacity: 0.6;
+  margin-right: 0.25rem;
+}
+
+/* contents 内容 */
+.inkweave-contents p {
+  margin: 0 0 0.5rem 0;
+}
+
+/* image 图片 */
+.inkweave-image-container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
-.btn:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
-.btn:hover {
-  background: rgba(128, 128, 128, 0.15);
-}
-
-.actions {
-  display: flex;
-  gap: 0.25rem;
+.inkweave-image-container img {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  object-fit: contain;
 }

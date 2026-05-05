@@ -3,7 +3,7 @@ import type { Root } from "react-dom/client";
 import { createRoot } from "react-dom/client";
 import pkg from "../../package.json";
 import { FetchFileHandler } from "../utils/fileHandler";
-import { render } from "./components";
+import { render } from "./App";
 import { initPlugins } from "./plugins";
 
 interface InkWeaveOptions {

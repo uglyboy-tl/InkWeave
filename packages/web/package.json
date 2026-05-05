@@ -3,13 +3,16 @@
   "version": "2.1.0",
   "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or as an npm module",
   "type": "module",
-  "main": "./dist/inkweave-react.min.js",
-  "module": "./dist/inkweave-react.min.js",
+  "main": "./dist/inkweave.min.js",
+  "module": "./dist/inkweave.min.js",
   "files": [
     "dist",
     "README.md"
   ],
   "exports": {
+    ".": {
+      "browser": "./dist/inkweave.min.js"
+    },
     "./react": {
       "browser": "./dist/inkweave-react.min.js"
     },
@@ -17,12 +20,13 @@
       "browser": "./dist/inkweave-svelte.min.js"
     },
     "./react.css": "./dist/inkweave-react.min.css",
-    "./svelte.css": "./dist/inkweave-svelte.min.css"
+    "./svelte.css": "./dist/inkweave-svelte.min.css",
+    "./global.css": "./dist/inkweave.min.css"
   },
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
-    "build": "vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts",
+    "build": "vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts && cp dist/inkweave-svelte.min.js dist/inkweave.min.js && cp dist/inkweave-svelte.min.css dist/inkweave.min.css",
     "preview": "vite preview"
   },
   "keywords": [
