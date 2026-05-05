@@ -90,6 +90,12 @@ export class InkStory implements InkStoryContext {
     choicesStore.getState().setChoices(currentChoices);
     variablesStore.getState().setGlobalVars(variablesState);
 
+    this.eventEmitter.emit(Events.CONTENTS_CHANGED, {
+      story: this,
+      newContents: newContent,
+      timestamp: Date.now(),
+    });
+
     this.eventEmitter.emit(Events.STORY_CONTINUE_END, {
       story: this,
       state: this.story.state,
