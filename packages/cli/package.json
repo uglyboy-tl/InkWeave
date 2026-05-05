@@ -24,8 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "@inkweave/core": "workspace:*",
-    "commander": "^13.0.0",
-    "inkjs": "^2.3.0",
+    "commander": "catalog:",
+    "inkjs": "catalog:",
     "prompts": "^2.4.2"
   },
   "devDependencies": {

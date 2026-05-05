@@ -10,14 +10,18 @@
     "catalog": {
       "vite": "^8.0.0",
       "@vitejs/plugin-react": "^6.0.0",
+      "@sveltejs/vite-plugin-svelte": "^5.0.0",
       "inkjs": "^2.3.0",
       "react": "^19.0.0",
       "react-dom": "^19.0.0",
+      "svelte": "^5.0.0",
       "zustand": "^5.0.0",
+      "commander": "^13.0.0",
       "@types/react": "^19.0.0",
       "@types/react-dom": "^19.0.0",
       "vite-plugin-dts": "^4.5.0",
-      "esbuild": "^0.28.0"
+      "esbuild": "^0.28.0",
+      "esbuild-svelte": "^0.8.0"
     }
   },
   "scripts": {
@@ -47,6 +51,7 @@
     "@testing-library/jest-dom": "^6.9.0",
     "@testing-library/react": "^16.3.0",
     "@tsconfig/bun": "^1.0.0",
+    "@tsconfig/svelte": "^5.0.0",
     "@tsconfig/vite-react": "^7.0.0",
     "@types/node": "^25.6.0",
     "@typescript/native-preview": "^7.0.0-dev.0.0",
