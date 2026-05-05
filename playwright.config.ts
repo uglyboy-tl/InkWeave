@@ -13,12 +13,36 @@ export default defineConfig({
     baseURL: "http://localhost:3141",
     trace: "on-first-retry",
   },
-  projects: [
-    {
-      name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    },
-  ],
+  projects: (() => {
+    const framework = process.env.FRAMEWORK || 'react';
+    if (framework === 'svelte') {
+      return [{
+        name: 'Edge (Svelte)',
+        use: { ...devices['Desktop Edge'], channel: 'msedge' },
+        env: { FRAMEWORK: 'svelte' },
+      }];
+    } else if (framework === 'all') {
+      return [
+        {
+          name: 'Edge (React)',
+          use: { ...devices['Desktop Edge'], channel: 'msedge' },
+          env: { FRAMEWORK: 'react' },
+        },
+        {
+          name: 'Edge (Svelte)',
+          use: { ...devices['Desktop Edge'], channel: 'msedge' },
+          env: { FRAMEWORK: 'svelte' },
+        }
+      ];
+    } else {
+      // default to react only
+      return [{
+        name: 'Edge (React)',
+        use: { ...devices['Desktop Edge'], channel: 'msedge' },
+        env: { FRAMEWORK: 'react' },
+      }];
+    }
+  })(),
   webServer: {
     command: 'vite --port 3141',
     port: 3141,

@@ -30,12 +30,17 @@
     var framework = urlParams.get('framework') || 'react';
     var storyPath = urlParams.get('story') || 'default.ink';
     var pluginsParam = urlParams.get('plugins') || '';
+    var enabled, k;
 
-    var base = framework === 'svelte'
-      ? '../../packages/web-svelte'
-      : '../../packages/web';
+    var base = '../../packages/web/dist';
+    var scriptName = framework === 'svelte'
+      ? 'inkweave-svelte.min.js'
+      : 'inkweave-react.min.js';
+    var cssName = framework === 'svelte'
+      ? 'inkweave-svelte.min.css'
+      : 'inkweave-react.min.css';
 
-    document.getElementById('framework-css').setAttribute('href', base + '/dist/inkweave.min.css');
+    document.getElementById('framework-css').setAttribute('href', `${base}/${cssName}`);
 
     function loadScript(src, onLoad) {
       var s = document.createElement('script');
@@ -56,10 +61,10 @@
       for (var key in defaultPlugins) { pluginsConfig[key] = defaultPlugins[key]; }
       if (pluginsParam) {
         if (pluginsParam === 'all') {
-          for (var k in pluginsConfig) { pluginsConfig[k] = true; }
+          for (k in pluginsConfig) { pluginsConfig[k] = true; }
         } else {
-          var enabled = pluginsParam.split(',').map(function(p) { return p.trim(); });
-          enabled.forEach(function(p) {
+          enabled = pluginsParam.split(',').map((p) => p.trim());
+          enabled.forEach((p) => {
             if (Object.hasOwn(pluginsConfig, p)) pluginsConfig[p] = true;
           });
         }
@@ -70,21 +75,21 @@
       }
 
       fetch(storyPath)
-        .then(function(response) {
-          if (!response.ok) throw new Error('Failed to load: ' + storyPath);
+        .then((response) => {
+          if (!response.ok) throw new Error(`Failed to load: ${storyPath}`);
           return response.text();
         })
-        .then(function(storyContent) {
+        .then((storyContent) => {
           InkWeave.init({ container: '#app', story: storyContent, plugins: pluginsConfig });
         })
-        .catch(function(error) {
+        .catch((error) => {
           console.error(error);
           var el = document.getElementById('app');
-          if (el) el.textContent = 'Error: ' + error.message;
+          if (el) el.textContent = `Error: ${error.message}`;
         });
     }
 
-    loadScript(base + '/dist/inkweave.min.js', initApp);
+    loadScript(`${base}/${scriptName}`, initApp);
   </script>
 </body>
 </html>
