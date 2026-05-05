@@ -14,12 +14,12 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: (() => {
-    const framework = process.env.FRAMEWORK || 'react';
-    if (framework === 'svelte') {
+    const framework = process.env.FRAMEWORK || 'svelte';
+    if (framework === 'react') {
       return [{
-        name: 'Edge (Svelte)',
+        name: 'Edge (React)',
         use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        env: { FRAMEWORK: 'svelte' },
+        env: { FRAMEWORK: 'react' },
       }];
     } else if (framework === 'all') {
       return [
@@ -35,11 +35,11 @@ export default defineConfig({
         }
       ];
     } else {
-      // default to react only
+      // default to svelte
       return [{
-        name: 'Edge (React)',
+        name: 'Edge (Svelte)',
         use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        env: { FRAMEWORK: 'react' },
+        env: { FRAMEWORK: 'svelte' },
       }];
     }
   })(),
