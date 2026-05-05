@@ -20,6 +20,7 @@ onMount(() => {
 });
 </script>
 
+<!-- svelte-ignore a11y_invalid_attribute -->
 <a href="#" class={className} style="display: none" aria-hidden="true">
   {choice.text}
 </a>
