@@ -1,7 +1,6 @@
 <script lang="ts">
 import type { ChoiceComponentProps } from "@inkweave/svelte";
 import { getStoryContext } from "@inkweave/svelte";
-import { onMount } from "svelte";
 import {
   getCooldownKey,
   getRemainingSeconds,
@@ -16,6 +15,7 @@ const cd = $derived(parseFloat(choice.val || "0"));
 const key = $derived(getCooldownKey(choice));
 
 let tick = $state(0);
+let cooldownEnd = $state(0);
 
 const isDisabled = $derived.by(() => {
   void tick;
@@ -41,17 +41,25 @@ function handleClick(e: MouseEvent) {
   if (isDisabled) return;
   onClick();
   setCooldown(key, cd);
+  cooldownEnd = Date.now() + cd * 1000;
   tick++;
 }
 
-onMount(() => {
+$effect(() => {
+  // 读取 cooldownEnd 建立响应式依赖，使其变更时重启 interval 对齐到点击时刻
+  // 不跳过 end===0 的分支，保证组件因故事循环重建后 tick 仍能驱动 $derived 更新
+  const end = cooldownEnd;
   const interval = setInterval(() => {
+    // 使用闭包捕获的 end 而非响应式 cooldownEnd，避免 tick 变化触发 $effect 重跑
+    if (end > 0 && Date.now() >= end) cooldownEnd = 0;
     tick++;
   }, 1000);
+
   return () => clearInterval(interval);
 });
 </script>
 
+<!-- svelte-ignore a11y_invalid_attribute -->
 <a href="#" class={buttonClass} onclick={handleClick} aria-disabled={isDisabled}>
   {displayText}
 </a>
