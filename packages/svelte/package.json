@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "check": "biome check --write --error-on-warnings .",
-    "build": "bun scripts/build.ts"
+    "build": "vite build"
   },
   "keywords": [
     "ink",
@@ -38,7 +38,8 @@
     "svelte": "catalog:"
   },
   "devDependencies": {
-    "esbuild": "catalog:",
-    "esbuild-svelte": "catalog:"
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   }
 }

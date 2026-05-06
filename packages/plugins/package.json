@@ -46,12 +46,12 @@
     "@inkweave/svelte": "^2.0.0",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "svelte": "^5.0.0",
+    "svelte": "catalog:",
     "zustand": "catalog:"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "catalog:",
     "@types/react": "catalog:",
-    "@sveltejs/vite-plugin-svelte": "^5.0.0",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:"
   }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.schemastore.org/tsconfig",
-  "extends": "@tsconfig/svelte/tsconfig.json",
+  "extends": ["@tsconfig/bun/tsconfig.json", "@tsconfig/svelte/tsconfig.json"],
   "compilerOptions": {
     "types": ["bun-types"]
   },
