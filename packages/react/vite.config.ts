@@ -12,7 +12,7 @@ export default defineConfig({
       fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime", "@inkweave/core"],
+      external: [/^react(\/|$)/, /^react-dom(\/|$)/, /^@inkweave\/core(\/|$)/],
       output: {
         globals: {
           react: "React",
