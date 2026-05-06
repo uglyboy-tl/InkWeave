@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.2.1 (2026-05-06)
+
+### Bug Fixes
+- **plugins**: disable auto-save and link-open by default
+
+### Refactoring
+- **build**: use regex patterns for vite external dependencies
+- **svelte**: migrate build from esbuild to vite
+
+### Chores
+- **obsidian**: update submodule pointer
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.2.0...v2.2.1
+
 ## v2.2.0 (2026-05-05)
 
 ### Features
