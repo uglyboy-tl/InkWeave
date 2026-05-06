@@ -27,6 +27,7 @@ describe("PluginRegistry configuration", () => {
       audio: true,
       "auto-restore": false,
       "fade-effect": true,
+      "link-open": true,
     });
 
     const ink = createInkStory("");
@@ -49,6 +50,15 @@ describe("PluginRegistry configuration", () => {
     PluginRegistry.register(fadeEffectPlugin);
     PluginRegistry.register(scrollAfterChoicePlugin);
     PluginRegistry.register(linkOpenPlugin);
+
+    PluginRegistry.setEnabled({
+      image: true,
+      audio: true,
+      "auto-restore": true,
+      "fade-effect": true,
+      "link-open": true,
+      "scroll-after-choice": true,
+    });
 
     const ink = createInkStory("");
     const loadedPlugins = ink.pluginLoader.loadedIds.sort();

@@ -6,7 +6,7 @@ export const autoSavePlugin: Plugin = {
   id: "auto-save",
   name: "Auto Save Plugin",
   description: "Automatically saves game state when autosave tag is encountered",
-  enabledByDefault: true,
+  enabledByDefault: false,
   onLoad: () => {
     TagHandler.add("autosave", (_: string | null | undefined, ink: InkStory) => {
       memory.save(1, ink);

@@ -7,7 +7,7 @@ export const linkOpenPlugin: Plugin = {
   id: "link-open",
   name: "Link Open Plugin",
   description: "Provides functionality to open links from ink stories",
-  enabledByDefault: true,
+  enabledByDefault: false,
   onLoad: () => {
     TagHandler.add("linkopen", (val: string | null | undefined) => {
       if (!val) return;
