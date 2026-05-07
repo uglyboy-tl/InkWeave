@@ -1,5 +1,5 @@
 import type { ChoiceRenderer, ModalContentProps } from "@inkweave/core";
-import { ChoiceRegistry, useChoicesCanShow } from "@inkweave/svelte";
+import { ChoiceRegistry, useChoicesCanShow, useLineDelay } from "@inkweave/svelte";
 import { createAutoButtonPlugin } from "../auto-button";
 import AutoButton from "../auto-button/svelte/AutoButton.svelte";
 import { createCdButtonPlugin } from "../cd-button";
@@ -32,6 +32,7 @@ export const cdButtonPlugin = createCdButtonPlugin(svelteChoiceRenderer, CdButto
 
 export const fadeEffectPlugin = createFadeEffectPlugin((ink) => {
   const choicesCanShow = useChoicesCanShow();
+  const lineDelay = useLineDelay();
 
   Object.defineProperty(ink, "choicesCanShow", {
     get() {
@@ -40,8 +41,19 @@ export const fadeEffectPlugin = createFadeEffectPlugin((ink) => {
   });
 
   choicesCanShow.value = useContentComplete.getState().contentComplete;
+
   useContentComplete.subscribe((state) => {
     choicesCanShow.value = state.contentComplete;
+  });
+
+  Object.defineProperty(ink, "linedelay", {
+    get() {
+      return ink.options.linedelay;
+    },
+    set(v: number) {
+      ink.options.linedelay = v;
+      lineDelay.value = v;
+    },
   });
 });
 
