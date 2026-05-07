@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { InkStory } from "@inkweave/core";
 import type { Snippet } from "svelte";
-import { untrack } from "svelte";
+import { onMount, untrack } from "svelte";
 import Choices from "./Choices.svelte";
 import Contents from "./Contents.svelte";
 import { setStoryContext } from "./context";
@@ -18,7 +18,7 @@ let { ink, class: className = "", onInit, children }: Props = $props();
 // 必须在组件初始化时设置 context，子组件依赖它
 untrack(() => setStoryContext(ink));
 
-$effect(() => {
+onMount(() => {
   ink.continue();
   onInit?.(ink);
 });

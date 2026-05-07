@@ -1,12 +1,13 @@
 <script lang="ts">
 import { ChoiceRegistry } from "./ChoiceRegistry";
 import { getStoryContext } from "./context";
-import { useChoices } from "./stores.svelte";
+import { useChoices, useChoicesCanShow } from "./stores.svelte";
 
 const ink = getStoryContext();
 const store = useChoices();
+const canShowStore = useChoicesCanShow();
 
-const canShow = $derived(typeof ink.choicesCanShow === "boolean" ? ink.choicesCanShow : true);
+const canShow = $derived(canShowStore.value);
 
 function getClassName(choice: { classes: string[]; type: string }): string {
   const classList = [...choice.classes, buttonClass, "inkweave-choice"];

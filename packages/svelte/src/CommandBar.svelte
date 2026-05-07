@@ -113,7 +113,7 @@ const sortedCommands = $derived(
   bind:this={modalRef}
   onclose={closeModal}
   onclick={handleBackdropClick}
-  onkeydown={handleKeyDown}
+  onkeyup={handleKeyDown}
   class="modal {modalClass}"
 >
   <div id="inkweave-modal-header" class="header">
