@@ -5,5 +5,5 @@
     "types": ["bun-types"]
   },
   "include": ["src", "package.json"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "src/solidjs"]
 }

@@ -5,5 +5,16 @@
     "types": ["bun-types"]
   },
   "include": ["packages/*/src", "packages/*/test", "test", "e2e", "scripts", "playwright.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    // SolidJS 使用独立的 JSX 命名空间，与 React JSX 不兼容，需从根 tsconfig 排除
+    "packages/solidjs",
+    "packages/plugins/src/auto-button/solidjs",
+    "packages/plugins/src/cd-button/solidjs",
+    "packages/plugins/src/image/solidjs",
+    "packages/plugins/src/memory/solidjs",
+    "packages/plugins/src/solidjs",
+    "packages/web/src/solidjs"
+  ]
 }

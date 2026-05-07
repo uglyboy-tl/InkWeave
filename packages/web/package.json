@@ -19,14 +19,18 @@
     "./svelte": {
       "browser": "./dist/inkweave-svelte.min.js"
     },
+    "./solidjs": {
+      "browser": "./dist/inkweave-solidjs.min.js"
+    },
     "./react.css": "./dist/inkweave-react.min.css",
     "./svelte.css": "./dist/inkweave-svelte.min.css",
+    "./solidjs.css": "./dist/inkweave-solidjs.min.css",
     "./global.css": "./dist/inkweave.min.css"
   },
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
-    "build": "vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts && cp dist/inkweave-svelte.min.js dist/inkweave.min.js && cp dist/inkweave-svelte.min.css dist/inkweave.min.css",
+    "build": "vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts && vite build --config vite.config.solidjs.ts && cp dist/inkweave-svelte.min.js dist/inkweave.min.js && cp dist/inkweave-svelte.min.css dist/inkweave.min.css",
     "preview": "vite preview"
   },
   "keywords": [
@@ -48,9 +52,11 @@
     "@inkweave/core": "^2.0.0",
     "@inkweave/react": "^2.0.0",
     "@inkweave/svelte": "^2.0.0",
+    "@inkweave/solidjs": "workspace:*",
     "@inkweave/plugins": "^2.0.0",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "solid-js": "^1.9.12"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "catalog:",
@@ -58,6 +64,7 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "svelte": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vite-plugin-solid": "catalog:"
   }
 }

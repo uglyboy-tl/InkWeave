@@ -19,7 +19,8 @@
       "commander": "^13.0.0",
       "@types/react": "^19.0.0",
       "@types/react-dom": "^19.0.0",
-      "vite-plugin-dts": "^4.5.0"
+      "vite-plugin-dts": "^4.5.0",
+      "vite-plugin-solid": "^2.11.12"
     }
   },
   "scripts": {
@@ -27,8 +28,9 @@
     "build:core": "bun -F @inkweave/core build",
     "build:react": "bun -F @inkweave/react build",
     "build:svelte": "bun -F @inkweave/svelte build",
+    "build:solidjs": "bun -F @inkweave/solidjs build",
     "build:plugins": "bun -F @inkweave/plugins build",
-    "build:pkg": "bun run build:core && bun run build:react && bun run build:svelte && bun run build:plugins",
+    "build:pkg": "bun run build:core && bun run build:react && bun run build:svelte && bun run build:solidjs && bun run build:plugins",
     "build:web": "bun -F @inkweave/web build",
     "build:obsidian": "bun -F ink-player build",
     "build:cli": "bun -F @inkweave/cli build",

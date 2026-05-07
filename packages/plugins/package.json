@@ -23,6 +23,11 @@
       "import": "./dist/svelte/index.js",
       "require": "./dist/svelte/index.cjs"
     },
+    "./solidjs": {
+      "types": "./dist/src/solidjs/index.d.ts",
+      "import": "./dist/solidjs/index.js",
+      "require": "./dist/solidjs/index.cjs"
+    },
     "./plugins.css": "./dist/plugins.css"
   },
   "files": [
@@ -30,7 +35,7 @@
   ],
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
-    "build": "vite build"
+    "build": "vite build --config vite.config.solidjs.ts && vite build"
   },
   "keywords": [
     "ink",
@@ -44,15 +49,19 @@
     "@inkweave/core": "^2.0.0",
     "@inkweave/react": "^2.0.0",
     "@inkweave/svelte": "^2.0.0",
+    "@inkweave/solidjs": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "svelte": "catalog:",
+    "solid-js": "catalog:",
     "zustand": "catalog:"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@types/react": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:"
+    "vite-plugin-dts": "catalog:",
+    "vite-plugin-solid": "catalog:"
   }
 }

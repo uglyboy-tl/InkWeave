@@ -5,5 +5,5 @@
     "types": ["bun-types"]
   },
   "include": ["src", "package.json", "test/utils.ts"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "src/auto-button/solidjs", "src/cd-button/solidjs", "src/image/solidjs", "src/memory/solidjs", "src/solidjs"]
 }

@@ -21,6 +21,12 @@ export default defineConfig({
         use: { ...devices['Desktop Edge'], channel: 'msedge' },
         env: { FRAMEWORK: 'react' },
       }];
+    } else if (framework === 'solidjs') {
+      return [{
+        name: 'Edge (SolidJS)',
+        use: { ...devices['Desktop Edge'], channel: 'msedge' },
+        env: { FRAMEWORK: 'solidjs' },
+      }];
     } else if (framework === 'all') {
       return [
         {
@@ -32,6 +38,11 @@ export default defineConfig({
           name: 'Edge (Svelte)',
           use: { ...devices['Desktop Edge'], channel: 'msedge' },
           env: { FRAMEWORK: 'svelte' },
+        },
+        {
+          name: 'Edge (SolidJS)',
+          use: { ...devices['Desktop Edge'], channel: 'msedge' },
+          env: { FRAMEWORK: 'solidjs' },
         }
       ];
     } else {
