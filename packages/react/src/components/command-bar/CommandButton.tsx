@@ -5,7 +5,7 @@ import type { CommandButtonProps } from "../../types";
 const CommandButton: React.FC<CommandButtonProps> = ({
   commandId,
   ink,
-  className = "",
+  class: className = "",
   onRequestOpenModal,
   t,
 }) => {

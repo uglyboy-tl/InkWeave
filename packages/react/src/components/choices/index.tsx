@@ -1,8 +1,10 @@
-import { type Choice, choicesStore } from "@inkweave/core";
+import { type Choice, ChoiceRegistry as ChoiceRegistryClass, choicesStore } from "@inkweave/core";
 import { createElement, memo, useCallback, useRef } from "react";
+import type { ChoiceComponent } from "../../types";
 import { useStory } from "../story";
-import { ChoiceRegistry } from "./ChoiceRegistry";
 import styles from "./styles.module.css";
+
+export const ChoiceRegistry = new ChoiceRegistryClass<ChoiceComponent>();
 
 interface ChoiceItemProps {
   choice: Choice;

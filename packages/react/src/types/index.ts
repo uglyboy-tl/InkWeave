@@ -13,15 +13,15 @@ export type ChoiceComponent = FC<ChoiceComponentProps>;
 export interface CommandButtonProps {
   commandId: string;
   ink: InkStory;
-  className?: string;
+  class?: string;
   onRequestOpenModal?: (commandId: string) => void;
   t: TranslationFunction;
 }
 
 export interface CommandBarProps {
   ink: InkStory;
-  className?: string;
-  buttonClassName?: string;
-  modalClassName?: string;
+  class?: string;
+  buttonClass?: string;
+  modalClass?: string;
   t?: TranslationFunction;
 }

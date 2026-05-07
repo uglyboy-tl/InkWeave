@@ -1,22 +1,27 @@
+import type { TranslationFunction } from "@inkweave/core";
 import { CommandRegistry } from "@inkweave/core";
 import type { ReactNode } from "react";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CommandBarProps } from "../../types";
 import CommandButton from "./CommandButton";
-import { t as default_t } from "./i18n";
 import style from "./styles.module.css";
+
+const translate: TranslationFunction = (key) => {
+  if (!key) return undefined;
+  return CommandRegistry.getTranslation(key) ?? key;
+};
 
 const CommandBar = ({
   ink,
-  className,
-  buttonClassName,
-  modalClassName,
+  class: className,
+  buttonClass,
+  modalClass,
   t: input_t,
 }: CommandBarProps) => {
   const t = useCallback(
     (key: string | undefined) => {
-      if (!input_t) return default_t(key);
-      return input_t(key) ?? default_t(key);
+      if (!input_t) return translate(key);
+      return input_t(key) ?? translate(key);
     },
     [input_t],
   );
@@ -90,12 +95,12 @@ const CommandBar = ({
             key={command.id}
             commandId={command.id}
             ink={ink}
-            className={buttonClassName}
+            class={buttonClass}
             onRequestOpenModal={command.getModalContent ? setActiveModal : undefined}
             t={t}
           />
         )),
-    [ink, buttonClassName, t],
+    [ink, buttonClass, t],
   );
 
   const modalTitle = useMemo(() => {
@@ -113,7 +118,7 @@ const CommandBar = ({
         onClose={closeModal}
         onClick={handleBackdropClick}
         onKeyUp={handleKeyUp}
-        className={modalClassName}
+        className={modalClass}
       >
         <div id="inkweave-modal-header" className={style.header}>
           <span id="inkweave-modal-title" className={style.title}>

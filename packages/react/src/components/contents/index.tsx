@@ -11,29 +11,37 @@ const ContentsComponent = () => {
 
   const renderedContents = useMemo(() => {
     return contents.map((item: ContentItem, i: number) => {
-      const style: CSSProperties = {
-        "--delay": `${(i > visibleLines ? i - visibleLines : 0) * lineDelay}s`,
-      } as CSSProperties & { "--delay": string };
-
       const isDivider = item.text === CHOICE_SEPARATOR;
       const key = isDivider ? `divider_${i}` : `line_${i}_${item.text.slice(0, 20)}`;
+      const hasFade = lineDelay > 0;
+      const delay = `${(i > visibleLines ? i - visibleLines : 0) * lineDelay}s`;
 
       if (isDivider) {
         return (
-          <div key={key} style={style}>
+          <div
+            key={key}
+            className={hasFade ? styles.fade : ""}
+            style={hasFade ? ({ "--delay": delay } as CSSProperties) : { opacity: "1" }}
+          >
             <hr className="inkweave-divider" />
           </div>
         );
       }
 
-      // 合并基础类名和动态类名
       const combinedClasses = ["inkweave-content-line"];
       if (item.classes && item.classes.length > 0) {
         combinedClasses.push(...item.classes);
       }
+      if (hasFade && styles.fade) {
+        combinedClasses.push(styles.fade);
+      }
 
       return (
-        <div key={key} style={style} className={combinedClasses.join(" ")}>
+        <div
+          key={key}
+          className={combinedClasses.join(" ")}
+          style={hasFade ? ({ "--delay": delay } as CSSProperties) : { opacity: "1" }}
+        >
           <p>{item.text}</p>
         </div>
       );

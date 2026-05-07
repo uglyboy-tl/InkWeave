@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "bun:test";
 import { CHOICE_SEPARATOR, Choice, choicesStore, contentsStore } from "@inkweave/core";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import Choices from "../components/choices";
-import { ChoiceRegistry } from "../components/choices/ChoiceRegistry";
+import Choices, { ChoiceRegistry } from "../components/choices";
 import Contents from "../components/contents";
 import { StoryProvider } from "../components/story";
 import { createMockInk } from "./mock";

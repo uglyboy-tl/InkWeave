@@ -14,9 +14,9 @@ export const render = (root: Root, ink: InkStory, translations?: TranslationFunc
         <nav>
           <CommandBar
             ink={ink}
-            className="inkweave-command-bar"
-            buttonClassName="inkweave-cmd-btn"
-            modalClassName="modal"
+            class="inkweave-command-bar"
+            buttonClass="inkweave-cmd-btn"
+            modalClass="modal"
             t={translations}
           />
         </nav>
