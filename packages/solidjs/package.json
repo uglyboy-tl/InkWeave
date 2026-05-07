@@ -1,0 +1,46 @@
+{
+  "name": "@inkweave/solidjs",
+  "repository": "https://github.com/uglyboy-tl/InkWeave.git",
+  "version": "2.2.1",
+  "description": "SolidJS components for InkWeave - ready to use in SolidJS applications",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./solidjs.css": {
+      "default": "./dist/solidjs.css"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check": "biome check --write --error-on-warnings .",
+    "build": "vite build"
+  },
+  "keywords": [
+    "ink",
+    "interactive-fiction",
+    "solidjs",
+    "solid",
+    "components",
+    "inkweave"
+  ],
+  "author": "Uglyboy",
+  "license": "MIT",
+  "peerDependencies": {
+    "@inkweave/core": "^2.0.0",
+    "solid-js": "catalog:"
+  },
+  "devDependencies": {
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vite-plugin-solid": "catalog:"
+  }
+}
