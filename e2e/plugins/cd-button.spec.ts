@@ -73,16 +73,12 @@ test.describe("CD Button Plugin", () => {
     const cdButton = page.locator('.inkweave-choice:has-text("CD Button")').first();
     const contents = page.locator(".inkweave-contents");
 
-    await cdButton.click();
-    await expect(contents).toContainText("Counter is now 1");
-
-    await expect(cdButton).toBeEnabled({ timeout: 1000 });
-    await cdButton.click();
-    await expect(contents).toContainText("Counter is now 2");
-
-    await expect(cdButton).toBeEnabled({ timeout: 1000 });
-    await cdButton.click();
-    await expect(contents).toContainText("Counter is now 3");
+    const texts = ["Counter is now 1", "Counter is now 2", "Counter is now 3"];
+    for (const text of texts) {
+      await cdButton.click();
+      await expect(contents).toContainText(text);
+      await expect(cdButton).toBeEnabled({ timeout: 1000 });
+    }
   });
 
   test("should show countdown and recover for cd:3", async ({ page }) => {
