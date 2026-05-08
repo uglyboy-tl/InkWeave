@@ -32,6 +32,7 @@ jobs:
           bun publish --access public --cwd="packages/core"
           bun publish --access public --cwd="packages/react"
           bun publish --access public --cwd="packages/svelte"
+          bun publish --access public --cwd="packages/solidjs"
           bun publish --access public --cwd="packages/plugins"
           bun publish --access public --cwd="packages/web"
         env:
@@ -59,5 +60,7 @@ jobs:
             packages/web/dist/inkweave-react.min.css
             packages/web/dist/inkweave-svelte.min.js
             packages/web/dist/inkweave-svelte.min.css
+            packages/web/dist/inkweave-solidjs.min.js
+            packages/web/dist/inkweave-solidjs.min.css
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
