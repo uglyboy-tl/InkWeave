@@ -19,8 +19,95 @@ export const useContentComplete = create<ContentComplete>((set) => ({
   },
 }));
 
+function wrapChoose(ink: InkStoryContext) {
+  if ((ink.choose as Record<string, unknown>).__wrapped) return;
+  const cc = useContentComplete.getState();
+  const orig = ink.choose as (i: number) => void;
+  ink.choose = (i: number) => {
+    if (ink.options.linedelay !== 0) {
+      cc.setContentComplete(false);
+      cc.setLastContent(ink.contents as ContentItem[]);
+    }
+    return orig.call(ink, i);
+  };
+  (ink.choose as Record<string, unknown>).__wrapped = true;
+}
+
+function defineLinedelay(ink: InkStoryContext) {
+  Object.defineProperty(ink, "linedelay", {
+    get() {
+      return ink.options.linedelay;
+    },
+    set(v: number) {
+      ink.options.linedelay = v;
+    },
+    enumerable: true,
+    configurable: true,
+  });
+  ink.save_label.push("linedelay");
+}
+
+function defineVisibleLines(ink: InkStoryContext) {
+  Object.defineProperty(ink, "visibleLines", {
+    get() {
+      const last = useContentComplete.getState().last_content;
+      if (last === "") return -1;
+      const contents = ink.contents as ContentItem[];
+      for (let i = contents.length - 1; i >= 0; i--) {
+        if (contents[i]?.text === last) return i;
+      }
+      return -1;
+    },
+    enumerable: true,
+    configurable: true,
+  });
+}
+
+function defineChoicesCanShow(ink: InkStoryContext) {
+  Object.defineProperty(ink, "choicesCanShow", {
+    get() {
+      return useContentComplete.getState().contentComplete;
+    },
+    enumerable: true,
+    configurable: true,
+  });
+}
+
+function watchContent(ink: InkStoryContext) {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+
+  const unsub = contentsStore.subscribe(() => {
+    if (timer) clearTimeout(timer);
+
+    const delay = (ink.options.linedelay as number) ?? 0.05;
+    if (delay === 0) {
+      useContentComplete.getState().setContentComplete(true);
+      return;
+    }
+
+    const visible = ink.visibleLines as number;
+    const total = (ink.contents as ContentItem[]).length;
+    const lines = visible >= 0 ? total - visible : total;
+    useContentComplete.getState().setContentComplete(false);
+
+    timer = setTimeout(
+      () => useContentComplete.getState().setContentComplete(true),
+      lines * delay * 1000,
+    );
+  });
+
+  ink.eventEmitter.on(Events.STORY_DISPOSE, () => {
+    unsub();
+    if (timer) clearTimeout(timer);
+  });
+  ink.eventEmitter.on(Events.STORY_CLEARED, () => {
+    if (ink.options.linedelay !== 0) useContentComplete.getState().setContentComplete(false);
+    useContentComplete.getState().setLastContent([]);
+  });
+}
+
 export function createFadeEffectPlugin(
-  setupChoicesCanShow: (ink: InkStoryContext) => void,
+  setupChoicesCanShow?: (ink: InkStoryContext) => void,
 ): Plugin {
   const options = { linedelay: 0.05 };
 
@@ -41,67 +128,16 @@ export function createFadeEffectPlugin(
       });
 
       Patches.add(function (this: InkStoryContext) {
-        const orig = this.choose as (i: number) => void;
-        this.choose = (i: number) => {
-          if (this.options.linedelay !== 0) {
-            useContentComplete.getState().setContentComplete(false);
-            useContentComplete.getState().setLastContent(this.contents as ContentItem[]);
-          }
-          return orig.call(this, i);
-        };
+        wrapChoose(this);
+        defineLinedelay(this);
+        defineVisibleLines(this);
+        defineChoicesCanShow(this);
 
-        Object.defineProperty(this, "linedelay", {
-          get() {
-            return this.options.linedelay;
-          },
-          set(v: number) {
-            this.options.linedelay = v;
-          },
-          enumerable: true,
-          configurable: true,
-        });
-        this.save_label.push("linedelay");
+        if (setupChoicesCanShow) {
+          setupChoicesCanShow(this);
+        }
 
-        Object.defineProperty(this, "visibleLines", {
-          get() {
-            const last = useContentComplete.getState().last_content;
-            if (!last) return -1;
-            const c = this.contents as ContentItem[];
-            for (let i = c.length - 1; i >= 0; i--) {
-              if (c[i]?.text === last) return i;
-            }
-            return -1;
-          },
-        });
-
-        setupChoicesCanShow(this);
-
-        let timer: ReturnType<typeof setTimeout> | null = null;
-        const unsub = contentsStore.subscribe(() => {
-          if (timer) clearTimeout(timer);
-          if (this.options.linedelay === 0) {
-            useContentComplete.getState().setContentComplete(true);
-            return;
-          }
-          const visible = this.visibleLines as number;
-          const total = (this.contents as ContentItem[]).length;
-          // When visible is -1 (no previous content), treat all lines as new
-          const lines = visible >= 0 ? total - visible : total;
-          useContentComplete.getState().setContentComplete(false);
-          timer = setTimeout(
-            () => useContentComplete.getState().setContentComplete(true),
-            Math.max(0, lines * (this.options.linedelay as number) * 1000),
-          );
-        });
-
-        this.eventEmitter.on(Events.STORY_DISPOSE, () => {
-          unsub();
-          if (timer) clearTimeout(timer);
-        });
-        this.eventEmitter.on(Events.STORY_CLEARED, () => {
-          if (this.options.linedelay !== 0) useContentComplete.getState().setContentComplete(false);
-          useContentComplete.getState().setLastContent([]);
-        });
+        watchContent(this);
       }, options);
     },
   };

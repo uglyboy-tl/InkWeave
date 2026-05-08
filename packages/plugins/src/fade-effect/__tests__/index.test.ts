@@ -3,13 +3,7 @@ import { contentsStore, Patches, TagHandler } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
 import { createFadeEffectPlugin, useContentComplete } from "../index";
 
-const plugin = createFadeEffectPlugin((ink) => {
-  Object.defineProperty(ink, "choicesCanShow", {
-    get() {
-      return true;
-    },
-  });
-});
+const plugin = createFadeEffectPlugin();
 
 describe("fadeEffect", () => {
   beforeEach(() => {
@@ -232,7 +226,7 @@ describe("fadeEffect", () => {
       expect(useContentComplete.getState().contentComplete).toBe(true);
     });
 
-    it("should unsubscribe on cleanup", async () => {
+    it("should remain subscribed after story.cleared and complete content", async () => {
       plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
