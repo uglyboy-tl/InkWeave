@@ -1,6 +1,5 @@
 import { type Choice, ChoiceRegistry as ChoiceRegistryClass, choicesStore } from "@inkweave/core";
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount } from "solid-js";
-import { useChoicesCanShow } from "../../stores";
 import type { ChoiceComponent } from "../../types";
 import { useStory } from "../story";
 import styles from "./styles.module.css";
@@ -56,7 +55,6 @@ const ChoiceItem = (props: ChoiceItemProps) => {
 const ChoicesComponent = () => {
   const ink = useStory();
   const [version, setVersion] = createSignal(0);
-  const cc = useChoicesCanShow();
 
   onMount(() => {
     setVersion(1);
@@ -71,7 +69,10 @@ const ChoicesComponent = () => {
     return choicesStore.getState().choices;
   });
 
-  const canShow = createMemo(() => cc.value);
+  const canShow = createMemo(() => {
+    version();
+    return choicesStore.getState().choicesVisible;
+  });
 
   let ulRef: HTMLUListElement | undefined;
 

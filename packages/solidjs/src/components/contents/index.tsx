@@ -15,8 +15,8 @@ const ContentsComponent = () => {
   const lineDelay = () => (ink.options.linedelay as number) ?? 0.05;
 
   const visibleLines = () => {
-    const v = ink.visibleLines;
-    return typeof v === "number" ? v : contents().length;
+    const v = contentsStore.getState().visibleLines;
+    return v ?? (lineDelay() > 0 ? -1 : contents().length);
   };
 
   return (
