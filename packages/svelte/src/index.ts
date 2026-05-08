@@ -7,7 +7,6 @@ export { default as Story } from "./Story.svelte";
 export {
   syncZustand,
   useChoices,
-  useChoicesCanShow,
   useContents,
 } from "./stores.svelte";
 export type {

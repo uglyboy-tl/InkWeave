@@ -1,11 +1,12 @@
 <script lang="ts">
+import { choicesStore } from "@inkweave/core";
 import { ChoiceRegistry } from "./ChoiceRegistry";
 import { getStoryContext } from "./context";
-import { useChoices, useChoicesCanShow } from "./stores.svelte";
+import { syncZustand, useChoices } from "./stores.svelte";
 
 const ink = getStoryContext();
 const store = useChoices();
-const canShowStore = useChoicesCanShow();
+const canShowStore = syncZustand(choicesStore, (s) => s.choicesVisible);
 
 const canShow = $derived(canShowStore.value);
 

@@ -1,21 +1,23 @@
 <script lang="ts">
 import type { ContentItem } from "@inkweave/core";
-import { CHOICE_SEPARATOR } from "@inkweave/core";
+import { CHOICE_SEPARATOR, contentsStore } from "@inkweave/core";
 import { getStoryContext } from "./context";
-import { useContents } from "./stores.svelte";
+import { syncZustand, useContents } from "./stores.svelte";
 
 const ink = getStoryContext();
 const store = useContents();
 
-const visibleLines = $derived.by(() => {
-  const len = store.contents.length;
-  const v = ink.visibleLines;
-  return typeof v === "number" ? v : len;
-});
+const visibleStore = syncZustand(contentsStore, (s) => s.visibleLines);
 
 const lineDelay = $derived.by(() => {
   const _ = store.contents;
   return (ink.options.linedelay as number) ?? 0.05;
+});
+
+const visibleLines = $derived.by(() => {
+  const len = store.contents.length;
+  const v = visibleStore.value;
+  return v ?? (lineDelay > 0 ? -1 : len);
 });
 </script>
 
