@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/solidjs",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "SolidJS components for InkWeave - ready to use in SolidJS applications",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.3.2 (2026-05-08)
+
+### Refactoring
+- **svelte**: read choicesVisible and visibleLines from core stores
+- **solidjs**: read choicesVisible and visibleLines from core stores
+- **react**: read choicesVisible and visibleLines from core stores
+- **fade-effect**: use core stores instead of local zustand store
+- **core**: move visibleLines and choicesVisible into core stores
+
+### Chores
+- **obsidian**: bump submodule to latest commit
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.3.1...v2.3.2
+
 ## v2.3.1 (2026-05-08)
 
 ### Chores
