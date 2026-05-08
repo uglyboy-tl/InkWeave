@@ -42,7 +42,6 @@ export { audioPlugin, useStoryMusic } from "../audio";
 export { autoRestorePlugin } from "../auto-restore";
 export { autoSavePlugin } from "../auto-save";
 export { classTagPlugin } from "../class-tag";
-export { useContentComplete } from "../fade-effect";
 export { imagePlugin, useStoryImage } from "../image";
 export { default as Image } from "../image/react/Image";
 export { linkOpenPlugin } from "../link-open";

@@ -1,5 +1,6 @@
 import type { ChoiceRenderer, ModalContentProps } from "@inkweave/core";
-import { ChoiceRegistry, useChoicesCanShow, useLineDelay } from "@inkweave/solidjs";
+import { Events } from "@inkweave/core";
+import { ChoiceRegistry, useChoicesCanShow } from "@inkweave/solidjs";
 import { createAutoButtonPlugin } from "../auto-button";
 import AutoButton from "../auto-button/solidjs/AutoButton";
 import { createCdButtonPlugin } from "../cd-button";
@@ -31,37 +32,17 @@ export const autoButtonPlugin = createAutoButtonPlugin(solidjsChoiceRenderer, Au
 export const cdButtonPlugin = createCdButtonPlugin(solidjsChoiceRenderer, CdButton);
 
 export const fadeEffectPlugin = createFadeEffectPlugin((ink) => {
-  const choicesCanShow = useChoicesCanShow();
-  const lineDelay = useLineDelay();
-
-  Object.defineProperty(ink, "choicesCanShow", {
-    get() {
-      return choicesCanShow.value;
-    },
+  const solidjsCC = useChoicesCanShow();
+  const unsub = useContentComplete.subscribe((state) => {
+    solidjsCC.value = state.contentComplete;
   });
-
-  choicesCanShow.value = useContentComplete.getState().contentComplete;
-
-  useContentComplete.subscribe((state) => {
-    choicesCanShow.value = state.contentComplete;
-  });
-
-  Object.defineProperty(ink, "linedelay", {
-    get() {
-      return ink.options.linedelay;
-    },
-    set(v: number) {
-      ink.options.linedelay = v;
-      lineDelay.value = v;
-    },
-  });
+  ink.eventEmitter.on(Events.STORY_DISPOSE, unsub);
 });
 
 export { audioPlugin, useStoryMusic } from "../audio";
 export { autoRestorePlugin } from "../auto-restore";
 export { autoSavePlugin } from "../auto-save";
 export { classTagPlugin } from "../class-tag";
-export { useContentComplete } from "../fade-effect";
 export { imagePlugin, useStoryImage } from "../image";
 export { default as Image } from "../image/solidjs/Image";
 export { linkOpenPlugin } from "../link-open";
