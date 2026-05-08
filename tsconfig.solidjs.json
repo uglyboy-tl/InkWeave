@@ -1,0 +1,21 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "extends": ["@tsconfig/bun/tsconfig.json"],
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "lib": ["ESNext", "DOM"],
+    "types": ["bun-types"]
+  },
+  "include": [
+    "packages/solidjs/src",
+    "packages/plugins/src/auto-button/solidjs",
+    "packages/plugins/src/cd-button/solidjs",
+    "packages/plugins/src/image/solidjs",
+    "packages/plugins/src/memory/solidjs",
+    "packages/plugins/src/solidjs",
+    "packages/web/src/solidjs",
+    "packages/obsidian/src"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

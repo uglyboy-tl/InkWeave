@@ -1,0 +1,9 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "extends": ["@tsconfig/bun/tsconfig.json", "@tsconfig/vite-react/tsconfig.json"],
+  "compilerOptions": {
+    "types": ["bun-types"]
+  },
+  "include": ["scripts", "e2e", "playwright.config.ts"],
+  "exclude": ["node_modules", "dist", "packages"]
+}

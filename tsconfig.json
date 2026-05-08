@@ -15,6 +15,8 @@
     "packages/plugins/src/image/solidjs",
     "packages/plugins/src/memory/solidjs",
     "packages/plugins/src/solidjs",
-    "packages/web/src/solidjs"
+    "packages/web/src/solidjs",
+    // Obsidian 插件使用 SolidJS，有独立 tsconfig
+    "packages/obsidian"
   ]
 }
