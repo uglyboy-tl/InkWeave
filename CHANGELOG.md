@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.3.1 (2026-05-08)
+
+### Chores
+- **solidjs**: add solid-js to catalog dependencies
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.3.0...v2.3.1
+
 ## v2.3.0 (2026-05-08)
 
 ### Features
