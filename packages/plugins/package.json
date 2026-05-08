@@ -4,15 +4,7 @@
   "version": "2.2.1",
   "description": "Plugin collection for InkWeave - extend functionality with plugins",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/src/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/src/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
     "./react": {
       "types": "./dist/src/react/index.d.ts",
       "import": "./dist/react/index.js",
@@ -28,14 +20,16 @@
       "import": "./dist/solidjs/index.js",
       "require": "./dist/solidjs/index.cjs"
     },
-    "./plugins.css": "./dist/plugins.css"
+    "./react.css": "./dist/react.css",
+    "./svelte.css": "./dist/svelte.css",
+    "./solidjs.css": "./dist/solidjs.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "check": "biome check --write --error-on-warnings . && tsgo -b",
-    "build": "vite build --config vite.config.solidjs.ts && vite build"
+    "check": "biome check --write --error-on-warnings . && tsgo -b && tsgo -p tsconfig.solidjs.json --noEmit",
+    "build": "rm -rf dist && vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts && vite build --config vite.config.solidjs.ts"
   },
   "keywords": [
     "ink",

@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
-import solid from "vite-plugin-solid";
+import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 import { renameCssPlugin } from "./vite.utils";
 
@@ -8,31 +8,31 @@ export default defineConfig({
   build: {
     emptyOutDir: false,
     lib: {
-      entry: resolve(__dirname, "src/solidjs/index.ts"),
+      entry: resolve(__dirname, "src/react/index.ts"),
       formats: ["es", "cjs"],
-      fileName: (format) => `solidjs/index.${format === "es" ? "js" : "cjs"}`,
+      fileName: (format) => `react/index.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: [
         /^@inkweave\/core(\/|$)/,
-        /^@inkweave\/solidjs(\/|$)/,
-        /^solid-js(\/|$)/,
+        /^@inkweave\/react(\/|$)/,
+        /^react(\/|$)/,
+        /^react-dom(\/|$)/,
         /^zustand(\/|$)/,
       ],
     },
     sourcemap: true,
   },
   plugins: [
-    solid({
-      include: ["**/solidjs/**/*.{tsx,jsx}"],
+    react({
+      include: ["**/react/**/*.{tsx,jsx}"],
     }),
     dts({
-      include: ["src/solidjs/**/*.ts", "src/**/solidjs/**/*.tsx", "src/types/**/*.d.ts"],
+      include: ["src/react/**/*.ts", "src/**/react/**/*.tsx", "src/types/**/*.d.ts"],
       exclude: ["src/**/__tests__/**"],
       outDir: "dist",
-      tsconfigPath: resolve(__dirname, "tsconfig.solidjs.json"),
       logLevel: "error",
     }),
-    renameCssPlugin("solidjs"),
+    renameCssPlugin("react"),
   ],
 });
