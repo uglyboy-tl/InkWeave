@@ -35,18 +35,18 @@
     var base = '../../packages/web/dist';
     var scriptName, cssName;
 
-    if (framework === 'svelte') {
-      scriptName = 'inkweave-svelte.min.js';
-      cssName = 'inkweave-svelte.min.css';
-    } else if (framework === 'solidjs') {
-      scriptName = 'inkweave-solidjs.min.js';
-      cssName = 'inkweave-solidjs.min.css';
-    } else {
+    if (framework === 'react') {
       scriptName = 'inkweave-react.min.js';
       cssName = 'inkweave-react.min.css';
     }
-
-    document.getElementById('framework-css').setAttribute('href', `${base}/${cssName}`);
+    else if (framework === 'svelte') {
+      scriptName = 'inkweave-svelte.min.js';
+      cssName = 'inkweave-svelte.min.css';
+    }
+    else {
+      scriptName = 'inkweave-solidjs.min.js';
+      cssName = 'inkweave-solidjs.min.css';
+    }
 
     document.getElementById('framework-css').setAttribute('href', `${base}/${cssName}`);
 

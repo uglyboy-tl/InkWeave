@@ -35,11 +35,11 @@
     "build:obsidian": "bun -F ink-player build",
     "build:cli": "bun -F @inkweave/cli build",
     "build": "bun run build:pkg && bun run build:web && bun run build:obsidian && bun run build:cli",
-    "check": "biome check --write --error-on-warnings . && tsgo -b --noEmit",
+    "check": "biome check --write --error-on-warnings . && tsgo -b --noEmit && tsgo -p tsconfig.solidjs.json --noEmit",
     "check:ink": "bun run packages/core/scripts/compile-ink.ts",
     "test": "bun test && bun test:integration && bun test:e2e",
     "test:e2e": "playwright test",
-    "test:e2e:all": "E2E_SYNTAX=1 playwright test",
+    "test:e2e:all": "FRAMEWORK=all playwright test",
     "test:integration": "bun -F '*' test:integration",
     "serve": "vite",
     "release": "bun run scripts/release.mjs"

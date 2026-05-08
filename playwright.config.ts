@@ -14,12 +14,18 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: (() => {
-    const framework = process.env.FRAMEWORK || 'svelte';
+    const framework = process.env.FRAMEWORK || 'solidjs';
     if (framework === 'react') {
       return [{
         name: 'Edge (React)',
         use: { ...devices['Desktop Edge'], channel: 'msedge' },
         env: { FRAMEWORK: 'react' },
+      }];
+    } else if (framework === 'svelte') {
+      return [{
+        name: 'Edge (Svelte)',
+        use: { ...devices['Desktop Edge'], channel: 'msedge' },
+        env: { FRAMEWORK: 'svelte' },
       }];
     } else if (framework === 'solidjs') {
       return [{
@@ -46,11 +52,11 @@ export default defineConfig({
         }
       ];
     } else {
-      // default to svelte
+      // default to solidjs
       return [{
-        name: 'Edge (Svelte)',
+        name: 'Edge (SolidJS)',
         use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        env: { FRAMEWORK: 'svelte' },
+        env: { FRAMEWORK: 'solidjs' },
       }];
     }
   })(),

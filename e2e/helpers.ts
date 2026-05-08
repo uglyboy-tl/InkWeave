@@ -6,8 +6,8 @@ export async function gotoFixture(page: Page, params: string) {
   let fw = "";
   if (FRAMEWORK === "svelte") {
     fw = "&framework=svelte";
-  } else if (FRAMEWORK === "solidjs") {
-    fw = "&framework=solidjs";
+  } else if (FRAMEWORK === "react") {
+    fw = "&framework=react";
   }
   await page.goto(`/e2e/fixtures/index.html?${params}${fw}`);
 }
