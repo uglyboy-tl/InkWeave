@@ -19,8 +19,8 @@ let tick = $state(0);
 $effect(() => {
   const interval = setInterval(() => {
     tick++;
+    if (!isCooldownActive(key)) clearInterval(interval);
   }, 200);
-
   return () => clearInterval(interval);
 });
 

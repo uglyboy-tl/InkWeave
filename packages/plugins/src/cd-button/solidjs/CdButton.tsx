@@ -1,6 +1,6 @@
 import type { ChoiceComponentProps } from "@inkweave/solidjs";
 import { choiceStyles, useStory } from "@inkweave/solidjs";
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import {
   getCooldownKey,
   getRemainingSeconds,
@@ -14,10 +14,13 @@ const CooldownChoice = (props: ChoiceComponentProps) => {
   const ink = useStory();
   const [tick, setTick] = createSignal(0);
 
-  onMount(() => {
+  createEffect(() => {
     const interval = setInterval(() => {
+      if (!isCooldownActive(key)) {
+        clearInterval(interval);
+        return;
+      }
       setTick((t) => t + 1);
-      if (!isCooldownActive(key)) clearInterval(interval);
     }, 200);
     onCleanup(() => clearInterval(interval));
   });
