@@ -14,16 +14,3 @@ export function useChoicesCanShow() {
     },
   };
 }
-
-const _lineDelaySignal = createSignal(0.05);
-
-export function useLineDelay() {
-  return {
-    get value() {
-      return _lineDelaySignal[0]();
-    },
-    set value(v: number) {
-      _lineDelaySignal[1](v);
-    },
-  };
-}

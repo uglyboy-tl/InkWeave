@@ -9,7 +9,6 @@ export {
   useChoices,
   useChoicesCanShow,
   useContents,
-  useLineDelay,
 } from "./stores.svelte";
 export type {
   ChoiceComponent,

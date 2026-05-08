@@ -1,5 +1,6 @@
 import { type Choice, ChoiceRegistry as ChoiceRegistryClass, choicesStore } from "@inkweave/core";
-import { createMemo, createSignal, For, onCleanup, onMount } from "solid-js";
+import { createEffect, createMemo, createSignal, For, onCleanup, onMount } from "solid-js";
+import { useChoicesCanShow } from "../../stores";
 import type { ChoiceComponent } from "../../types";
 import { useStory } from "../story";
 import styles from "./styles.module.css";
@@ -55,6 +56,7 @@ const ChoiceItem = (props: ChoiceItemProps) => {
 const ChoicesComponent = () => {
   const ink = useStory();
   const [version, setVersion] = createSignal(0);
+  const cc = useChoicesCanShow();
 
   onMount(() => {
     setVersion(1);
@@ -69,7 +71,20 @@ const ChoicesComponent = () => {
     return choicesStore.getState().choices;
   });
 
-  const canShow = () => (typeof ink.choicesCanShow === "boolean" ? ink.choicesCanShow : true);
+  const canShow = createMemo(() => cc.value);
+
+  let ulRef: HTMLUListElement | undefined;
+
+  createEffect(() => {
+    if (canShow() && ulRef) {
+      ulRef.style.animation = "none";
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (ulRef) ulRef.style.animation = "";
+        });
+      });
+    }
+  });
 
   const handleClick = (index: number) => {
     ink.choose(index);
@@ -77,6 +92,7 @@ const ChoicesComponent = () => {
 
   return (
     <ul
+      ref={ulRef}
       data-inkweave="choices"
       class={`inkweave-choices ${styles.choices}`}
       style={{ visibility: canShow() ? "visible" : "hidden" }}

@@ -38,20 +38,6 @@ export function useChoicesCanShow() {
   };
 }
 
-// Global reactive state for line delay (used by fade-effect plugin)
-let _lineDelay = $state(0.05);
-
-export function useLineDelay() {
-  return {
-    get value() {
-      return _lineDelay;
-    },
-    set value(v: number) {
-      _lineDelay = v;
-    },
-  };
-}
-
 export function useContents(): { readonly contents: ContentItem[] } {
   const store = syncZustand(contentsStore, (s) => s.contents);
   return {

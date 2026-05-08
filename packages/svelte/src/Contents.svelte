@@ -2,18 +2,21 @@
 import type { ContentItem } from "@inkweave/core";
 import { CHOICE_SEPARATOR } from "@inkweave/core";
 import { getStoryContext } from "./context";
-import { useContents, useLineDelay } from "./stores.svelte";
+import { useContents } from "./stores.svelte";
 
 const ink = getStoryContext();
 const store = useContents();
-const lineDelayStore = useLineDelay();
 
 const visibleLines = $derived.by(() => {
   const len = store.contents.length;
   const v = ink.visibleLines;
   return typeof v === "number" ? v : len;
 });
-const lineDelay = $derived(lineDelayStore.value);
+
+const lineDelay = $derived.by(() => {
+  const _ = store.contents;
+  return (ink.options.linedelay as number) ?? 0.05;
+});
 </script>
 
 <section class="inkweave-contents contents">
