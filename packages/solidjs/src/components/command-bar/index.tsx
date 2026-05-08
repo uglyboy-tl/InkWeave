@@ -123,21 +123,21 @@ const CommandBar = (props: CommandBarProps) => {
         onKeyUp={handleKeyUp}
         class={props.modalClass}
       >
-        <div id="inkweave-modal-header" class={style.header}>
-          <span id="inkweave-modal-title" class={style.title}>
+        <div id="inkweave-modal-header" class={`inkweave-modal-header ${style.header}`}>
+          <span id="inkweave-modal-title" class={`inkweave-modal-title ${style.title}`}>
             {modalTitle()}
           </span>
           <button
             type="button"
             id="inkweave-modal-close"
-            class={style.close}
+            class={`inkweave-modal-close ${style.close}`}
             onClick={closeModal}
             aria-label="Close"
           >
             ×
           </button>
         </div>
-        <div id="inkweave-modal-body" class={style.body}>
+        <div id="inkweave-modal-body" class={`inkweave-modal-body ${style.body}`}>
           {modalContent()}
         </div>
       </dialog>
