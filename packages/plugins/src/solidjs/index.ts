@@ -1,11 +1,9 @@
 import type { ChoiceRenderer, ModalContentProps } from "@inkweave/core";
-import { Events } from "@inkweave/core";
-import { ChoiceRegistry, useChoicesCanShow } from "@inkweave/solidjs";
+import { ChoiceRegistry } from "@inkweave/solidjs";
 import { createAutoButtonPlugin } from "../auto-button";
 import AutoButton from "../auto-button/solidjs/AutoButton";
 import { createCdButtonPlugin } from "../cd-button";
 import CdButton from "../cd-button/solidjs/CdButton";
-import { createFadeEffectPlugin, useContentComplete } from "../fade-effect";
 import {
   createMemoryPlugin,
   getSlotLabelKey,
@@ -31,18 +29,11 @@ const solidjsChoiceRenderer: ChoiceRenderer = {
 export const autoButtonPlugin = createAutoButtonPlugin(solidjsChoiceRenderer, AutoButton);
 export const cdButtonPlugin = createCdButtonPlugin(solidjsChoiceRenderer, CdButton);
 
-export const fadeEffectPlugin = createFadeEffectPlugin((ink) => {
-  const solidjsCC = useChoicesCanShow();
-  const unsub = useContentComplete.subscribe((state) => {
-    solidjsCC.value = state.contentComplete;
-  });
-  ink.eventEmitter.on(Events.STORY_DISPOSE, unsub);
-});
-
 export { audioPlugin, useStoryMusic } from "../audio";
 export { autoRestorePlugin } from "../auto-restore";
 export { autoSavePlugin } from "../auto-save";
 export { classTagPlugin } from "../class-tag";
+export { fadeEffectPlugin } from "../fade-effect";
 export { imagePlugin, useStoryImage } from "../image";
 export { default as Image } from "../image/solidjs/Image";
 export { linkOpenPlugin } from "../link-open";

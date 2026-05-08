@@ -1,14 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from "bun:test";
-import { contentsStore, Patches, TagHandler } from "@inkweave/core";
+import { beforeEach, describe, expect, it } from "bun:test";
+import { choicesStore, contentsStore, Patches, TagHandler } from "@inkweave/core";
 import { createMockStory } from "../../../test/utils";
-import { createFadeEffectPlugin, useContentComplete } from "../index";
-
-const plugin = createFadeEffectPlugin();
+import { fadeEffectPlugin as plugin } from "../index";
 
 describe("fadeEffect", () => {
   beforeEach(() => {
     Patches.clear();
-    useContentComplete.setState({ contentComplete: true, last_content: "" });
+    choicesStore.setState({ choicesVisible: true });
+    contentsStore.setState({ visibleLines: null });
   });
 
   describe("load", () => {
@@ -40,6 +39,7 @@ describe("fadeEffect", () => {
       patch?.call(mockStory as never, "");
       TagHandler.process(mockStory as never, "linedelay: 0");
       expect(mockStory.options.linedelay).toBe(0);
+      expect(choicesStore.getState().choicesVisible).toBe(true);
     });
 
     it("should handle invalid linedelay value", () => {
@@ -58,161 +58,44 @@ describe("fadeEffect", () => {
   });
 
   describe("Patches", () => {
-    it("should add visibleLines property", () => {
+    it("should add linedelay property", () => {
       plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }, { text: "line2" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
-      expect(mockStory).toHaveProperty("visibleLines");
-    });
-
-    it("should return -1 for visibleLines when no last_content", () => {
-      plugin.onLoad();
-      useContentComplete.getState().setLastContent([]);
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }, { text: "line2" }],
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      expect((mockStory as unknown as { visibleLines: number }).visibleLines).toBe(-1);
-    });
-
-    it("should return correct index for visibleLines", () => {
-      plugin.onLoad();
-      useContentComplete.getState().setLastContent([{ text: "line1" }, { text: "line2" }]);
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }, { text: "line2" }, { text: "line3" }],
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      expect((mockStory as unknown as { visibleLines: number }).visibleLines).toBe(1);
-    });
-
-    it("should add choicesCanShow property", () => {
-      plugin.onLoad();
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }],
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      const descriptor = Object.getOwnPropertyDescriptor(mockStory, "choicesCanShow");
-      expect(descriptor).toBeDefined();
-      expect(typeof descriptor?.get).toBe("function");
+      expect(mockStory).toHaveProperty("linedelay");
     });
 
     it("should call clear function", () => {
       plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }, { text: "line2" }],
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      mockStory.eventEmitter.emit("story.cleared");
-    });
-
-    it("should set contentComplete false on clear with linedelay", () => {
-      plugin.onLoad();
-      useContentComplete.getState().setContentComplete(true);
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      mockStory.eventEmitter.emit("story.cleared");
-      expect(useContentComplete.getState().contentComplete).toBe(false);
-    });
-
-    it("should call cleanup function", () => {
-      plugin.onLoad();
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
         contents: [{ text: "line1" }],
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
       mockStory.eventEmitter.emit("story.cleared");
-    });
-
-    it("should wrap choose function", () => {
-      plugin.onLoad();
-      const mockChoose = vi.fn();
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }],
-        choose: mockChoose,
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      (mockStory as unknown as { choose: (i: number) => void }).choose(0);
-      expect(mockChoose).toHaveBeenCalledWith(0);
-    });
-
-    it("should set contentComplete false on choose with linedelay", () => {
-      plugin.onLoad();
-      useContentComplete.getState().setContentComplete(true);
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }, { text: "line2" }],
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      (mockStory as unknown as { choose: (i: number) => void }).choose(0);
-      expect(useContentComplete.getState().contentComplete).toBe(false);
-    });
-
-    it("should set lastContent on choose", () => {
-      plugin.onLoad();
-      useContentComplete.getState().setLastContent([]);
-      const mockStory = createMockStory({
-        options: { linedelay: 0.05 },
-        contents: [{ text: "line1" }, { text: "line2" }],
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      (mockStory as unknown as { choose: (i: number) => void }).choose(0);
-      expect(useContentComplete.getState().last_content).toBe("line2");
-    });
-
-    it("should not set contentComplete false on choose with zero linedelay", () => {
-      plugin.onLoad();
-      useContentComplete.getState().setContentComplete(true);
-      const mockStory = createMockStory({
-        options: { linedelay: 0 },
-        contents: [{ text: "line1" }],
-      });
-      const patch = Patches.patches[0];
-      patch?.call(mockStory as never, "");
-      (mockStory as unknown as { choose: (i: number) => void }).choose(0);
-      expect(useContentComplete.getState().contentComplete).toBe(true);
     });
   });
 
   describe("contentsStore subscription", () => {
-    it("should set contentComplete true on contents update with zero linedelay", async () => {
+    it("should set choicesVisible true on content update with zero delay", async () => {
       plugin.onLoad();
-      useContentComplete.getState().setContentComplete(false);
       const mockStory = createMockStory({
         options: { linedelay: 0 },
       });
       const patch = Patches.patches[0];
       patch?.call(mockStory as never, "");
 
+      choicesStore.getState().setChoicesVisible(false);
       contentsStore.setState({ contents: [{ text: "new content" }] });
-      await new Promise((r) => setTimeout(r, 0));
-
-      expect(useContentComplete.getState().contentComplete).toBe(true);
+      expect(choicesStore.getState().choicesVisible).toBe(true);
     });
 
-    it("should schedule timer on contents update with linedelay", async () => {
+    it("should hide choices and schedule timer on content with delay", async () => {
       plugin.onLoad();
-      useContentComplete.getState().setContentComplete(false);
       const mockStory = createMockStory({
         options: { linedelay: 0.01 },
         contents: [{ text: "line1" }],
@@ -221,12 +104,13 @@ describe("fadeEffect", () => {
       patch?.call(mockStory as never, "");
 
       contentsStore.setState({ contents: [{ text: "line1" }, { text: "line2" }] });
-      await new Promise((r) => setTimeout(r, 50));
+      expect(choicesStore.getState().choicesVisible).toBe(false);
 
-      expect(useContentComplete.getState().contentComplete).toBe(true);
+      await new Promise((r) => setTimeout(r, 50));
+      expect(choicesStore.getState().choicesVisible).toBe(true);
     });
 
-    it("should remain subscribed after story.cleared and complete content", async () => {
+    it("should remain subscribed after clear and complete content", async () => {
       plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0.05 },
@@ -237,9 +121,16 @@ describe("fadeEffect", () => {
       mockStory.eventEmitter.emit("story.cleared");
       contentsStore.setState({ contents: [{ text: "new" }] });
 
-      // Wait for the contentComplete timer to fire
       await new Promise((r) => setTimeout(r, 100));
-      expect(useContentComplete.getState().contentComplete).toBe(true);
+      expect(choicesStore.getState().choicesVisible).toBe(true);
+    });
+
+    it("should handle multiple onLoad calls without issues", () => {
+      plugin.onLoad();
+      plugin.onLoad();
+      const patch = Patches.patches[0];
+      const mockStory = createMockStory({ options: { linedelay: 0.05 } });
+      expect(() => patch?.call(mockStory as never, "")).not.toThrow();
     });
   });
 

@@ -6,7 +6,6 @@ import { createAutoButtonPlugin } from "../auto-button";
 import AutoButton from "../auto-button/react/AutoButton";
 import { createCdButtonPlugin } from "../cd-button";
 import CdButton from "../cd-button/react/CdButton";
-import { createFadeEffectPlugin, useContentComplete } from "../fade-effect";
 import {
   createMemoryPlugin,
   getSlotLabelKey,
@@ -30,18 +29,11 @@ const reactChoiceRenderer: ChoiceRenderer = {
 export const autoButtonPlugin = createAutoButtonPlugin(reactChoiceRenderer, AutoButton);
 export const cdButtonPlugin = createCdButtonPlugin(reactChoiceRenderer, CdButton);
 
-export const fadeEffectPlugin = createFadeEffectPlugin((ink) => {
-  Object.defineProperty(ink, "choicesCanShow", {
-    get() {
-      return useContentComplete((s) => s.contentComplete);
-    },
-  });
-});
-
 export { audioPlugin, useStoryMusic } from "../audio";
 export { autoRestorePlugin } from "../auto-restore";
 export { autoSavePlugin } from "../auto-save";
 export { classTagPlugin } from "../class-tag";
+export { fadeEffectPlugin } from "../fade-effect";
 export { imagePlugin, useStoryImage } from "../image";
 export { default as Image } from "../image/react/Image";
 export { linkOpenPlugin } from "../link-open";
