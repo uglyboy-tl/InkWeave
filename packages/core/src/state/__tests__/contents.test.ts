@@ -19,12 +19,30 @@ describe("contentsStore", () => {
   });
 
   describe("add", () => {
-    it("should add content", () => {
-      contentsStore.getState().setContents([]);
+    it("should add content without changing visibleLines", () => {
+      contentsStore.getState().clear();
       contentsStore.getState().add([{ text: "hello" }]);
       contentsStore.getState().add([{ text: "world" }]);
-      const { contents } = contentsStore.getState();
-      expect(contents).toEqual([{ text: "hello" }, { text: "world" }]);
+      const state = contentsStore.getState();
+      expect(state.contents).toEqual([{ text: "hello" }, { text: "world" }]);
+      expect(state.visibleLines).toBeNull();
+    });
+  });
+
+  describe("addSeparator", () => {
+    it("should set visibleLines to last index before separator", () => {
+      contentsStore.getState().clear();
+      contentsStore.getState().add([{ text: "a" }, { text: "b" }, { text: "c" }]);
+      contentsStore.getState().addSeparator();
+      const state = contentsStore.getState();
+      expect(state.visibleLines).toBe(2);
+      expect(state.contents).toHaveLength(4);
+    });
+
+    it("should set visibleLines to -1 when contents is empty", () => {
+      contentsStore.getState().clear();
+      contentsStore.getState().addSeparator();
+      expect(contentsStore.getState().visibleLines).toBe(-1);
     });
   });
 

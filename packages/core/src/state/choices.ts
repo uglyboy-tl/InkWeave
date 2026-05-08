@@ -5,12 +5,15 @@ import { Choice } from "../types";
 
 type StoryChoices = {
   choices: Choice[];
+  choicesVisible: boolean;
   setChoices: (choices: InkChoice[]) => void;
   clear: () => void;
+  setChoicesVisible: (v: boolean) => void;
 };
 
 const choicesStore = create<StoryChoices>((set) => ({
   choices: [],
+  choicesVisible: true,
   setChoices: (ink_choices) => {
     const choices = ink_choices.map((choice) => {
       const new_choice = new Choice(choice.text, choice.index);
@@ -21,7 +24,8 @@ const choicesStore = create<StoryChoices>((set) => ({
     });
     set({ choices });
   },
-  clear: () => set({ choices: [] }),
+  clear: () => set({ choices: [], choicesVisible: true }),
+  setChoicesVisible: (choicesVisible) => set({ choicesVisible }),
 }));
 
 export default choicesStore;

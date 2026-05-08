@@ -1,5 +1,5 @@
 import type { Story } from "inkjs/engine/Story";
-import { CHOICE_SEPARATOR, DEFAULT_STORY_OPTIONS, Events } from "../constants";
+import { DEFAULT_STORY_OPTIONS, Events } from "../constants";
 import { EventEmitter } from "../events/EventEmitter";
 import { PluginLoader } from "../plugin/PluginLoader";
 import choicesStore from "../state/choices";
@@ -117,7 +117,7 @@ export class InkStory implements InkStoryContext {
     });
 
     this.story.ChooseChoiceIndex(index);
-    contentsStore.getState().add([{ text: CHOICE_SEPARATOR }]);
+    contentsStore.getState().addSeparator();
     this.continue();
 
     this.eventEmitter.emit(Events.CHOICE_SELECTED, {
