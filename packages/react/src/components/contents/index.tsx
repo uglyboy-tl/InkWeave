@@ -6,8 +6,9 @@ import styles from "./styles.module.css";
 const ContentsComponent = () => {
   const ink = useStory();
   const contents = contentsStore((state) => state.contents);
-  const visibleLines = typeof ink.visibleLines === "number" ? ink.visibleLines : contents.length;
   const lineDelay = (ink.options.linedelay as number) ?? 0.05;
+  const storedVisibleLines = contentsStore((state) => state.visibleLines);
+  const visibleLines = storedVisibleLines ?? (lineDelay > 0 ? -1 : contents.length);
 
   const renderedContents = useMemo(() => {
     return contents.map((item: ContentItem, i: number) => {

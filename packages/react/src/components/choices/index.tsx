@@ -72,7 +72,7 @@ ChoiceItem.displayName = "ChoiceItem";
 const ChoicesComponent = () => {
   const ink = useStory();
   const choices = choicesStore((state) => state.choices);
-  const canShow = typeof ink.choicesCanShow === "boolean" ? ink.choicesCanShow : true;
+  const canShow = choicesStore((state) => state.choicesVisible);
 
   const inkRef = useRef(ink);
   inkRef.current = ink;

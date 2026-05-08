@@ -102,13 +102,12 @@ describe("Choices", () => {
     expect(screen.queryByRole("listitem")).not.toBeInTheDocument();
   });
 
-  it("should hide choices when choicesCanShow is false", () => {
-    const mockInk = createMockInk({
-      choicesCanShow: false,
-    });
+  it("should hide choices when choicesVisible is false", () => {
+    const mockInk = createMockInk({});
 
     choicesStore.setState({
       choices: [new Choice("Hidden", 0)],
+      choicesVisible: false,
     });
 
     const { container } = render(
