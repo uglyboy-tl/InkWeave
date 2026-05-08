@@ -5,7 +5,7 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "lib": ["ESNext", "DOM"],
-    "types": ["bun-types"]
+    "types": ["bun-types", "vite/client"]
   },
   "include": [
     "packages/solidjs/src",
