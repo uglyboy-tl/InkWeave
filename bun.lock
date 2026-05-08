@@ -39,7 +39,7 @@
     },
     "packages/core": {
       "name": "@inkweave/core",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "devDependencies": {
         "vite": "catalog:",
         "vite-plugin-dts": "catalog:",
@@ -88,7 +88,7 @@
     },
     "packages/plugins": {
       "name": "@inkweave/plugins",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "catalog:",
         "@types/react": "catalog:",
@@ -111,7 +111,7 @@
     },
     "packages/react": {
       "name": "@inkweave/react",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "devDependencies": {
         "@types/react": "catalog:",
         "@vitejs/plugin-react": "catalog:",
@@ -126,7 +126,7 @@
     },
     "packages/solidjs": {
       "name": "@inkweave/solidjs",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "devDependencies": {
         "vite": "catalog:",
         "vite-plugin-dts": "catalog:",
@@ -139,7 +139,7 @@
     },
     "packages/svelte": {
       "name": "@inkweave/svelte",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "catalog:",
         "vite": "catalog:",
@@ -152,7 +152,7 @@
     },
     "packages/web": {
       "name": "@inkweave/web",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "dependencies": {
         "@inkweave/core": "^2.0.0",
         "@inkweave/plugins": "^2.0.0",
@@ -183,6 +183,7 @@
     "inkjs": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "solid-js": "^1.0.0",
     "svelte": "^5.0.0",
     "vite": "^8.0.0",
     "vite-plugin-dts": "^4.5.0",
