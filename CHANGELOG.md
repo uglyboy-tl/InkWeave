@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.3.0 (2026-05-08)
+
+### Features
+- **web**: add SolidJS web entry and build config
+- **plugins**: add SolidJS plugin bindings
+- **solidjs**: add @inkweave/solidjs component package
+
+### Bug Fixes
+- **cd-button**: fix SolidJS lifecycle and Svelte interval cleanup
+
+### Refactoring
+- **frameworks**: remove useLineDelay, read lineDelay from ink.options
+- **plugins**: remove agnostic entry and simplify framework bindings
+- **fade-effect**: extract helpers and make setupChoicesCanShow optional
+- **plugins**: add linedelay setter and simplify CdButton timer
+- **react**: use core adapters, unify props, inline translations
+- **svelte**: use core ChoiceRegistry and fix component lifecycle
+- **core**: extract shared choice and command adapters to adapter module
+- **memory**: centralize command and translation registration in core plugin
+
+### Styles
+- **command-bar**: add global modal CSS classes and slide-in animation
+
+### Tests
+- **e2e**: add SolidJS framework support to E2E tests
+
+### Chores
+- **solidjs**: integrate into build and publish workflow
+- **e2e**: switch default E2E and build tooling to SolidJS
+- **tsconfig**: add root and SolidJS standalone tsconfig
+- **web**: split CSS imports per framework and add audio plugin
+- **plugins**: split Vite build config per framework
+- **obsidian**: update submodule pointer
+- **config**: add SolidJS build support across packages
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.2.1...v2.3.0
+
 ## v2.2.1 (2026-05-06)
 
 ### Bug Fixes

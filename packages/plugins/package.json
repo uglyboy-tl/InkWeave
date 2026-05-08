@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/plugins",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Plugin collection for InkWeave - extend functionality with plugins",
   "type": "module",
   "exports": {
@@ -43,7 +43,7 @@
     "@inkweave/core": "^2.0.0",
     "@inkweave/react": "^2.0.0",
     "@inkweave/svelte": "^2.0.0",
-    "@inkweave/solidjs": "workspace:*",
+    "@inkweave/solidjs": "^2.3.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "svelte": "catalog:",

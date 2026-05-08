@@ -1,6 +1,6 @@
 {
   "name": "@inkweave/web",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or as an npm module",
   "type": "module",
   "main": "./dist/inkweave.min.js",
@@ -52,7 +52,7 @@
     "@inkweave/core": "^2.0.0",
     "@inkweave/react": "^2.0.0",
     "@inkweave/svelte": "^2.0.0",
-    "@inkweave/solidjs": "workspace:*",
+    "@inkweave/solidjs": "^2.3.0",
     "@inkweave/plugins": "^2.0.0",
     "react": "catalog:",
     "react-dom": "catalog:",
