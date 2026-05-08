@@ -3,7 +3,7 @@ import { mount, unmount } from "svelte";
 import pkg from "../../package.json";
 import App from "./App.svelte";
 import "@inkweave/svelte/svelte.css";
-import "@inkweave/plugins/plugins.css";
+import "@inkweave/plugins/svelte.css";
 import "../global.css";
 import { FetchFileHandler } from "../utils/fileHandler";
 import { initPlugins } from "./plugins";

@@ -1,5 +1,6 @@
 import { PluginRegistry } from "@inkweave/core";
 import {
+  audioPlugin,
   autoButtonPlugin,
   autoRestorePlugin,
   autoSavePlugin,
@@ -14,6 +15,7 @@ import {
 
 export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
   PluginRegistry.register(imagePlugin);
+  PluginRegistry.register(audioPlugin);
   PluginRegistry.register(autoRestorePlugin);
   PluginRegistry.register(autoSavePlugin);
   PluginRegistry.register(scrollAfterChoicePlugin);

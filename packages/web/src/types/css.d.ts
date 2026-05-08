@@ -13,7 +13,17 @@ declare module "@inkweave/react/react.css" {
   export default content;
 }
 
-declare module "@inkweave/plugins/plugins.css" {
+declare module "@inkweave/plugins/react.css" {
+  const content: string;
+  export default content;
+}
+
+declare module "@inkweave/plugins/svelte.css" {
+  const content: string;
+  export default content;
+}
+
+declare module "@inkweave/plugins/solidjs.css" {
   const content: string;
   export default content;
 }

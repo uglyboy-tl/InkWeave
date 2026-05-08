@@ -30,7 +30,7 @@
   "scripts": {
     "check": "biome check --write --error-on-warnings . && tsgo -b",
     "dev": "vite",
-    "build": "vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts && vite build --config vite.config.solidjs.ts && cp dist/inkweave-svelte.min.js dist/inkweave.min.js && cp dist/inkweave-svelte.min.css dist/inkweave.min.css",
+    "build": "rm -rf dist && vite build --config vite.config.react.ts && vite build --config vite.config.svelte.ts && vite build --config vite.config.solidjs.ts && cp dist/inkweave-solidjs.min.js dist/inkweave.min.js && cp dist/inkweave-solidjs.min.css dist/inkweave.min.css",
     "preview": "vite preview"
   },
   "keywords": [

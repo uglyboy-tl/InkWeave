@@ -15,7 +15,7 @@ export default defineConfig({
     "process.browser": true,
   },
   build: {
-    emptyOutDir: true,
+    emptyOutDir: false,
     copyPublicDir: false,
     lib: {
       entry: resolve(__dirname, "src/react/main.ts"),

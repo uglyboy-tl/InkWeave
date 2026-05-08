@@ -2,7 +2,7 @@ import type { InkStory, TranslationFunction } from "@inkweave/core";
 import { Image } from "@inkweave/plugins/solidjs";
 import { CommandBar, Story } from "@inkweave/solidjs";
 import "@inkweave/solidjs/solidjs.css";
-import "@inkweave/plugins/plugins.css";
+import "@inkweave/plugins/solidjs.css";
 import "../global.css";
 
 interface AppProps {

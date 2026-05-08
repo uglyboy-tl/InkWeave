@@ -4,7 +4,7 @@ import { CommandBar, Story } from "@inkweave/react";
 import { StrictMode } from "react";
 import type { Root } from "react-dom/client";
 import "@inkweave/react/react.css";
-import "@inkweave/plugins/plugins.css";
+import "@inkweave/plugins/react.css";
 import "../global.css";
 
 export const render = (root: Root, ink: InkStory, translations?: TranslationFunction) => {
