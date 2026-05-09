@@ -1,7 +1,7 @@
 {
   "name": "@inkweave/plugins",
   "repository": "https://github.com/uglyboy-tl/InkWeave.git",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Plugin collection for InkWeave - extend functionality with plugins",
   "type": "module",
   "exports": {

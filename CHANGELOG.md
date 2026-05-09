@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.3.3 (2026-05-09)
+
+### Features
+- **core**: add InteractionManager for gesture/keyboard-driven choices
+
+### Documentation
+- **e2e**: add README with test architecture and writing guide
+- **svelte**: add README with component usage and API reference
+- **solidjs**: add README with component usage and API reference
+- **react**: add README with component usage and API reference
+- **web**: rewrite README as bilingual with plugin config guide
+- **core**: rewrite README as bilingual with InteractionManager guide
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.3.2...v2.3.3
+
 ## v2.3.2 (2026-05-08)
 
 ### Refactoring
