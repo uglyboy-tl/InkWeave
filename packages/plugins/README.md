@@ -1,221 +1,219 @@
 # InkWeave Plugins
 
-InkWeave 插件扩展包，为交互式故事提供丰富的功能增强。
+English | [中文](./README.zh-cn.md)
 
-## 内置插件
+Plugin extension pack for InkWeave, providing rich functionality for interactive fiction.
 
-| 插件              | 功能说明                 |
-| ----------------- | ------------------------ |
-| Image             | 显示场景背景图片         |
-| Audio             | 播放背景音乐和音效       |
-| Linkopen          | 打开外部网页链接         |
-| FadeEffect        | 文字逐行淡入效果         |
-| ScrollAfterChoice | 选择后自动滚动到最新内容 |
-| AutoButton        | 隐藏按钮，定时自动触发   |
-| CdButton          | 冷却按钮，显示倒计时     |
-| Memory            | 存档管理（保存/读取）    |
-| Autosave          | 标签触发自动保存         |
-| AutoRestore       | 自动保存和还原游戏进度   |
+## Built-in Plugins
 
-### 内容扩展
+| Plugin            | Description                          |
+| ----------------- | ------------------------------------ |
+| Image             | Display scene background images      |
+| Audio             | Play background music and SFX        |
+| Linkopen          | Open external web links              |
+| FadeEffect        | Line-by-line text fade-in            |
+| ScrollAfterChoice | Auto-scroll to latest content        |
+| AutoButton        | Hidden button with auto-trigger      |
+| CdButton          | Cooldown button with countdown       |
+| Memory            | Save/load management                 |
+| Autosave          | Tag-triggered auto-save              |
+| AutoRestore       | Auto-save and restore game progress  |
 
-#### Image - 图片显示
+### Content Extensions
 
-在故事中显示背景图片或场景插图。
+#### Image
 
-**Ink 语法：**
+Display background images or scene illustrations.
+
+**Ink syntax:**
 
 ```
 #image:path/to/image.png
 ```
 
-清除当前图片：
+Clear current image:
 
 ```
 #image:
 ```
 
-**效果：** 设置当前场景的背景图片，图片路径相对于 `basePath`。
+**Effect:** Sets the background image for the current scene. Path is relative to `basePath`.
 
 ---
 
-#### Audio - 音频播放
+#### Audio
 
-支持背景音乐和音效播放。
+Background music and sound effect playback.
 
-**Ink 语法：**
-
-```
-#music:audio/bgm.mp3    // 播放背景音乐（循环）
-#sound:audio/effect.wav // 播放音效（单次）
-```
-
-停止播放：
+**Ink syntax:**
 
 ```
-#music:    // 停止背景音乐
-#sound:    // 停止音效
+#music:audio/bgm.mp3    // Play BGM (loop)
+#sound:audio/effect.wav // Play SFX (once)
 ```
 
-**效果：**
+Stop playback:
 
-- `#music` 循环播放背景音乐，适合场景氛围
-- `#sound` 播放单次音效，适合点击、过渡等
+```
+#music:    // Stop BGM
+#sound:    // Stop SFX
+```
+
+**Effect:**
+- `#music` loops background music for atmosphere
+- `#sound` plays one-shot sound effects
 
 ---
 
-#### Linkopen - 外部链接
+#### Linkopen
 
-在故事中打开外部网页链接。
+Open external web links within the story.
 
-**Ink 语法：**
+**Ink syntax:**
 
 ```
 #linkopen:https://example.com
 ```
 
-**效果：** 在新标签页打开指定 URL（仅支持 http/https 协议，安全限制）。
+**Effect:** Opens the URL in a new tab (http/https only for security).
 
 ---
 
-### 视觉效果
+### Visual Effects
 
-#### FadeEffect - 文字淡入
+#### FadeEffect
 
-为文字添加逐行淡入效果，营造阅读节奏感。
+Line-by-line text fade-in for reading rhythm.
 
-**Ink 语法：**
+**Ink syntax:**
 
 ```
-#linedelay:0.05    // 设置每行延迟 0.05 秒
-#linedelay:0       // 关闭淡入效果（立即显示全部文字）
+#linedelay:0.05    // 0.05s per line
+#linedelay:0       // Disable (show all instantly)
 ```
 
-**效果：** 文字按设定速度逐行淡入显示，选项按钮会在文字完全显示后才出现。
+**Effect:** Text fades in at the set speed. Choice buttons appear only after all text is shown.
 
 ---
 
-#### ScrollAfterChoice - 选择后滚动
+#### ScrollAfterChoice
 
-选择选项后自动滚动到最新内容位置。
+Auto-scroll to the latest content after making a choice.
 
-**Ink 语法：** 无需语法，自动生效。
+**Ink syntax:** None — works automatically.
 
-**效果：** 确保用户始终看到最新的故事内容，适合长篇故事。
+**Effect:** Ensures users always see the newest story content. Useful for long stories.
 
 ---
 
-### 按钮增强
+### Button Enhancements
 
-#### AutoButton - 自动按钮
+#### AutoButton
 
-隐藏按钮，倒计时后自动触发。
+Hidden button that auto-triggers after a countdown.
 
-**Ink 语法：**
+**Ink syntax:**
 
 ```
-+ [按钮文本#auto:3]
++ [Button text#auto:3]
   -> next_scene
 ```
 
-**参数：** `#auto:秒数` - 自动触发的时间间隔
+**Parameter:** `#auto:seconds` — auto-trigger delay
 
-**效果：**
+**Effect:**
+- Button is invisible
+- Auto-executes the choice after the specified delay
+- Suitable for countdown transitions, skip cutscenes, auto-advance plot
 
-- 按钮隐藏不可见
-- 指定秒数后自动执行该选项
-- 适合倒计时跳转、跳过过场、自动推进剧情
-
-**组合用法：** 同时提供手动和自动选项：
+**Combined usage:**
 
 ```
-+ [跳过过场#auto:5]
++ [Skip cutscene#auto:5]
   -> next
-+ [点击继续]
++ [Click to continue]
   -> next
 ```
 
 ---
 
-#### CdButton - 冷却按钮
+#### CdButton
 
-按钮显示冷却倒计时，冷却期间禁用。
+Button with cooldown countdown, disabled during cooldown.
 
-**Ink 语法：**
+**Ink syntax:**
 
 ```
-+ [攻击#cd:10]
++ [Attack#cd:10]
   -> attack
 ```
 
-**参数：** `#cd:秒数` - 冷却时间
+**Parameter:** `#cd:seconds` — cooldown duration
 
-**效果：**
+**Effect:**
+- Displays button text with remaining seconds: `Attack (10)`
+- Button disabled during cooldown
+- Suitable for skill cooldowns, reply limits, etc.
 
-- 显示按钮文本和剩余秒数：`攻击 (10)`
-- 冷却期间按钮禁用，不可点击
-- 适合技能冷却、回复限制等场景
-
-**模板定制：** 初始化时可配置 `cdTemplate`：
+**Template customization:**
 
 ```js
 InkWeave.init({
-  cdTemplate: '{text} [{time}s]', // 显示：攻击 [10s]
+  cdTemplate: '{text} [{time}s]',  // displays: Attack [10s]
 });
 ```
 
 ---
 
-### 存档系统
+### Save System
 
-#### Memory - 存档管理
+#### Memory
 
-提供存档、读档功能，支持 localStorage 和 sessionStorage。
+Save/load functionality supporting localStorage and sessionStorage.
 
-**API：**
+**API:**
 
 ```js
 import { memory } from '@inkweave/plugins';
 
-memory.save(1, ink); // 保存到槽位 1
-memory.load(saveData, ink); // 加载存档
-memory.show(title); // 获取指定故事的存档列表
+memory.save(1, ink);          // Save to slot 1
+memory.load(saveData, ink);   // Load saved data
+memory.show(title);           // Get save list for a title
 ```
 
-**配置：**
+**Configuration:**
 
 ```js
-loadMemory(); // 默认 localStorage
-// 或在 init 时设置：memory_format: 'session'
+loadMemory();  // Default localStorage
+// Or set during init: memory_format: 'session'
 ```
 
 ---
 
-#### Autosave - 标签触发自动存档
+#### Autosave
 
-在故事中使用标签触发自动保存。
+Tag-triggered auto-save.
 
-**Ink 语法：**
+**Ink syntax:**
 
 ```
 #autosave
 ```
 
-**效果：** 执行到此标签时自动保存到槽位 1。
+**Effect:** Auto-saves to slot 1 when this tag is reached.
 
 ---
 
-#### AutoRestore - 自动保存和还原
+#### AutoRestore
 
-类似 Calico 的 autosave 功能，在关键节点自动保存，并在故事加载时自动还原。
+Auto-save and restore, similar to Calico's autosave.
 
-**功能：**
+**Features:**
+- Auto-saves to slot 0 after each choice
+- Auto-loads the latest save on story initialization
+- Minimal configuration required
 
-- 选择选项后自动保存到槽位 0
-- 故事初始化时自动加载最近的存档
-- 低配置，只需确保存储机制正常工作即可使用
-
-**使用示例：**
+**Usage:**
 
 ```js
 import { loadAutoRestore } from '@inkweave/plugins';
@@ -223,37 +221,31 @@ import { loadAutoRestore } from '@inkweave/plugins';
 loadAutoRestore();
 ```
 
-**与 Autosave 的区别：**
-
-- `Autosave`：需要通过 `#autosave` 标签手动触发保存
-- `AutoRestore`：自动在关键节点保存，无需标签，并支持自动还原
-
-**保存时机：**
-
-- 玩家选择选项后自动保存
-- 存档槽位固定为 0（与 Memory 插件的默认槽位一致）
+**Difference from Autosave:**
+- `Autosave`: requires `#autosave` tag to trigger
+- `AutoRestore`: auto-saves at key points without tags, supports auto-restore
 
 ---
 
-## 插件开发规范
+## Plugin Development
 
-### 插件结构
+### Plugin Structure
 
 ```
 src/
 ├── myPlugin/
-│   ├── index.ts      # 入口，导出 load 函数
-│   ├── MyComponent.tsx  # 可选，React 组件
-│   └── utils.ts      # 可选，辅助逻辑
+│   ├── index.ts      # Entry, exports load function
+│   ├── MyComponent.tsx  # Optional, React component
+│   └── utils.ts      # Optional, helpers
 │
-└── index.ts          # 导出所有插件
+└── index.ts          # Exports all plugins
 ```
 
-### 入口文件规范
+### Entry File Convention
 
 ```ts
 // index.ts
-import { Tags, ChoiceParser, Patches, type InkStory } from '@inkweave/core';
+import { TagHandler, ChoiceHandler, Patches, type InkStory } from '@inkweave/core';
 import { ChoiceRegistry } from '@inkweave/react';
 
 const options = {
@@ -261,86 +253,72 @@ const options = {
 };
 
 const load = () => {
-  // 注册功能...
+  // Register functionality...
 };
 
 export default load;
 ```
 
-### 核心扩展点
+### Core Extension Points
 
-#### 1. Tags - 内容标签
+#### 1. Tags — Content Tags
 
-处理 ink 脚本中的 `#tag:value` 标签。
+Handle `#tag:value` tags in ink scripts.
 
 ```ts
-Tags.add('mytag', (val: string | null | undefined, ink: InkStory) => {
-  // val 是标签值，ink 是故事实例
+TagHandler.add('mytag', (val: string | null | undefined, ink: InkStory) => {
+  // val is the tag value, ink is the story instance
   if (val) {
     ink.options.my_option = val;
   }
 });
 ```
 
-**使用场景：** 图片、音频、链接、配置修改等。
+**Use cases:** images, audio, links, configuration tweaks.
 
 ---
 
-#### 2. ChoiceParser - 选项解析
+#### 2. ChoiceHandler — Choice Parsing
 
-解析选项按钮的标签 `[文本#tag:value]`。
+Parse choice button tags `[text#tag:value]`.
 
 ```ts
-ChoiceParser.add('mytype', (choice, val) => {
-  choice.type = 'mytype'; // 设置按钮类型
-  choice.val = val; // 保存参数值
+ChoiceHandler.add('mytype', (choice, val) => {
+  choice.type = 'mytype';  // Set button type
+  choice.val = val;        // Save parameter value
 });
 ```
 
-**配合组件注册：**
+**With component registration:**
 
 ```ts
 ChoiceRegistry.register('mytype', MyButtonComponent);
 ```
 
-**使用场景：** 特殊按钮类型（自动、冷却、禁用等）。
+**Use cases:** special button types (auto, cooldown, disabled).
 
 ---
 
-#### 3. Patches - 实例扩展
+#### 3. Patches — Instance Extension
 
-扩展 InkStory 实例的能力和生命周期。
+Extend InkStory instance with custom properties and lifecycle hooks.
 
 ```ts
 Patches.add(function (this: InkStoryContext) {
-  // 添加属性
   this.myProperty = 'value';
-
-  // 添加存档字段
   this.save_label.push('myProperty');
-
-  // 清理钩子（故事重置时）
-  this.clears.push(() => {
-    this.myProperty = '';
-  });
-
-  // 销毁钩子（实例销毁时）
-  this.cleanups.push(() => {
-    // 清理资源...
-  });
 }, options);
 ```
 
-**使用场景：** 添加状态、生命周期管理、存档字段。
+**Use cases:** state management, lifecycle hooks, save fields.
 
 ---
 
-#### 4. ChoiceRegistry - 按钮组件
+#### 4. ChoiceRegistry — Button Components
 
-注册自定义 React 选项按钮组件。
+Register custom React choice button components.
 
 ```tsx
-// MyButton.tsx
 import { memo } from 'react';
 import type { ChoiceComponentProps } from '@inkweave/react';
 
@@ -348,7 +326,6 @@ const MyButton: React.FC<ChoiceComponentProps> = ({ choice, onClick, className, 
   return (
     <button className={className} onClick={onClick}>
       {children}
-      {/* 自定义渲染 */}
     </button>
   );
 };
@@ -361,9 +338,9 @@ ChoiceRegistry.register('mytype', MyButton);
 
 ---
 
-### 类型声明扩展
+### Type Declaration Extension
 
-当插件添加新属性时，需要扩展类型声明：
+Extend type declarations when plugins add new properties:
 
 ```ts
 declare module '@inkweave/core' {
@@ -375,29 +352,27 @@ declare module '@inkweave/core' {
 
 ---
 
-### 开发建议
+### Development Tips
 
-1. **单一职责**：每个插件专注一个功能
-2. **命名规范**：
-   - 标签：小写，无特殊字符（`#image`、`#music`）
-   - 类型：简短描述性（`cd`、`auto`）
-3. **配置可定制**：通过 options 提供默认配置
-4. **生命周期管理**：
-   - 使用 `clears` 处理故事重置
-   - 使用 `cleanups` 处理实例销毁
-5. **存档兼容**：新增状态需添加到 `save_label`
+1. **Single responsibility** — each plugin focuses on one feature
+2. **Naming conventions**:
+   - Tags: lowercase, no special chars (`#image`, `#music`)
+   - Types: short and descriptive (`cd`, `auto`)
+3. **Customizable** — provide defaults via `options`
+4. **Lifecycle management** — use event system for cleanup
+5. **Save compatibility** — add new state to `save_label`
 
 ---
 
-### 插件导出
+### Plugin Export
 
-在 `src/index.ts` 中导出：
+Export in `src/index.ts`:
 
 ```ts
 export { default as loadMyPlugin } from './myPlugin';
 ```
 
-使用方按需加载：
+Consumers load on demand:
 
 ```ts
 import { loadMyPlugin } from '@inkweave/plugins';
