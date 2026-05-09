@@ -1,6 +1,8 @@
 # @inkweave/web
 
-Pre-built browser bundle for InkWeave - ready to use via CDN or script tag without any build tools.
+English | [中文](./README.zh-cn.md)
+
+Pre-built browser bundle for InkWeave — ready to use via CDN or script tag without any build tools.
 
 ## Quick Start via CDN
 
@@ -28,7 +30,7 @@ Pre-built browser bundle for InkWeave - ready to use via CDN or script tag witho
 </head>
 <body>
   <div id="story-container"></div>
-  
+
   <script src="https://unpkg.com/@inkweave/web"></script>
   <script>
     InkWeave.init({
@@ -53,19 +55,51 @@ Pre-built browser bundle for InkWeave - ready to use via CDN or script tag witho
 Initialize InkWeave in your container.
 
 **Options:**
-- `container` (string | Element): CSS selector or DOM element
-- `story` (string): Ink story content (inline or from file)
-- `title` (string): Story title
-- `basePath` (string): Base path for loading external files
-- `theme` ('light' | 'dark'): Theme mode
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `container` | `string \| Element` | CSS selector or DOM element |
+| `story` | `string` | Ink story content (inline or from file) |
+| `title` | `string` | Story title |
+| `basePath` | `string` | Base path for loading external files |
+| `theme` | `'light' \| 'dark'` | Theme mode |
+| `plugins` | `Record<string, boolean>` | Plugin enable/disable configuration |
 
 ### `InkWeave.version`
 
 Current version string.
 
+## Plugin Configuration
+
+Control which plugins are enabled during initialization:
+
+```js
+InkWeave.init({
+  container: '#app',
+  story: '...',
+  plugins: {
+    'image': false,         // Disable image plugin
+    'audio': true,          // Enable audio plugin
+    'auto-restore': false,  // Disable auto-restore plugin
+  }
+});
+```
+
+### Plugin ID Reference
+
+| ID | Plugin | ID | Plugin |
+|----|--------|----|--------|
+| `image` | Image | `link-open` | Link Open |
+| `audio` | Audio | `memory` | Memory |
+| `auto-restore` | Auto Restore | `auto-button` | Auto Button |
+| `auto-save` | Auto Save | `cd-button` | Countdown Button |
+| `fade-effect` | Fade Effect | `class-tag` | CSS Class Tag |
+| `scroll-after-choice` | Scroll After Choice | | |
+
 ## Bundle Contents
 
 This bundle includes everything you need:
+
 - React & ReactDOM
 - inkjs runtime
 - InkWeave core engine
@@ -77,9 +111,10 @@ This bundle includes everything you need:
 ## For Build Tool Users
 
 If you're using webpack, Vite, or other build tools, consider using the modular packages instead:
-- `@inkweave/core` - Core engine
-- `@inkweave/react` - React components  
-- `@inkweave/plugins` - Optional plugins
+
+- `@inkweave/core` — Core engine
+- `@inkweave/react` — React components
+- `@inkweave/plugins` — Optional plugins
 
 This allows for better optimization and smaller bundles.
 
