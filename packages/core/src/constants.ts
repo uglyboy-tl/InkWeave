@@ -17,4 +17,5 @@ export const Events = {
   CHOICE_SELECTING: "choice.selecting",
   CHOICE_SELECTED: "choice.selected",
   CONTENTS_CHANGED: "contents.changed",
+  INTERACTION_TRIGGERED: "interaction.triggered",
 } as const;

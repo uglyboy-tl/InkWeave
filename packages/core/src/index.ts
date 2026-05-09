@@ -17,6 +17,10 @@ export { ChoiceHandler } from "./story/ChoiceHandler";
 export { ContentParser, type ContentParserLine } from "./story/ContentParser";
 export { Externals } from "./story/Externals";
 export { InkStory } from "./story/InkStory";
+export {
+  InteractionManager,
+  type InteractionResolver,
+} from "./story/InteractionManager";
 export { Patches } from "./story/Patches";
 export { TagHandler } from "./story/TagHandler";
 export type {

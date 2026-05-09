@@ -8,6 +8,7 @@ import variablesStore from "../state/variables";
 import type { ContentItem, InkStoryContext, InkStoryOptions } from "../types";
 import { ContentParser } from "./ContentParser";
 import { Externals } from "./Externals";
+import { InteractionManager } from "./InteractionManager";
 import { Patches } from "./Patches";
 import { TagHandler } from "./TagHandler";
 
@@ -17,6 +18,7 @@ export class InkStory implements InkStoryContext {
   options: InkStoryOptions;
   eventEmitter: EventEmitter;
   pluginLoader: PluginLoader;
+  interactionManager: InteractionManager;
   save_label: string[] = ["contents"];
   [key: string]: unknown;
 
@@ -26,6 +28,10 @@ export class InkStory implements InkStoryContext {
     this.title = title;
     this.eventEmitter = new EventEmitter();
     this.pluginLoader = new PluginLoader(this);
+    this.interactionManager = new InteractionManager(this);
+    this.eventEmitter.on(Events.INTERACTION_TRIGGERED, (data: { index: number }) => {
+      this.choose(data.index);
+    });
     const content = this.story.ToJson();
     if (content) {
       Patches.apply(this, content);

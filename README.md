@@ -33,6 +33,7 @@ ink-player          → Obsidian 插件 (git submodule)
 | **Patches**           | JS → Engine | 扩展引擎能力，注入属性         |
 | **ChoiceParser**      | ink → JS    | 选项行为定制                   |
 | **ChoiceRegistry**    | JS → React  | 注册自定义选项组件             |
+| **InteractionManager**| JS → Engine | 外部交互映射（手势/键盘驱动选择）|
 
 详细设计思路见 [docs/why-this-project.md](docs/why-this-project.md)。
 
