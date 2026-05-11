@@ -9,6 +9,7 @@ import { PluginRegistry } from "./PluginRegistry";
 
 export class PluginLoader {
   private _loadedIds: Set<string> = new Set();
+  private _activeClassName: string | null = null;
 
   constructor(ink: InkStory) {
     this.load();
@@ -21,8 +22,13 @@ export class PluginLoader {
     return Array.from(this._loadedIds);
   }
 
+  get activeDisplayClassName(): string | null {
+    return this._activeClassName;
+  }
+
   load() {
     this._loadedIds.clear();
+    this._activeClassName = null;
 
     Patches.clear();
     TagHandler.clear();
@@ -30,7 +36,16 @@ export class PluginLoader {
     ContentParser.clear();
     Externals.clear();
 
-    for (const plugin of PluginRegistry.getAll()) {
+    // 加载显示类插件（基础，只有当前激活的）
+    const displayPlugin = PluginRegistry.getActiveLayout();
+    if (displayPlugin && PluginRegistry.isEnabled(displayPlugin.id)) {
+      displayPlugin.onLoad();
+      this._loadedIds.add(displayPlugin.id);
+      this._activeClassName = displayPlugin.injectClassName ?? null;
+    }
+
+    // 加载功能类插件
+    for (const plugin of PluginRegistry.getPlugins()) {
       if (PluginRegistry.isEnabled(plugin.id)) {
         plugin.onLoad();
         this._loadedIds.add(plugin.id);
@@ -40,5 +55,6 @@ export class PluginLoader {
 
   dispose() {
     this._loadedIds.clear();
+    this._activeClassName = null;
   }
 }

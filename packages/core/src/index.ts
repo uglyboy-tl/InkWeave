@@ -1,6 +1,6 @@
 export { ChoiceRegistry } from "./adapter/ChoiceRegistry";
 export { CommandRegistry } from "./adapter/CommandRegistry";
-export type { Command, ModalContentProps } from "./adapter/types";
+export type { Command, ModalContentProps, StatusBarConfig } from "./adapter/types";
 export { CHOICE_SEPARATOR, DEFAULT_STORY_OPTIONS, Events } from "./constants";
 export { createInkStory } from "./create";
 export { EventEmitter } from "./events/EventEmitter";
@@ -9,7 +9,7 @@ export { BaseFileHandler, type FileHandler } from "./file/FileHandler";
 export { InkjsFileHandler } from "./file/InkjsFileHandler";
 export { PluginLoader } from "./plugin/PluginLoader";
 export { PluginRegistry } from "./plugin/PluginRegistry";
-export type { ChoiceRenderer, Plugin } from "./plugin/types";
+export type { ChoiceRenderer, Layout, Plugin } from "./plugin/types";
 export { default as choicesStore } from "./state/choices";
 export { default as contentsStore } from "./state/contents";
 export { default as variablesStore } from "./state/variables";

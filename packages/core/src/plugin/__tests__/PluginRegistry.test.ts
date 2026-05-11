@@ -21,7 +21,7 @@ describe("PluginRegistry", () => {
     it("should register a plugin", () => {
       const plugin = createMockPlugin("test-plugin-1");
       PluginRegistry.register(plugin);
-      expect(PluginRegistry.getAll().map((p) => p.id)).toEqual(["test-plugin-1"]);
+      expect(PluginRegistry.getPlugins().map((p) => p.id)).toEqual(["test-plugin-1"]);
     });
 
     it("should register multiple plugins", () => {
@@ -29,7 +29,10 @@ describe("PluginRegistry", () => {
       const plugin2 = createMockPlugin("test-plugin-2", false);
       PluginRegistry.register(plugin1);
       PluginRegistry.register(plugin2);
-      expect(PluginRegistry.getAll().map((p) => p.id)).toEqual(["test-plugin-1", "test-plugin-2"]);
+      expect(PluginRegistry.getPlugins().map((p) => p.id)).toEqual([
+        "test-plugin-1",
+        "test-plugin-2",
+      ]);
     });
   });
 

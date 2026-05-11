@@ -17,3 +17,9 @@ export interface Command {
   handler: (ink: InkStory) => void | Promise<void>;
   getModalContent?: (props: ModalContentProps) => unknown;
 }
+
+export interface StatusBarConfig {
+  key: string;
+  label: string;
+  display: "bar" | "number";
+}
