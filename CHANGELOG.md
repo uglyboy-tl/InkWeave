@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.4.0 (2026-05-11)
+
+### Features
+- **core**: add interactionManager to InkStoryContext
+- **web**: integrate StatusBar and layout plugin system
+- **svelte**: add StatusBar component and inline prop types
+- **solidjs**: add StatusBar component and inline prop types
+- **react**: add StatusBar component and inline prop types
+- **core**: add layout plugin system and StatusBarConfig
+- **reigns**: add Reigns card swipe plugin
+
+### Bug Fixes
+- **fade-effect**: remove forced choicesVisible override
+
+### Refactoring
+- **reigns**: extract swipe handler to separate module
+- **core**: remove unused interactionManager from InkStoryContext
+- **status-bar**: optimize variable subscription
+- **scroll-after-choice**: use named imports
+- **reigns**: migrate to Layout plugin with external StatusBar
+
+### Documentation
+- **plugins**: rewrite README as bilingual
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.3.3...v2.4.0
+
 ## v2.3.3 (2026-05-09)
 
 ### Features
