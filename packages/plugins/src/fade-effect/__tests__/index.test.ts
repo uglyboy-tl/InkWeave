@@ -39,7 +39,6 @@ describe("fadeEffect", () => {
       patch?.call(mockStory as never, "");
       TagHandler.process(mockStory as never, "linedelay: 0");
       expect(mockStory.options.linedelay).toBe(0);
-      expect(choicesStore.getState().choicesVisible).toBe(true);
     });
 
     it("should handle invalid linedelay value", () => {
@@ -81,7 +80,7 @@ describe("fadeEffect", () => {
   });
 
   describe("contentsStore subscription", () => {
-    it("should set choicesVisible true on content update with zero delay", async () => {
+    it("should not force choicesVisible when delay is zero", async () => {
       plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0 },
@@ -91,7 +90,7 @@ describe("fadeEffect", () => {
 
       choicesStore.getState().setChoicesVisible(false);
       contentsStore.setState({ contents: [{ text: "new content" }] });
-      expect(choicesStore.getState().choicesVisible).toBe(true);
+      expect(choicesStore.getState().choicesVisible).toBe(false);
     });
 
     it("should hide choices and schedule timer on content with delay", async () => {

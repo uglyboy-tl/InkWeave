@@ -2,23 +2,24 @@ import {
   choicesStore,
   contentsStore,
   Events,
+  type InkStory,
   type InkStoryContext,
   Patches,
+  type Plugin,
   TagHandler,
 } from "@inkweave/core";
 
-export const fadeEffectPlugin = {
+export const fadeEffectPlugin: Plugin = {
   id: "fade-effect",
   name: "Fade Effect Plugin",
   description: "Provides text fade-in effect with configurable line delay",
   enabledByDefault: true,
   onLoad: () => {
-    TagHandler.add("linedelay", (val: string | null | undefined, ink) => {
+    TagHandler.add("linedelay", (val: string | null | undefined, ink: InkStory) => {
       if (val != null) {
         const v = parseFloat(val);
         if (!Number.isNaN(v)) {
-          ink.linedelay = v;
-          if (v === 0) choicesStore.getState().setChoicesVisible(true);
+          (ink as unknown as Record<string, unknown>).linedelay = v;
         }
       }
     });
@@ -42,7 +43,6 @@ export const fadeEffectPlugin = {
           if (timer) clearTimeout(timer);
 
           if (this.options.linedelay === 0) {
-            choicesStore.getState().setChoicesVisible(true);
             return;
           }
 
@@ -67,4 +67,4 @@ export const fadeEffectPlugin = {
       { linedelay: 0.05 },
     );
   },
-} satisfies import("@inkweave/core").Plugin;
+};

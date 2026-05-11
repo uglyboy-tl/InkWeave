@@ -1,4 +1,4 @@
-import type { Layout } from "@inkweave/core";
+import type { InkStory, InkStoryContext, Layout } from "@inkweave/core";
 import { choicesStore, contentsStore, Events, InteractionManager, Patches } from "@inkweave/core";
 import "./styles.css";
 
@@ -14,14 +14,14 @@ interface SwipeState {
 export const reignsPlugin: Layout = {
   id: "reigns",
   injectClassName: "reigns-mode",
-  exclude: ["fade-effect", "scroll-after-choice"],
+  exclude: ["scroll-after-choice"],
   name: "Reigns Card Plugin",
   description: "Provides card swipe interaction for Reigns-style games",
   onLoad: () => {
     choicesStore.getState().setChoicesVisible(false);
 
-    Patches.add(function (this: import("@inkweave/core").InkStoryContext) {
-      const ink = this as unknown as import("@inkweave/core").InkStory;
+    Patches.add(function (this: InkStoryContext) {
+      const ink = this as unknown as InkStory;
 
       ink.interactionManager.register("swipe-left", InteractionManager.presets.left);
       ink.interactionManager.register("swipe-right", InteractionManager.presets.right);
