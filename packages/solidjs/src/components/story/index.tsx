@@ -36,9 +36,15 @@ const Story = (props: StoryProps) => {
     props.onInit?.(props.ink);
   });
 
+  const displayClass = () => props.ink.pluginLoader.activeDisplayClassName ?? "";
+
   return (
     <StoryProvider ink={props.ink}>
-      <div id="inkweave-story" class={`${styles.story} ${props.class || ""}`} data-inkweave="story">
+      <div
+        id="inkweave-story"
+        class={`${styles.story} ${displayClass()} ${props.class || ""}`}
+        data-inkweave="story"
+      >
         {props.children}
         <Contents />
         <Choices />

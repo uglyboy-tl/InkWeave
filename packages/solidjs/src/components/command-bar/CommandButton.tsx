@@ -1,5 +1,13 @@
+import type { InkStory, TranslationFunction } from "@inkweave/core";
 import { CommandRegistry } from "@inkweave/core";
-import type { CommandButtonProps } from "../../types";
+
+interface CommandButtonProps {
+  commandId: string;
+  ink: InkStory;
+  class?: string;
+  onRequestOpenModal?: (commandId: string) => void;
+  t: TranslationFunction;
+}
 
 const CommandButton = (props: CommandButtonProps) => {
   const command = CommandRegistry.get(props.commandId);

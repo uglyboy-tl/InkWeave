@@ -1,0 +1,37 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.label {
+  color: #888;
+  flex-shrink: 0;
+}
+
+.track {
+  flex: 1;
+  min-width: 30px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: #4a90d9;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.value {
+  font-weight: bold;
+  color: #555;
+}

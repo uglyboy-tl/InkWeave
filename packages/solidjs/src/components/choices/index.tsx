@@ -1,8 +1,24 @@
 import { type Choice, ChoiceRegistry as ChoiceRegistryClass, choicesStore } from "@inkweave/core";
-import { createEffect, createMemo, createSignal, For, onCleanup, onMount } from "solid-js";
-import type { ChoiceComponent } from "../../types";
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  type JSX,
+  onCleanup,
+  onMount,
+} from "solid-js";
 import { useStory } from "../story";
 import styles from "./styles.module.css";
+
+export interface ChoiceComponentProps {
+  choice: Choice;
+  onClick: () => void;
+  class?: string;
+  children?: JSX.Element;
+}
+
+export type ChoiceComponent = (props: ChoiceComponentProps) => JSX.Element;
 
 export const ChoiceRegistry = new ChoiceRegistryClass<ChoiceComponent>();
 
