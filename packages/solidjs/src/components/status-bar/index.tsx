@@ -1,6 +1,6 @@
 import type { InkStory, StatusBarConfig } from "@inkweave/core";
 import { variablesStore } from "@inkweave/core";
-import { createMemo, createSignal, type JSX, onCleanup, onMount } from "solid-js";
+import { createSignal, type JSX, onCleanup, onMount } from "solid-js";
 import styles from "./styles.module.css";
 
 interface StatusBarProps {
@@ -10,22 +10,20 @@ interface StatusBarProps {
 }
 
 const StatusBar = (props: StatusBarProps): JSX.Element => {
-  const [version, setVersion] = createSignal(0);
+  const [state, setState] = createSignal(variablesStore.getState());
 
   onMount(() => {
-    setVersion(1);
-    const unsub = variablesStore.subscribe(() => setVersion((v) => v + 1));
+    const unsub = variablesStore.subscribe((s) => setState(s));
     onCleanup(unsub);
   });
 
-  const allVars = createMemo(() => {
-    version();
-    return variablesStore.getState().variables;
-  });
-
   const getValue = (key: string): number => {
-    const raw = allVars().get(key);
+    const raw = state().variables.get(key);
     return typeof raw === "number" ? raw : 0;
+  };
+
+  const getPercent = (key: string, max = 10): number => {
+    return state().getPercent(key, max);
   };
 
   return (
@@ -41,7 +39,7 @@ const StatusBar = (props: StatusBarProps): JSX.Element => {
           );
         }
 
-        const percent = variablesStore.getState().getPercent(cfg.key);
+        const percent = getPercent(cfg.key);
         return (
           <div class={styles.item}>
             <span class={styles.label}>{cfg.label}</span>
