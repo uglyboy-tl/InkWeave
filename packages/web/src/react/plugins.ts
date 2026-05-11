@@ -14,7 +14,8 @@ import {
   scrollAfterChoicePlugin,
 } from "@inkweave/plugins/react";
 
-export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
+export const initPlugins = (pluginConfig?: Record<string, boolean>, display?: string) => {
+  PluginRegistry.clear();
   PluginRegistry.register(imagePlugin);
   PluginRegistry.register(audioPlugin);
   PluginRegistry.register(autoRestorePlugin);
@@ -26,9 +27,8 @@ export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
   PluginRegistry.register(autoButtonPlugin);
   PluginRegistry.register(cdButtonPlugin);
   PluginRegistry.register(classTagPlugin);
-  PluginRegistry.register(reignsPlugin);
+  PluginRegistry.registerLayout(reignsPlugin);
 
-  if (pluginConfig) {
-    PluginRegistry.setEnabled(pluginConfig);
-  }
+  PluginRegistry.setLayout(display ?? null);
+  PluginRegistry.setEnabled(pluginConfig ?? {});
 };

@@ -1,16 +1,24 @@
 <script lang="ts">
-import type { InkStory, TranslationFunction } from "@inkweave/core";
+import type { InkStory, StatusBarConfig, TranslationFunction } from "@inkweave/core";
 import { Image } from "@inkweave/plugins/svelte";
-import { CommandBar, Story } from "@inkweave/svelte";
+import { CommandBar, StatusBar, Story } from "@inkweave/svelte";
 
-const _props = $props<{ ink: InkStory; translations?: TranslationFunction }>();
+interface Props {
+  ink: InkStory;
+  translations?: TranslationFunction;
+  statusBar?: StatusBarConfig[];
+}
+let { ink, translations, statusBar }: Props = $props();
 </script>
 
 <div id="inkweave-player">
   <nav>
-    <CommandBar ink={_props.ink} class="inkweave-command-bar" buttonClass="inkweave-cmd-btn" t={_props.translations} />
+    {#if statusBar}
+      <StatusBar ink={ink} variables={statusBar} />
+    {/if}
+    <CommandBar ink={ink} class="inkweave-command-bar" buttonClass="inkweave-cmd-btn" t={translations} />
   </nav>
-  <Story ink={_props.ink}>
+  <Story ink={ink}>
     <Image />
   </Story>
 </div>

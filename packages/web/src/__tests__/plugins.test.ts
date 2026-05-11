@@ -33,7 +33,13 @@ describe("PluginRegistry configuration", () => {
     const ink = createInkStory("");
     const loadedPlugins = ink.pluginLoader.loadedIds.sort();
 
-    const expectedPlugins = ["audio", "fade-effect", "link-open", "scroll-after-choice"].sort();
+    const expectedPlugins = [
+      "audio",
+      "default-layout",
+      "fade-effect",
+      "link-open",
+      "scroll-after-choice",
+    ].sort();
 
     expect(loadedPlugins).toEqual(expectedPlugins);
 
@@ -66,6 +72,7 @@ describe("PluginRegistry configuration", () => {
     const expectedPlugins = [
       "audio",
       "auto-restore",
+      "default-layout",
       "fade-effect",
       "image",
       "link-open",
@@ -93,7 +100,7 @@ describe("PluginRegistry configuration", () => {
     const ink = createInkStory("");
     const loadedPlugins = ink.pluginLoader.loadedIds.sort();
 
-    const expectedPlugins = ["audio", "auto-restore", "fade-effect"].sort();
+    const expectedPlugins = ["audio", "auto-restore", "default-layout", "fade-effect"].sort();
 
     expect(loadedPlugins).toEqual(expectedPlugins);
 
@@ -117,6 +124,7 @@ describe("PluginRegistry configuration", () => {
     const loadedPlugins = ink.pluginLoader.loadedIds;
 
     expect(loadedPlugins).toContain("audio");
+    expect(loadedPlugins).toContain("default-layout");
 
     expect(loadedPlugins).not.toContain("image");
     expect(loadedPlugins).not.toContain("auto-restore");

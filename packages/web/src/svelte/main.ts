@@ -1,4 +1,9 @@
-import { createInkStory, type ErrorHandler, type TranslationFunction } from "@inkweave/core";
+import {
+  createInkStory,
+  type ErrorHandler,
+  type StatusBarConfig,
+  type TranslationFunction,
+} from "@inkweave/core";
 import { mount, unmount } from "svelte";
 import pkg from "../../package.json";
 import App from "./App.svelte";
@@ -14,6 +19,8 @@ interface InkWeaveOptions {
   title?: string;
   basePath?: string;
   theme?: "light" | "dark";
+  display?: string;
+  statusBar?: StatusBarConfig[];
   plugins?: Record<string, boolean>;
   translations?: TranslationFunction;
 }
@@ -23,7 +30,7 @@ let currentApp: Record<string, unknown> | null = null;
 export const init = (
   options: InkWeaveOptions,
 ): { ink: ReturnType<typeof createInkStory>; dispose: () => void } | undefined => {
-  initPlugins(options.plugins);
+  initPlugins(options.plugins, options.display);
   const containerEl =
     typeof options.container === "string"
       ? document.querySelector(options.container)
@@ -57,7 +64,7 @@ export const init = (
 
     currentApp = mount(App, {
       target: containerEl as HTMLElement,
-      props: { ink, translations: options.translations },
+      props: { ink, translations: options.translations, statusBar: options.statusBar },
     });
 
     console.log(`InkWeave (Svelte) v${pkg.version} initialized`);

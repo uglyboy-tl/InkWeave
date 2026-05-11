@@ -1,4 +1,9 @@
-import { createInkStory, type ErrorHandler, type TranslationFunction } from "@inkweave/core";
+import {
+  createInkStory,
+  type ErrorHandler,
+  type StatusBarConfig,
+  type TranslationFunction,
+} from "@inkweave/core";
 import { render as solidRender } from "solid-js/web";
 import pkg from "../../package.json";
 import { FetchFileHandler } from "../utils/fileHandler";
@@ -11,6 +16,8 @@ interface InkWeaveOptions {
   title?: string;
   basePath?: string;
   theme?: "light" | "dark";
+  display?: string;
+  statusBar?: StatusBarConfig[];
   plugins?: Record<string, boolean>;
   translations?: TranslationFunction;
 }
@@ -20,7 +27,7 @@ let currentDispose: (() => void) | null = null;
 export const init = (
   options: InkWeaveOptions,
 ): { ink: ReturnType<typeof createInkStory>; dispose: () => void } | undefined => {
-  initPlugins(options.plugins);
+  initPlugins(options.plugins, options.display);
 
   const containerEl =
     typeof options.container === "string"
@@ -54,7 +61,7 @@ export const init = (
     }
 
     const dispose = solidRender(
-      () => App({ ink, translations: options.translations }),
+      () => App({ ink, translations: options.translations, statusBar: options.statusBar }),
       containerEl as HTMLElement,
     );
     currentDispose = dispose;
