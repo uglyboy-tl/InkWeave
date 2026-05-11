@@ -10,6 +10,7 @@ import {
   imagePlugin,
   linkOpenPlugin,
   memoryPlugin,
+  reignsPlugin,
   scrollAfterChoicePlugin,
 } from "@inkweave/plugins/svelte";
 
@@ -25,6 +26,7 @@ export const initPlugins = (pluginConfig?: Record<string, boolean>) => {
   PluginRegistry.register(autoButtonPlugin);
   PluginRegistry.register(cdButtonPlugin);
   PluginRegistry.register(classTagPlugin);
+  PluginRegistry.register(reignsPlugin);
 
   if (pluginConfig) {
     PluginRegistry.setEnabled(pluginConfig);

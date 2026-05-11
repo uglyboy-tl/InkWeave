@@ -38,5 +38,6 @@ export { imagePlugin, useStoryImage } from "../image";
 export { default as Image } from "../image/solidjs/Image";
 export { linkOpenPlugin } from "../link-open";
 export type { SaveSlot } from "../memory";
+export { reignsPlugin } from "../reigns";
 export { scrollAfterChoicePlugin } from "../scroll-after-choice";
 export { getSlotLabelKey, isSlotReserved, memory, reserveSlot };

@@ -1,0 +1,183 @@
+/* Reigns Card Plugin Styles */
+
+.reigns-mode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  background: #f0f2f5;
+  color: #333;
+  position: relative;
+}
+
+/* 背景堆叠卡片放在 story 容器上 */
+.reigns-mode::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 420px;
+  box-sizing: border-box;
+  border: 3px solid #d8d8d8;
+  border-radius: 16px;
+  background: #f2f2f2;
+  transform: translateX(8px) translateY(-10px) scale(0.96);
+  transform-origin: center center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.reigns-mode::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 420px;
+  box-sizing: border-box;
+  border: 3px solid #d0d0d0;
+  border-radius: 16px;
+  background: #eee;
+  transform: translateX(18px) translateY(-22px) scale(0.93);
+  transform-origin: center center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#inkweave-player nav .reigns-status-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+  padding: 0 12px 0 8px;
+  flex: 1;
+}
+
+#inkweave-player nav .reigns-status-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#inkweave-player nav .reigns-status-label {
+  width: 24px;
+  font-size: 10px;
+  text-align: right;
+  color: #888;
+  flex-shrink: 0;
+}
+
+#inkweave-player nav .reigns-status-track {
+  flex: 1;
+  min-width: 30px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+#inkweave-player nav .reigns-status-fill {
+  height: 100%;
+  background: #4a90d9;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+#inkweave-player nav .reigns-status-item:nth-child(1) .reigns-status-fill {
+  background: #9b59b6;
+}
+#inkweave-player nav .reigns-status-item:nth-child(2) .reigns-status-fill {
+  background: #2ecc71;
+}
+#inkweave-player nav .reigns-status-item:nth-child(3) .reigns-status-fill {
+  background: #e74c3c;
+}
+#inkweave-player nav .reigns-status-item:nth-child(4) .reigns-status-fill {
+  background: #f39c12;
+}
+
+.reigns-mode .inkweave-contents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 420px;
+  padding: 40px 24px;
+  background: #fff;
+  border: 3px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.12),
+    0 2px 10px rgba(0, 0, 0, 0.08);
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+  position: relative;
+  will-change: transform;
+  z-index: 3;
+  box-sizing: border-box;
+}
+
+/* 扑克牌白边效果 */
+.reigns-mode .inkweave-contents::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.reigns-mode .inkweave-contents:active {
+  cursor: grabbing;
+}
+
+.reigns-mode .inkweave-content-line {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #333;
+  margin: 0;
+}
+
+.reigns-mode .inkweave-content-line p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.reigns-mode .reigns-hint-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 5;
+}
+
+.reigns-mode .reigns-hint {
+  font-size: 22px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reigns-mode .reigns-hint-left {
+  color: #27ae60;
+}
+.reigns-mode .reigns-hint-right {
+  color: #e74c3c;
+}
+
+.reigns-mode .inkweave-choices {
+  visibility: hidden;
+  position: absolute;
+  height: 0;
+  overflow: hidden;
+}
