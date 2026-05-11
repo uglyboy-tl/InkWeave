@@ -1,4 +1,4 @@
-import type { Plugin } from "@inkweave/core";
+import type { InkStoryContext, Plugin } from "@inkweave/core";
 import { Events, Patches } from "@inkweave/core";
 
 const scrollToBottom = () => {
@@ -18,7 +18,7 @@ export const scrollAfterChoicePlugin: Plugin = {
   description: "Automatically scrolls to the latest content after choices are made",
   enabledByDefault: true,
   onLoad: () => {
-    Patches.add(function (this: import("@inkweave/core").InkStoryContext) {
+    Patches.add(function (this: InkStoryContext) {
       let scrollTimer: ReturnType<typeof setTimeout> | null = null;
 
       const unsubscribeChoice = this.eventEmitter.on(Events.CHOICE_SELECTED, () => {
