@@ -1,7 +1,6 @@
 import type { ErrorHandler as InkErrorHandler } from "inkjs/engine/Error";
 import type { EventEmitterInterface } from "./events/types";
 import type { FileHandler } from "./file/FileHandler";
-import type { InteractionManager } from "./story/InteractionManager";
 
 export type ErrorHandler = InkErrorHandler;
 
@@ -16,7 +15,6 @@ export interface InkStoryContext {
   options: InkStoryOptions;
   save_label: string[];
   eventEmitter: EventEmitterInterface;
-  interactionManager?: InteractionManager;
   [key: string]: unknown;
 }
 
