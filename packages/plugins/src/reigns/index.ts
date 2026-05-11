@@ -1,23 +1,9 @@
-import type { Plugin } from "@inkweave/core";
-import {
-  choicesStore,
-  contentsStore,
-  Events,
-  InteractionManager,
-  Patches,
-  variablesStore,
-} from "@inkweave/core";
+import type { Layout } from "@inkweave/core";
+import { choicesStore, contentsStore, Events, InteractionManager, Patches } from "@inkweave/core";
 import "./styles.css";
 
 const SWIPE_THRESHOLD = 80;
 const MAX_ROTATION = 15;
-const STATUS_BARS = ["Church", "People", "Army", "Money"] as const;
-const STATUS_LABELS: Record<string, string> = {
-  Church: "信仰",
-  People: "民众",
-  Army: "军队",
-  Money: "财富",
-};
 
 interface SwipeState {
   startX: number;
@@ -25,11 +11,12 @@ interface SwipeState {
   isDragging: boolean;
 }
 
-export const reignsPlugin: Plugin = {
+export const reignsPlugin: Layout = {
   id: "reigns",
+  injectClassName: "reigns-mode",
+  exclude: ["fade-effect", "scroll-after-choice"],
   name: "Reigns Card Plugin",
   description: "Provides card swipe interaction for Reigns-style games",
-  enabledByDefault: false,
   onLoad: () => {
     choicesStore.getState().setChoicesVisible(false);
 
@@ -40,7 +27,6 @@ export const reignsPlugin: Plugin = {
       ink.interactionManager.register("swipe-right", InteractionManager.presets.right);
 
       let initialized = false;
-      let statusBar: HTMLElement | null = null;
       let hintOverlay: HTMLElement | null = null;
       let storyEl: HTMLElement | null = null;
       let bindings: ReturnType<typeof bindCardEvents> | null = null;
@@ -70,26 +56,6 @@ export const reignsPlugin: Plugin = {
           cardEl.style.zIndex = "3";
         }
 
-        // 状态栏插入到 nav 中，CommandBar 前面
-        statusBar = document.createElement("div");
-        statusBar.className = "reigns-status-bar";
-        statusBar.innerHTML = STATUS_BARS.map(
-          (key) => `
-          <div class="reigns-status-item">
-            <span class="reigns-status-label">${STATUS_LABELS[key]}</span>
-            <div class="reigns-status-track">
-              <div class="reigns-status-fill" data-status="${key}"></div>
-            </div>
-          </div>
-        `,
-        ).join("");
-
-        const navEl = storyEl.parentElement?.querySelector("nav");
-        if (navEl) {
-          navEl.style.opacity = "1";
-          navEl.insertBefore(statusBar, navEl.firstChild);
-        }
-
         hintOverlay = document.createElement("div");
         hintOverlay.className = "reigns-hint-overlay";
         hintOverlay.innerHTML = `
@@ -97,26 +63,9 @@ export const reignsPlugin: Plugin = {
           <div class="reigns-hint reigns-hint-right"></div>
         `;
 
-        storyEl.classList.add("reigns-mode");
         storyEl.appendChild(hintOverlay);
 
         bindings = bindCardEvents();
-        requestAnimationFrame(updateStatusBar);
-      };
-
-      const updateStatusBar = () => {
-        if (!statusBar) return;
-        const vars = variablesStore.getState().variables;
-        STATUS_BARS.forEach((key) => {
-          const value = (vars.get(key) as number) ?? 0;
-          const fill = statusBar?.querySelector(
-            `.reigns-status-fill[data-status="${key}"]`,
-          ) as HTMLElement;
-          if (fill) {
-            const percent = Math.max(0, Math.min(100, (value / 10) * 100));
-            fill.style.width = `${percent}%`;
-          }
-        });
       };
 
       const bindCardEvents = () => {
@@ -254,7 +203,6 @@ export const reignsPlugin: Plugin = {
               bindings.cardEl.removeEventListener("mousedown", bindings.onMouseDown);
             }
             bindings = bindCardEvents();
-            requestAnimationFrame(updateStatusBar);
           });
         });
       });
@@ -268,13 +216,7 @@ export const reignsPlugin: Plugin = {
           bindings.cardEl.removeEventListener("touchend", bindings.handleEnd);
           bindings.cardEl.removeEventListener("mousedown", bindings.onMouseDown);
         }
-        if (statusBar) statusBar.remove();
         if (hintOverlay) hintOverlay.remove();
-        if (storyEl) {
-          storyEl.classList.remove("reigns-mode");
-          const navEl = storyEl.parentElement?.querySelector("nav");
-          if (navEl) navEl.style.opacity = "";
-        }
       });
     }, {});
   },

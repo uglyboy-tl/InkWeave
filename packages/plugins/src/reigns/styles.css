@@ -22,7 +22,7 @@
   border: 3px solid #d8d8d8;
   border-radius: 16px;
   background: #f2f2f2;
-  transform: translateX(8px) translateY(-10px) scale(0.96);
+  transform: translateX(12px) translateY(-14px) scale(0.96);
   transform-origin: center center;
   z-index: 1;
   pointer-events: none;
@@ -37,61 +37,10 @@
   border: 3px solid #d0d0d0;
   border-radius: 16px;
   background: #eee;
-  transform: translateX(18px) translateY(-22px) scale(0.93);
+  transform: translateX(22px) translateY(-26px) scale(0.93);
   transform-origin: center center;
   z-index: 0;
   pointer-events: none;
-}
-
-#inkweave-player nav .reigns-status-bar {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 16px;
-  padding: 0 12px 0 8px;
-  flex: 1;
-}
-
-#inkweave-player nav .reigns-status-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-#inkweave-player nav .reigns-status-label {
-  width: 24px;
-  font-size: 10px;
-  text-align: right;
-  color: #888;
-  flex-shrink: 0;
-}
-
-#inkweave-player nav .reigns-status-track {
-  flex: 1;
-  min-width: 30px;
-  height: 4px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-#inkweave-player nav .reigns-status-fill {
-  height: 100%;
-  background: #4a90d9;
-  border-radius: 2px;
-  transition: width 0.3s ease;
-}
-
-#inkweave-player nav .reigns-status-item:nth-child(1) .reigns-status-fill {
-  background: #9b59b6;
-}
-#inkweave-player nav .reigns-status-item:nth-child(2) .reigns-status-fill {
-  background: #2ecc71;
-}
-#inkweave-player nav .reigns-status-item:nth-child(3) .reigns-status-fill {
-  background: #e74c3c;
-}
-#inkweave-player nav .reigns-status-item:nth-child(4) .reigns-status-fill {
-  background: #f39c12;
 }
 
 .reigns-mode .inkweave-contents {
