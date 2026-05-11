@@ -1,8 +1,17 @@
 import { type Choice, ChoiceRegistry as ChoiceRegistryClass, choicesStore } from "@inkweave/core";
+import type { FC } from "react";
 import { createElement, memo, useCallback, useRef } from "react";
-import type { ChoiceComponent } from "../../types";
 import { useStory } from "../story";
 import styles from "./styles.module.css";
+
+export interface ChoiceComponentProps {
+  choice: Choice;
+  onClick: () => void;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export type ChoiceComponent = FC<ChoiceComponentProps>;
 
 export const ChoiceRegistry = new ChoiceRegistryClass<ChoiceComponent>();
 

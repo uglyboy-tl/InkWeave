@@ -11,6 +11,7 @@ export function createMockInk(
     choose?: (choice: number) => void;
     options?: Record<string, unknown>;
     eventEmitter?: EventEmitter;
+    pluginLoader?: { activeDisplayClassName: string | null };
     [key: string]: unknown;
   }> = {},
 ) {
@@ -19,6 +20,7 @@ export function createMockInk(
     continue: vi.fn(),
     choose: vi.fn(),
     options: {},
+    pluginLoader: { activeDisplayClassName: null },
     ...overrides,
   };
 }

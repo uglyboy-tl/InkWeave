@@ -1,10 +1,17 @@
-import type { TranslationFunction } from "@inkweave/core";
+import type { InkStory, TranslationFunction } from "@inkweave/core";
 import { CommandRegistry } from "@inkweave/core";
 import type { ReactNode } from "react";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { CommandBarProps } from "../../types";
 import CommandButton from "./CommandButton";
 import style from "./styles.module.css";
+
+interface CommandBarProps {
+  ink: InkStory;
+  class?: string;
+  buttonClass?: string;
+  modalClass?: string;
+  t?: TranslationFunction;
+}
 
 const translate: TranslationFunction = (key) => {
   if (!key) return undefined;

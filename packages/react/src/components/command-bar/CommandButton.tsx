@@ -1,6 +1,14 @@
+import type { InkStory, TranslationFunction } from "@inkweave/core";
 import { CommandRegistry } from "@inkweave/core";
 import { memo, useCallback } from "react";
-import type { CommandButtonProps } from "../../types";
+
+interface CommandButtonProps {
+  commandId: string;
+  ink: InkStory;
+  class?: string;
+  onRequestOpenModal?: (commandId: string) => void;
+  t: TranslationFunction;
+}
 
 const CommandButton: React.FC<CommandButtonProps> = ({
   commandId,

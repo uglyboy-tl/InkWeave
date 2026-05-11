@@ -41,11 +41,13 @@ const StoryComponent: React.FC<StoryProps> = ({ ink, children, className = "", o
     onInitRef.current?.(ink);
   }, [ink]);
 
+  const displayClass = ink.pluginLoader.activeDisplayClassName ?? "";
+
   return (
     <StoryProvider ink={ink}>
       <div
         id="inkweave-story"
-        className={[styles.story, className].filter(Boolean).join(" ")}
+        className={[styles.story, displayClass, className].filter(Boolean).join(" ")}
         data-inkweave="story"
       >
         {children}
