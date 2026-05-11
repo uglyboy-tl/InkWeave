@@ -26,7 +26,7 @@ onMount(() => {
 
 <div
   id="inkweave-story"
-  class="story {className}"
+  class="story {ink.pluginLoader.activeDisplayClassName ?? ''} {className}"
   data-inkweave="story"
 >
   {#if children}
