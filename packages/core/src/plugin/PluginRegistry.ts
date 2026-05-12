@@ -39,7 +39,7 @@ export class PluginRegistry {
 
   static setLayout(pluginId: string | null) {
     PluginRegistry.ensureBuiltinPlugins();
-    if (pluginId !== null && !PluginRegistry._layouts.has(pluginId)) {
+    if (pluginId && !PluginRegistry._layouts.has(pluginId)) {
       console.warn(`InkWeave: display plugin "${pluginId}" not found`);
       return;
     }
