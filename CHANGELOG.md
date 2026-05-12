@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.4.1 (2026-05-12)
+
+### Features
+- **e2e**: add framework-aware test execution
+
+### Bug Fixes
+- **core**: use truthy check for pluginId validation
+- **fade-effect**: show choices on zero line delay
+- **cd-button**: improve cooldown tick reactivity
+
+### Refactoring
+- **solidjs**: use createMemo for contents
+
+### Tests
+- **e2e**: adopt gotoFixture, fix cd-button spec
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.4.0...v2.4.1
+
 ## v2.4.0 (2026-05-11)
 
 ### Features
