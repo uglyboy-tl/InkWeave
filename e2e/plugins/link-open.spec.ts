@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { fixtureUrl } from "../helpers";
 
-const TEST_URL = "/e2e/fixtures/index.html?story=plugins/link-open.ink&plugins=link-open";
+const TEST_URL = fixtureUrl("story=plugins/link-open.ink&plugins=link-open");
 
 type MockWindow = Window & typeof globalThis & { __openedUrls: string[] };
 

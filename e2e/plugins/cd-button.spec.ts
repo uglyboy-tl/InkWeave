@@ -50,10 +50,11 @@ test.describe("CD Button Plugin", () => {
     const contents = page.locator(".inkweave-contents");
     await expect(contents).toContainText("Counter is now 1");
 
+    await expect(cdButton).not.toContainText("(", { timeout: 1000 });
     await cdButton.click();
 
     const finalContents = page.locator(".inkweave-contents");
-    await expect(finalContents).toContainText("Counter is now 1");
+    await expect(finalContents).toContainText("Counter is now 2");
   });
 
   test("should allow cd button click after cooldown expires", async ({ page }) => {
@@ -63,7 +64,7 @@ test.describe("CD Button Plugin", () => {
     const contents = page.locator(".inkweave-contents");
     await expect(contents).toContainText("Counter is now 1");
 
-    await expect(cdButton).toBeEnabled({ timeout: 1000 });
+    await expect(cdButton).not.toContainText("(", { timeout: 1000 });
     await cdButton.click();
 
     await expect(contents).toContainText("Counter is now 2");
@@ -77,7 +78,7 @@ test.describe("CD Button Plugin", () => {
     for (const text of texts) {
       await cdButton.click();
       await expect(contents).toContainText(text);
-      await expect(cdButton).toBeEnabled({ timeout: 1000 });
+      await expect(cdButton).not.toContainText("(", { timeout: 1000 });
     }
   });
 

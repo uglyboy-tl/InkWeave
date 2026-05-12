@@ -1,10 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("Scroll After Choice Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(
-      "/e2e/fixtures/index.html?story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice",
-    );
+    await gotoFixture(page, "story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice");
     await page.waitForSelector("#inkweave-story");
   });
 
@@ -224,8 +223,9 @@ test.describe("Scroll After Choice Plugin", () => {
 
   test("should scroll to choices after clear tag with fade-effect enabled", async ({ page }) => {
     // Navigate with both scroll-after-choice and fade-effect plugins
-    await page.goto(
-      "/e2e/fixtures/index.html?story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice,fade-effect",
+    await gotoFixture(
+      page,
+      "story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice,fade-effect",
     );
     await page.waitForSelector("#inkweave-story");
 
@@ -271,8 +271,9 @@ test.describe("Scroll After Choice Plugin", () => {
 
 test("should scroll to bottom after loading a save", async ({ page }) => {
   // Navigate with scroll-after-choice + memory plugins
-  await page.goto(
-    "/e2e/fixtures/index.html?story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice,memory",
+  await gotoFixture(
+    page,
+    "story=plugins/scroll-after-choice.ink&plugins=scroll-after-choice,memory",
   );
   await page.waitForSelector("#inkweave-story");
 

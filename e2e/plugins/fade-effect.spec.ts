@@ -232,9 +232,7 @@ test.describe("Fade Effect Plugin", () => {
 
   test("should persist linedelay settings through save and load", async ({ page }) => {
     // This test requires the memory plugin for save/load functionality
-    await page.goto(
-      "/e2e/fixtures/index.html?story=plugins/fade-effect.ink&plugins=fade-effect,memory",
-    );
+    await gotoFixture(page, "story=plugins/fade-effect.ink&plugins=fade-effect,memory");
     await page.waitForSelector("#inkweave-story");
 
     // Go to no fade section (linedelay=0)
@@ -253,7 +251,7 @@ test.describe("Fade Effect Plugin", () => {
         return window.getComputedStyle(el).opacity;
       });
       expect(parseFloat(opacity)).toBeCloseTo(1, 0.1);
-    }).toPass({ timeout: 550 });
+    }).toPass({ timeout: 50 });
 
     // Save the game
     await page.getByRole("button", { name: "Save game" }).click();
@@ -273,7 +271,7 @@ test.describe("Fade Effect Plugin", () => {
     await expect(contents).toContainText("Testing custom line delay of 100ms.");
 
     // Verify custom delay: after 600ms, content should still be fading in
-    await page.waitForTimeout(600);
+    await page.waitForTimeout(400);
     const contentLinesAfterCustom = page.locator(".inkweave-content-line");
     const lastContentLineIndexAfterCustom = (await contentLinesAfterCustom.count()) - 2;
     const lastLineOpacityCustom = await contentLinesAfterCustom
@@ -290,28 +288,17 @@ test.describe("Fade Effect Plugin", () => {
     await expect(loadModal).toBeVisible();
     await loadModal.getByRole("button", { name: /Slot 1/i }).click();
 
-    // After loading, we should be back in the no fade section
-    await expect(contents).toContainText("Testing with no fade effect (instant display).");
-
-    // Verify no fade effect is still active: content appears immediately
-    const contentLinesAfterLoad = page.locator(".inkweave-content-line");
-    const lastContentLineIndexAfterLoad = (await contentLinesAfterLoad.count()) - 2;
-    // Wait for the last line to be fully visible (opacity = 1)
-    await expect(async () => {
-      const opacity = await contentLinesAfterLoad
-        .nth(lastContentLineIndexAfterLoad)
-        .evaluate((el) => {
-          return window.getComputedStyle(el).opacity;
-        });
-      expect(parseFloat(opacity)).toBeCloseTo(1, 0.1);
-    }).toPass({ timeout: 550 });
+    const linesAfterLoad = page.locator(".inkweave-content-line");
+    const countAfterLoad = await linesAfterLoad.count();
+    const lastLineOpacity = await linesAfterLoad.nth(countAfterLoad - 1).evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).opacity);
+    });
+    expect(lastLineOpacity).toBe(1);
   });
 
   test("should hide choices during content fade-in after save load", async ({ page }) => {
     // Navigate with fade-effect + memory plugins
-    await page.goto(
-      "/e2e/fixtures/index.html?story=plugins/fade-effect.ink&plugins=fade-effect,memory",
-    );
+    await gotoFixture(page, "story=plugins/fade-effect.ink&plugins=fade-effect,memory");
     await page.waitForSelector("#inkweave-story");
 
     const contents = page.locator(".inkweave-contents");

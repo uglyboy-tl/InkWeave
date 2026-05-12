@@ -10,8 +10,8 @@ VAR counter = 0
 -> start
 === start
 = circle
-~counter +=1
 Counter is now {counter}.
+~counter +=1
 + [Normal Choice]
   This is a normal choice that works immediately.
   -> END

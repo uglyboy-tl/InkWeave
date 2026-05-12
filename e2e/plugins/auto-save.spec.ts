@@ -1,10 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { gotoFixture } from "../helpers";
 
 test.describe("Auto Save Plugin", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(
-      "/e2e/fixtures/index.html?story=plugins/auto-save.ink&plugins=auto-save,memory",
-    );
+    await gotoFixture(page, "story=plugins/auto-save.ink&plugins=auto-save,memory");
     await page.waitForSelector("#inkweave-story");
   });
 
