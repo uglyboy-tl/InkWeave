@@ -16,11 +16,11 @@ const CooldownChoice = (props: ChoiceComponentProps) => {
 
   createEffect(() => {
     const interval = setInterval(() => {
+      setTick((t) => t + 1);
       if (!isCooldownActive(key)) {
         clearInterval(interval);
         return;
       }
-      setTick((t) => t + 1);
     }, 200);
     onCleanup(() => clearInterval(interval));
   });

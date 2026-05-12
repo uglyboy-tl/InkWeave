@@ -15,22 +15,22 @@ const cd = $derived(parseFloat(choice.val || "0"));
 const key = $derived(getCooldownKey(choice));
 
 let tick = $state(0);
+let isDisabled = $state(false);
+let remainingSeconds = $state(0);
 
 $effect(() => {
-  const interval = setInterval(() => {
-    tick++;
-    if (!isCooldownActive(key)) clearInterval(interval);
-  }, 200);
-  return () => clearInterval(interval);
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  tick;
+  isDisabled = isCooldownActive(key);
+  remainingSeconds = getRemainingSeconds(key);
 });
 
-const isDisabled = $derived.by(() => {
-  void tick;
-  return isCooldownActive(key);
-});
-const remainingSeconds = $derived.by(() => {
-  void tick;
-  return getRemainingSeconds(key);
+$effect(() => {
+  if (!isDisabled) return;
+  const interval = setInterval(() => {
+    tick++;
+  }, 200);
+  return () => clearInterval(interval);
 });
 
 const buttonClass = $derived(isDisabled ? `${className} disabled`.trim() : className);

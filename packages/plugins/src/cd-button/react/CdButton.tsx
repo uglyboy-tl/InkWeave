@@ -35,7 +35,7 @@ const CooldownChoice: React.FC<ChoiceComponentProps> = ({
       if (isMountedRef.current) {
         setTick((t) => t + 1);
       }
-    }, 1000);
+    }, 200);
     return () => clearInterval(interval);
   }, [isDisabled]);
 
