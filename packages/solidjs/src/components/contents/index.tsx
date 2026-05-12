@@ -1,5 +1,5 @@
-import { CHOICE_SEPARATOR, contentsStore } from "@inkweave/core";
-import { createSignal, For, onCleanup } from "solid-js";
+import { CHOICE_SEPARATOR, type ContentItem, contentsStore } from "@inkweave/core";
+import { createMemo, createSignal, onCleanup } from "solid-js";
 import { useStory } from "../story";
 import styles from "./styles.module.css";
 
@@ -19,46 +19,40 @@ const ContentsComponent = () => {
     return v ?? (lineDelay() > 0 ? -1 : contents().length);
   };
 
-  return (
-    <section class={`inkweave-contents ${styles.contents}`}>
-      <For each={contents()}>
-        {(item, i) => {
-          const vl = visibleLines();
-          const ld = lineDelay();
-          const delay = `${(i() > vl ? i() - vl : 0) * ld}s`;
-          const isDivider = item.text === CHOICE_SEPARATOR;
+  const renderedContents = createMemo(() => {
+    const ld = lineDelay();
+    const vl = visibleLines();
+    const items = contents();
 
-          if (isDivider) {
-            return (
-              <div
-                class={ld > 0 ? styles.fade : ""}
-                style={ld > 0 ? ({ "--delay": delay } as Record<string, string>) : { opacity: "1" }}
-              >
-                <hr class="inkweave-divider" />
-              </div>
-            );
-          }
+    return items.map((item: ContentItem, i: number) => {
+      const delay = `${(i > vl ? i - vl : 0) * ld}s`;
+      const isDivider = item.text === CHOICE_SEPARATOR;
 
-          const combinedClasses = ["inkweave-content-line"];
-          if (item.classes && item.classes.length > 0) {
-            combinedClasses.push(...item.classes);
-          }
-          if (ld > 0 && styles.fade) {
-            combinedClasses.push(styles.fade);
-          }
+      if (isDivider) {
+        return (
+          <div
+            class={ld > 0 ? styles.fade : ""}
+            style={ld > 0 ? ({ "--delay": delay } as Record<string, string>) : { opacity: "1" }}
+          >
+            <hr class="inkweave-divider" />
+          </div>
+        );
+      }
 
-          return (
-            <div
-              style={ld > 0 ? ({ "--delay": delay } as Record<string, string>) : { opacity: "1" }}
-              class={combinedClasses.join(" ")}
-            >
-              <p>{item.text}</p>
-            </div>
-          );
-        }}
-      </For>
-    </section>
-  );
+      return (
+        <div
+          style={ld > 0 ? ({ "--delay": delay } as Record<string, string>) : { opacity: "1" }}
+          class={["inkweave-content-line", ...(item.classes ?? []), ld > 0 && styles.fade]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <p>{item.text}</p>
+        </div>
+      );
+    });
+  });
+
+  return <section class={`inkweave-contents ${styles.contents}`}>{renderedContents()}</section>;
 };
 
 export default ContentsComponent;
