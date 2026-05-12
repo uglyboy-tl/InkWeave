@@ -19,7 +19,7 @@ export const fadeEffectPlugin: Plugin = {
       if (val != null) {
         const v = parseFloat(val);
         if (!Number.isNaN(v)) {
-          (ink as unknown as Record<string, unknown>).linedelay = v;
+          ink.linedelay = v;
         }
       }
     });
@@ -43,6 +43,7 @@ export const fadeEffectPlugin: Plugin = {
           if (timer) clearTimeout(timer);
 
           if (this.options.linedelay === 0) {
+            choicesStore.getState().setChoicesVisible(true);
             return;
           }
 

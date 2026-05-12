@@ -80,7 +80,7 @@ describe("fadeEffect", () => {
   });
 
   describe("contentsStore subscription", () => {
-    it("should not force choicesVisible when delay is zero", async () => {
+    it("should set choicesVisible immediately when delay is zero", async () => {
       plugin.onLoad();
       const mockStory = createMockStory({
         options: { linedelay: 0 },
@@ -90,7 +90,7 @@ describe("fadeEffect", () => {
 
       choicesStore.getState().setChoicesVisible(false);
       contentsStore.setState({ contents: [{ text: "new content" }] });
-      expect(choicesStore.getState().choicesVisible).toBe(false);
+      expect(choicesStore.getState().choicesVisible).toBe(true);
     });
 
     it("should hide choices and schedule timer on content with delay", async () => {
