@@ -40,7 +40,9 @@
     "check:ink": "bun run packages/core/scripts/compile-ink.ts",
     "test": "bun test && bun test:integration && bun test:e2e",
     "test:e2e": "playwright test",
-    "test:e2e:all": "FRAMEWORK=all playwright test",
+    "test:e2e:react": "FRAMEWORK=react playwright test",
+    "test:e2e:svelte": "FRAMEWORK=svelte playwright test",
+    "test:e2e:solidjs": "FRAMEWORK=solidjs playwright test",
     "test:integration": "bun -F '*' test:integration",
     "serve": "vite",
     "release": "bun run scripts/release.mjs"

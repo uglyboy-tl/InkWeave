@@ -1,13 +1,15 @@
 import type { Page } from "@playwright/test";
 
-const FRAMEWORK = process.env.FRAMEWORK || "svelte";
+export const FRAMEWORK = process.env.FRAMEWORK || "default";
 
 export async function gotoFixture(page: Page, params: string) {
-  let fw = "";
-  if (FRAMEWORK === "svelte") {
-    fw = "&framework=svelte";
-  } else if (FRAMEWORK === "react") {
-    fw = "&framework=react";
-  }
-  await page.goto(`/e2e/fixtures/index.html?${params}${fw}`);
+  await page.goto(fixtureUrl(params));
+}
+
+export function fixtureUrl(params: string) {
+  return `/e2e/fixtures/index.html?${params}&framework=${FRAMEWORK}`;
+}
+
+export function getFramework() {
+  return FRAMEWORK;
 }

@@ -15,49 +15,16 @@ export default defineConfig({
   },
   projects: (() => {
     const framework = process.env.FRAMEWORK || 'solidjs';
+    const project = (name: string) => ({
+      name,
+      use: { ...devices['Desktop Edge'], channel: 'msedge' as const },
+    });
     if (framework === 'react') {
-      return [{
-        name: 'Edge (React)',
-        use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        env: { FRAMEWORK: 'react' },
-      }];
+      return [project('Edge (React)')];
     } else if (framework === 'svelte') {
-      return [{
-        name: 'Edge (Svelte)',
-        use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        env: { FRAMEWORK: 'svelte' },
-      }];
+      return [project('Edge (Svelte)')];
     } else if (framework === 'solidjs') {
-      return [{
-        name: 'Edge (SolidJS)',
-        use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        env: { FRAMEWORK: 'solidjs' },
-      }];
-    } else if (framework === 'all') {
-      return [
-        {
-          name: 'Edge (React)',
-          use: { ...devices['Desktop Edge'], channel: 'msedge' },
-          env: { FRAMEWORK: 'react' },
-        },
-        {
-          name: 'Edge (Svelte)',
-          use: { ...devices['Desktop Edge'], channel: 'msedge' },
-          env: { FRAMEWORK: 'svelte' },
-        },
-        {
-          name: 'Edge (SolidJS)',
-          use: { ...devices['Desktop Edge'], channel: 'msedge' },
-          env: { FRAMEWORK: 'solidjs' },
-        }
-      ];
-    } else {
-      // default to solidjs
-      return [{
-        name: 'Edge (SolidJS)',
-        use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        env: { FRAMEWORK: 'solidjs' },
-      }];
+      return [project('Edge (SolidJS)')];
     }
   })(),
   webServer: {

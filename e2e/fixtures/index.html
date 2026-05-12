@@ -27,7 +27,7 @@
   <div id="app"></div>
   <script>
     var urlParams = new URLSearchParams(window.location.search);
-    var framework = urlParams.get('framework') || 'react';
+    var framework = urlParams.get('framework') || 'default';
     var storyPath = urlParams.get('story') || 'default.ink';
     var pluginsParam = urlParams.get('plugins') || '';
     var enabled, k;
@@ -43,9 +43,13 @@
       scriptName = 'inkweave-svelte.min.js';
       cssName = 'inkweave-svelte.min.css';
     }
-    else {
+    else if (framework === 'solidjs') {
       scriptName = 'inkweave-solidjs.min.js';
       cssName = 'inkweave-solidjs.min.css';
+    }
+    else if (framework === 'default') {
+      scriptName = 'inkweave.min.js';
+      cssName = 'inkweave.min.css';
     }
 
     document.getElementById('framework-css').setAttribute('href', `${base}/${cssName}`);
