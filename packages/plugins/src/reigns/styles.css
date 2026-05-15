@@ -95,21 +95,23 @@
   line-height: 1.7;
 }
 
-.reigns-mode .reigns-hint-overlay {
+.reigns-mode .inkweave-choices {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  pointer-events: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
+  list-style: none;
+  margin: 0;
+  pointer-events: none;
   z-index: 5;
 }
 
-.reigns-mode .reigns-hint {
+.reigns-mode .inkweave-choices li {
   font-size: 22px;
   font-weight: bold;
   opacity: 0;
@@ -117,16 +119,14 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-.reigns-mode .reigns-hint-left {
+.reigns-mode .inkweave-choices li:first-child {
   color: #27ae60;
 }
-.reigns-mode .reigns-hint-right {
+
+.reigns-mode .inkweave-choices li:last-child {
   color: #e74c3c;
 }
 
-.reigns-mode .inkweave-choices {
-  visibility: hidden;
-  position: absolute;
-  height: 0;
-  overflow: hidden;
+.reigns-mode .inkweave-choices li a {
+  pointer-events: none;
 }
