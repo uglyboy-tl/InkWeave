@@ -10,7 +10,7 @@ test("should load the correct framework bundle", async ({ page }) => {
   );
 
   const loadedBundle = scripts.find((src) => src.includes("inkweave"));
-  let fw = `-${getFramework()}`
+  let fw = `-${getFramework()}`;
   if (fw === "-default") {
     fw = ".min";
   }
