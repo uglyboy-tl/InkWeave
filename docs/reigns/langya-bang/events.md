@@ -1,4 +1,4 @@
-| name | C | P | A | M | add_card | remove_card | next_card |
+| name | A | B | C | D | add_card | remove_card | next_card |
 | :--- | :---: | :---: | :---: | :---: | :--- | :--- | :--- |
 | 琅琊造势 | 0 | 0 | 0 | +1 | | | 梁帝侧目 |
 | 琅琊避嫌 | 0 | 0 | 0 | -1 | | | 梁帝侧目 |

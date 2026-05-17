@@ -1,4 +1,4 @@
-# config
+## config
 | key | value |
 |-----|-------|
 | title | 哔哩哔哩入学考试 |
@@ -9,7 +9,7 @@
 | passScore | 60 |
 | isExam | true |
 
-# questions
+## questions
 | id | type | content | optionA | optionB | optionC | optionD | answer | score | explanation | category |
 |----|------|---------|---------|---------|---------|---------|--------|-------|-------------|----------|
 | q1 | choice | 世界第一的公主殿下是？ | cona | miku | pazu | lbxx | B | 10 | 初音未来是世界第一的公主殿下 | 动漫 |
@@ -18,7 +18,7 @@
 | q4 | judge | 水的化学式是 H2O。 | | | | | true | 5 | | 科学 |
 | q5 | choice | 1 + 1 = ? | 1 | 2 | 3 | 4 | B | 5 | 基础数学 | 数学 |
 
-# results
+## results
 | min | max | title | description |
 |-----|-----|-------|-------------|
 | 0 | 40 | 继续努力 | 还需要多多学习呢 |
