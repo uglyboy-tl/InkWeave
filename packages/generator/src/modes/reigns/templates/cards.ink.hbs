@@ -1,0 +1,41 @@
+LIST CARD_LIST = {{#each cards}}{{#if @first}}({{this.name}}){{else}}, {{this.name}}{{/if}}{{/each}}
+
+=== function get_content(card)
+{card:
+{{#each cards}}
+    - {{this.name}}: ~ return "{{this.content}}"
+{{/each}}
+    - else: ~ return "什么也没有"
+}
+
+=== function get_left_option(card)
+{card:
+{{#each cards}}
+    - {{this.name}}: ~ return "{{this.left_option}}"
+{{/each}}
+    - else: ~ return "左划"
+}
+
+=== function get_right_option(card)
+{card:
+{{#each cards}}
+    - {{this.name}}: ~ return "{{this.right_option}}"
+{{/each}}
+    - else: ~ return "右划"
+}
+
+=== function left_event(card)
+{card:
+{{#each cards}}
+    - {{this.name}}: ~ return "{{this.left_event}}"
+{{/each}}
+    - else: ~ return ""
+}
+
+=== function right_event(card)
+{card:
+{{#each cards}}
+    - {{this.name}}: ~ return "{{this.right_event}}"
+{{/each}}
+    - else: ~ return ""
+}

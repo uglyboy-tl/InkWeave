@@ -1,0 +1,24 @@
+=== do_event(event_name)
+{event_name:
+{{#each events}}
+    - "{{this.name}}": -> {{this.name}}_event ->
+{{/each}}
+    - else: ->->
+}
+-> check_conditions(event_name) ->
+->->
+
+{{#each events}}
+= {{this.name}}_event
+{{#each this._statChanges}}
+~ {{this.id}} {{{parseStatEffect this.value}}}
+{{/each}}
+{{#if this.next_card}}~ next_card = ({{replaceCommas this.next_card}})
+{{/if}}
+{{#if this.add_card}}~ CARD_LIST += ({{replaceCommas this.add_card}})
+{{/if}}
+{{#if this.remove_card}}~ CARD_LIST -= ({{replaceCommas this.remove_card}})
+{{/if}}
+->->
+
+{{/each}}

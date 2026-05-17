@@ -1,0 +1,223 @@
+---
+layout: game
+display: survey
+---
+
+VAR score = 0
+VAR total_score = {{totalScore}}
+VAR current = 1
+VAR total = {{maxQuestions}}
+VAR correct_count = 0
+{{#if randomize}}
+VAR remaining = ()
+{{/if}}
+
+{{#if title}}{{title}}{{/if}}
+{{#if description}}{{description}}{{/if}}
+
+本次{{#if isExam}}考试{{else}}问卷{{/if}}共 {{maxQuestions}} 道题
+
+-> start
+
+== start
+{{#if randomize}}
+LIST QUESTION_LIST = {{#each questions}}(q_{{this.id}}){{#unless @last}}, {{/unless}}{{/each}}
+~ remaining = QUESTION_LIST
+-> next_question
+{{else}}
+-> question(current)
+{{/if}}
+
+{{#each questions}}
+== question_{{this.id}}
+# CLEAR
+{{{content}}}
+{{#if (eq this.type "choice")}}
++ [{{this.optionA}}]
+  {{#if (eq this.answer "A")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
++ [{{this.optionB}}]
+  {{#if (eq this.answer "B")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
+{{#if this.optionC}}
++ [{{this.optionC}}]
+  {{#if (eq this.answer "C")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
+{{/if}}
+{{#if this.optionD}}
++ [{{this.optionD}}]
+  {{#if (eq this.answer "D")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
+{{/if}}
+- {{#if this.explanation}}{{this.explanation}}{{/if}}
+  正确答案是：{{#if (eq this.answer "A")}}{{this.optionA}}{{/if}}{{#if (eq this.answer "B")}}{{this.optionB}}{{/if}}{{#if (eq this.answer "C")}}{{this.optionC}}{{/if}}{{#if (eq this.answer "D")}}{{this.optionD}}{{/if}}
+  {{#if ../randomize}}
+  ~ remaining = remaining - (q_{{this.id}})
+  {{/if}}
+  ~ current += 1
+  {{#if ../randomize}}
+  -> next_question
+  {{else}}
+  { current > total:
+    -> result
+  - else:
+    -> question(current)
+  }
+  {{/if}}
+{{/if}}
+{{#if (eq this.type "input")}}
++ [{{this.optionA}}]
+  {{#if (eq this.answer "A")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
++ [{{this.optionB}}]
+  {{#if (eq this.answer "B")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
+{{#if this.optionC}}
++ [{{this.optionC}}]
+  {{#if (eq this.answer "C")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
+{{/if}}
+{{#if this.optionD}}
++ [{{this.optionD}}]
+  {{#if (eq this.answer "D")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
+{{/if}}
+- {{#if this.explanation}}{{this.explanation}}{{/if}}
+  正确答案是：{{#if (eq this.answer "A")}}{{this.optionA}}{{/if}}{{#if (eq this.answer "B")}}{{this.optionB}}{{/if}}{{#if (eq this.answer "C")}}{{this.optionC}}{{/if}}{{#if (eq this.answer "D")}}{{this.optionD}}{{/if}}
+  {{#if ../randomize}}
+  ~ remaining = remaining - (q_{{this.id}})
+  {{/if}}
+  ~ current += 1
+  {{#if ../randomize}}
+  -> next_question
+  {{else}}
+  { current > total:
+    -> result
+  - else:
+    -> question(current)
+  }
+  {{/if}}
+{{/if}}
+{{#if (eq this.type "judge")}}
++ [正确]
+  {{#if (eq this.answer "true")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
++ [错误]
+  {{#if (eq this.answer "false")}}
+  ✓ 正确！
+  ~ score += {{this.score}}
+  ~ correct_count += 1
+  {{else}}
+  ✗ 错误
+  {{/if}}
+- {{#if this.explanation}}{{this.explanation}}{{/if}}
+  正确答案是：{{#if (eq this.answer "true")}}正确{{else}}错误{{/if}}
+  {{#if ../randomize}}
+  ~ remaining = remaining - (q_{{this.id}})
+  {{/if}}
+  ~ current += 1
+  {{#if ../randomize}}
+  -> next_question
+  {{else}}
+  { current > total:
+    -> result
+  - else:
+    -> question(current)
+  }
+  {{/if}}
+{{/if}}
+{{/each}}
+
+{{#if randomize}}
+== next_question
+~ temp count = LIST_COUNT(remaining)
+{ current > total || count < 1:
+  -> result
+- else:
+  ~ temp idx = RANDOM(1, count)
+  ~ temp selected = LIST_RANGE(remaining, idx, idx)
+  { selected:
+  {{#each questions}}
+  - q_{{this.id}}: -> question_{{this.id}}
+  {{/each}}
+  }
+}
+{{/if}}
+
+== question(n)
+{ n:
+{{#each questions}}
+- {{add @index 1}}:
+  -> question_{{this.id}}
+{{/each}}
+}
+
+== result
+# CLEAR
+{
+- score >= {{passScore}}:
+  ✓ 恭喜通过！
+- else:
+  ✗ 未通过
+}
+
+你答对了 {correct_count} / {total} 题
+得分：{score} / {total_score}
+得分率：{score * 100 / total_score}%
+
+{{#each results}}
+- {score * 100 / total_score} >= {{this.min}} && {score * 100 / total_score} < {{this.max}}:
+  {{this.title}}
+  {{this.description}}
+{{/each}}
+
++ [重新开始]
+  #RESTART
+  -> DONE
++ [结束]
+  -> END

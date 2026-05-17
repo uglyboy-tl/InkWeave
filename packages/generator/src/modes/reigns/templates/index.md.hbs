@@ -1,0 +1,44 @@
+---
+layout: game
+display: reigns
+statusBar:
+{{#each stats}}
+  - key: {{this.id}}
+    label: {{this.name}}
+    display: bar
+{{/each}}
+---
+
+INCLUDE cards.ink
+INCLUDE events.ink
+INCLUDE conditions.ink
+INCLUDE stats.ink
+
+VAR next_card = ()
+
+-> loop(start)
+
+=== loop(card)
+# CLEAR
+-> check_stats ->
+{get_content(card)}
++ [{get_left_option(card)}]
+    -> do_event(left_event(card)) ->
++ [{get_right_option(card)}]
+    -> do_event(right_event(card)) ->
+- -> loop(get_next_card(card))
+
+== function get_next_card(card)
+{
+- LIST_COUNT(next_card) > 0:
+    ~ temp c = next_card
+    ~ next_card = ()
+    ~ return c
+- CARD_LIST? card:
+    ~ CARD_LIST -= card
+    ~ temp random_card = LIST_RANDOM(CARD_LIST)
+    ~ CARD_LIST += card
+    ~ return random_card
+- else:
+    ~ return LIST_RANDOM(CARD_LIST)
+}

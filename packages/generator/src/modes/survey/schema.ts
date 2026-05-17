@@ -1,4 +1,4 @@
-import type { TableSchema } from "../../core/types";
+import type { TableSchema } from "../../core";
 
 /**
  * 问卷/考试系统 - 题目表结构

@@ -1,8 +1,13 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { Command } from "commander";
-import { autoParse, parse } from "../core/parsers";
-import { registry } from "../core/registry";
+import type { GameType } from "../core";
+import { runPipeline } from "../core";
+import { duel } from "../modes/duel";
+import { reigns } from "../modes/reigns";
+import { survey } from "../modes/survey";
+
+const MODES: Record<string, GameType> = { reigns, duel, survey };
 
 const program = new Command()
   .name("inkweave-gen")
@@ -13,58 +18,63 @@ program
   .command("generate")
   .alias("gen")
   .description("Generate ink files from input data")
-  .requiredOption("-t, --type <type>", "Game type (e.g., duel, reigns, survey)")
-  .requiredOption("-i, --input <file>", "Input file path")
-  .requiredOption("-o, --output <dir>", "Output directory")
-  .option("-f, --format <format>", "Input format (csv, markdown, json)", "auto")
+  .argument("<input>", "Input file or directory")
+  .requiredOption("-t, --type <type>", `Available: ${Object.keys(MODES).join(", ")}`)
+  .option("-o, --output <dir>", "Output directory")
   .option("--dry-run", "Preview output without writing files", false)
-  .action((options) => {
-    const inputContent = readFileSync(options.input, "utf-8");
-    const data =
-      options.format === "auto" ? autoParse(inputContent) : parse(inputContent, options.format);
-    const gameType = registry.get(options.type);
-
-    if (!gameType) {
+  .action((input, options) => {
+    const mode = MODES[options.type];
+    if (!mode) {
       console.error(
-        `Unknown game type: ${options.type}\nAvailable: ${registry.getIds().join(", ")}`,
+        `Unknown game type: ${options.type}\nAvailable: ${Object.keys(MODES).join(", ")}`,
       );
       process.exit(1);
     }
 
-    const validation = gameType.validate(data);
+    const { validation, module } = runPipeline({ input, plugin: mode });
+
     if (!validation.valid) {
       console.error("Validation failed:");
       for (const e of validation.errors) console.error(`  - [${e.table}] ${e.message}`);
       process.exit(1);
     }
 
-    const result = gameType.generate(data);
+    if (validation.warnings?.length) {
+      console.warn("Warnings:");
+      for (const w of validation.warnings) console.warn(`  - [${w.table}] ${w.message}`);
+    }
+
+    if (!module) return;
 
     if (options.dryRun) {
-      for (const file of result.files) {
-        console.log(`\n--- ${file.path} ---\n${file.content}`);
-      }
+      for (const file of module.files) console.log(`\n--- ${file.path} ---\n${file.content}`);
       return;
     }
 
-    for (const file of result.files) {
+    if (!options.output) {
+      console.error("Error: --output is required");
+      process.exit(1);
+    }
+
+    for (const file of module.files) {
       const filePath = join(options.output, file.path);
       mkdirSync(dirname(filePath), { recursive: true });
       writeFileSync(filePath, file.content, "utf-8");
     }
-    console.log(
-      `Generated ${result.files.length} files in ${options.output}\nEntry: ${result.entry}`,
-    );
+    console.log(`Generated ${module.files.length} files in ${options.output}`);
   });
 
 program
   .command("list")
   .description("List all available game types")
   .action(() => {
-    const types = registry.getAll();
-    if (!types.length) return console.log("No game types registered.");
+    const ids = Object.keys(MODES);
+    if (!ids.length) return console.log("No game types available.");
     console.log("Available game types:\n");
-    for (const t of types) console.log(`  ${t.id.padEnd(12)} ${t.description}`);
+    for (const id of ids) {
+      const mode = MODES[id];
+      if (mode) console.log(`  ${id.padEnd(12)} ${mode.description}`);
+    }
   });
 
 program
@@ -72,12 +82,12 @@ program
   .description("Show schema for a game type")
   .requiredOption("-t, --type <type>", "Game type")
   .action((options) => {
-    const gameType = registry.get(options.type);
-    if (!gameType) {
+    const mode = MODES[options.type];
+    if (!mode) {
       console.error(`Unknown game type: ${options.type}`);
       process.exit(1);
     }
-    console.log(`Schema for ${gameType.name}:\n${JSON.stringify(gameType.tableSchemas, null, 2)}`);
+    console.log(`Schema for ${mode.name}:\n${JSON.stringify(mode.tableSchemas, null, 2)}`);
   });
 
 export { program };

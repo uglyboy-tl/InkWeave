@@ -1,0 +1,25 @@
+=== check_conditions(event_name)
+{event_name:
+{{#each eventConditions}}
+    - "{{this._primaryEvent}}":
+        { {{{this._conditionExpr}}}
+            -> do_event("{{this.trigger_event}}") ->
+        }
+{{/each}}
+    - else: ~ temp _dummy = 0
+}
+{{#if statConditions.length}}-> check_stat_conditions() ->{{/if}}
+->->
+
+{{#if statConditions.length}}
+=== check_stat_conditions
+{
+{{#each statConditions}}
+    - {{{this._conditionStatExpr}}}:
+        -> do_event("{{this.trigger_event}}") ->
+{{/each}}
+    - else:
+        ~ temp _dummy = 0
+}
+->->
+{{/if}}

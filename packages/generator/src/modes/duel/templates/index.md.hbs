@@ -1,9 +1,14 @@
-LIST STATS_NAME = HP, Atk, Def, SpAtk, SpDef, Spd
+---
+layout: game
+display: duel
+---
 
-INCLUDE {{roleFile}}
-INCLUDE {{moveFile}}
-INCLUDE {{typeFile}}
-INCLUDE {{utilsFile}}
+INCLUDE base.ink
+INCLUDE move.ink
+INCLUDE type.ink
+INCLUDE utils.ink
+
+LIST STATS_NAME = HP, Atk, Def, SpAtk, SpDef, Spd
 
 == function get_damage(_level, _hero, _enemy_level, _enemy, _move)
 ~ temp _damage = 0

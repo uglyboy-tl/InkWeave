@@ -1,0 +1,20 @@
+{{#each @root.stats}}
+VAR {{this.id}} = {{this.initial}}
+{{/each}}
+
+=== check_stats
+{
+{{#each endings}}
+    - {{this.stat}} {{#if (eq this.dir "+")}}>= {{@root.maxThreshold}}{{else}}<= {{@root.minThreshold}}{{/if}}:
+{{#each (splitLines this.text)}}
+{{#if (startsWith this "#class:")}}
+        {{{formatClassLine this}}}
+{{else}}
+        {{{this}}}
+{{/if}}
+{{/each}}
+        -> END
+{{/each}}
+    - else:
+        ->->
+}

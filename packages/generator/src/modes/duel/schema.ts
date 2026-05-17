@@ -1,4 +1,4 @@
-import type { TableSchema } from "../../core/types";
+import type { TableSchema } from "../../core";
 
 /**
  * 对战系统 - 角色表结构
