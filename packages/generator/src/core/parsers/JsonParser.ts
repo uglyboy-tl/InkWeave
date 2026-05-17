@@ -1,4 +1,5 @@
-import type { Parser, Table, UnifiedGameData } from "../types";
+import type { Table, UnifiedGameData } from "../types";
+import type { Parser } from "./types";
 
 /**
  * JSON 解析器
@@ -77,11 +78,4 @@ export class JsonParser implements Parser {
 
     return { headers, rows, lookup };
   }
-}
-
-/**
- * 便捷函数：解析 JSON 字符串
- */
-export function parseJson(input: string): UnifiedGameData {
-  return new JsonParser().parse(input);
 }

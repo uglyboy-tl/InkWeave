@@ -1,5 +1,6 @@
 import Papa from "papaparse";
-import type { Parser, Table, UnifiedGameData } from "../types";
+import type { Table, UnifiedGameData } from "../types";
+import type { Parser } from "./types";
 
 /**
  * CSV 解析器
@@ -77,11 +78,4 @@ export class CsvParser implements Parser {
 
     return { headers, rows, lookup };
   }
-}
-
-/**
- * 便捷函数：解析 CSV 字符串
- */
-export function parseCsv(input: string): UnifiedGameData {
-  return new CsvParser().parse(input);
 }

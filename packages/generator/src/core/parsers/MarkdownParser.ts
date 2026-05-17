@@ -1,4 +1,5 @@
-import type { Parser, Table, UnifiedGameData } from "../types";
+import type { Table, UnifiedGameData } from "../types";
+import type { Parser } from "./types";
 
 /**
  * Markdown 表格解析器
@@ -40,29 +41,33 @@ export class MarkdownParser implements Parser {
   }
 
   /**
-   * 按 ## 标题分割文档
+   * 按 ## 标题或空行分割文档。
+   * 有 ## 标题时用标题文本作表名，无标题时自动编号。
    */
   private splitByHeaders(input: string): [string, string][] {
     const sections: [string, string][] = [];
-    const lines = input.split("\n");
-    let currentName = "data";
-    let currentLines: string[] = [];
+    const paragraphs = input.split(/\n\n+/);
+    let autoIndex = 0;
 
-    for (const line of lines) {
-      const headerMatch = line.match(/^##\s+(.+)$/);
+    for (const para of paragraphs) {
+      const lines = para.trim().split("\n");
+      if (lines.length < 2) continue;
+
+      let name: string;
+      let content: string;
+
+      const firstLine = lines[0]?.trim() ?? "";
+      const headerMatch = firstLine.match(/^##\s+(.+)$/);
       if (headerMatch) {
-        if (currentLines.length > 0) {
-          sections.push([currentName, currentLines.join("\n")]);
-        }
-        currentName = headerMatch[1]?.trim() ?? "data";
-        currentLines = [];
+        name = headerMatch[1]?.trim() ?? "data";
+        content = lines.slice(1).join("\n");
       } else {
-        currentLines.push(line);
+        name = autoIndex === 0 ? "data" : `data_${autoIndex}`;
+        content = para;
       }
-    }
 
-    if (currentLines.length > 0) {
-      sections.push([currentName, currentLines.join("\n")]);
+      sections.push([name, content]);
+      autoIndex++;
     }
 
     return sections;
@@ -130,11 +135,4 @@ export class MarkdownParser implements Parser {
       .slice(1, -1)
       .map((cell) => cell.trim());
   }
-}
-
-/**
- * 便捷函数：解析 Markdown 表格
- */
-export function parseMarkdown(input: string): UnifiedGameData {
-  return new MarkdownParser().parse(input);
 }

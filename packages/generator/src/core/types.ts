@@ -29,18 +29,6 @@ export interface UnifiedGameData {
 }
 
 // ============================================================
-// 解析器
-// ============================================================
-
-/** 解析器接口 */
-export interface Parser {
-  /** 解析输入字符串为统一数据结构 */
-  parse(input: string): UnifiedGameData;
-  /** 检测输入是否为当前格式 */
-  detect(input: string): boolean;
-}
-
-// ============================================================
 // 生成产物
 // ============================================================
 
@@ -78,6 +66,10 @@ export interface ColumnDef {
   default?: string;
   /** 描述（供 AI 和用户理解） */
   description: string;
+  /** 引用其他表的主键（用于跨表校验） */
+  references?: string | string[];
+  /** 值解析函数名（如 "comma" 表示逗号分隔） */
+  valueParser?: "comma";
 }
 
 /** 表结构定义 */
@@ -108,31 +100,36 @@ export interface ValidationError {
 export interface ValidationResult {
   valid: boolean;
   errors: ValidationError[];
+  warnings?: ValidationError[];
 }
 
 // ============================================================
 // 游戏类型接口
 // ============================================================
 
-/** 游戏类型定义 */
+/** 游戏类型定义（运行时接口） */
 export interface GameType {
-  /** 类型 ID（命令行使用） */
   readonly id: string;
-  /** 显示名称 */
   readonly name: string;
-  /** 描述 */
   readonly description: string;
-  /** 需要的表格名称列表 */
   readonly requiredTables: string[];
-  /** 每个表格的结构定义 */
   readonly tableSchemas: Record<string, TableSchema>;
-  /** 验证输入数据 */
   validate(data: UnifiedGameData): ValidationResult;
-  /** 生成 ink 文件 */
   generate(data: UnifiedGameData): GeneratedModule;
 }
 
-/** 游戏类型构造函数接口 */
-export interface GameTypeConstructor {
-  new (): GameType;
+/** 游戏类型构建配置（用户编写插件时使用） */
+export interface GameTypeDefinition {
+  id: string;
+  name: string;
+  description: string;
+  tableSchemas?: Record<string, TableSchema>;
+  requiredTables?: string[];
+  validate?: import("../core/validator/types").ValidationRule[];
+  generate: {
+    templates: string[];
+    transform?: (data: UnifiedGameData) => Record<string, unknown>;
+    helpers?: Record<string, (...args: unknown[]) => unknown>;
+    entry?: string;
+  };
 }
