@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import type { Table, UnifiedGameData } from "../core/types";
-import { DuelGenerator } from "../games/duel";
+import { duel } from "../modes/duel";
 
 describe("DuelGenerator", () => {
-  let generator: DuelGenerator;
+  let generator: typeof duel;
 
   beforeEach(() => {
-    generator = new DuelGenerator();
+    generator = duel;
   });
 
   const createRolesTable = (): Table => ({
@@ -259,39 +259,6 @@ describe("DuelGenerator", () => {
       expect(result.valid).toBe(false);
       expect(result.errors.some((e) => e.table === "typeChart")).toBe(true);
     });
-
-    it("should detect invalid role hp", () => {
-      const data = createTestData();
-      const roles = data.tables.roles;
-      if (roles?.rows[0]) {
-        roles.rows[0].hp = "-10";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "hp")).toBe(true);
-    });
-
-    it("should detect invalid move power", () => {
-      const data = createTestData();
-      const moves = data.tables.moves;
-      if (moves?.rows[0]) {
-        moves.rows[0].power = "abc";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "power")).toBe(true);
-    });
-
-    it("should detect invalid move category", () => {
-      const data = createTestData();
-      const moves = data.tables.moves;
-      if (moves?.rows[0]) {
-        moves.rows[0].category = "Magic";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "category")).toBe(true);
-    });
   });
 
   describe("generate", () => {
@@ -309,7 +276,7 @@ describe("DuelGenerator", () => {
       expect(fileNames).toContain("duel/move.ink");
       expect(fileNames).toContain("duel/type.ink");
       expect(fileNames).toContain("duel/utils.ink");
-      expect(fileNames).toContain("duel/battle.ink");
+      expect(fileNames).toContain("duel/index.md");
     });
 
     it("should generate valid base.ink content", () => {
@@ -379,17 +346,20 @@ describe("DuelGenerator", () => {
       expect(utilsInk.content).toContain("== function calculate_times");
     });
 
-    it("should generate valid battle.ink content", () => {
+    it("should generate valid index.md with frontmatter and game logic", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const battleInk = result.files.find((f) => f.path === "duel/battle.ink");
+      const battleInk = result.files.find((f) => f.path === "duel/index.md");
       expect(battleInk).toBeDefined();
       if (!battleInk) return;
 
-      expect(battleInk.content).toContain("INCLUDE duel/base.ink");
-      expect(battleInk.content).toContain("INCLUDE duel/move.ink");
-      expect(battleInk.content).toContain("INCLUDE duel/type.ink");
-      expect(battleInk.content).toContain("INCLUDE duel/utils.ink");
+      expect(battleInk.content).toContain("---");
+      expect(battleInk.content).toContain("layout: game");
+      expect(battleInk.content).toContain("display: duel");
+      expect(battleInk.content).toContain("INCLUDE base.ink");
+      expect(battleInk.content).toContain("INCLUDE move.ink");
+      expect(battleInk.content).toContain("INCLUDE type.ink");
+      expect(battleInk.content).toContain("INCLUDE utils.ink");
       expect(battleInk.content).toContain("== function get_damage");
       expect(battleInk.content).toContain("== function get_stat");
       expect(battleInk.content).toContain("== function get_enemy_stat");

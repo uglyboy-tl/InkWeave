@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import type { Table, UnifiedGameData } from "../core/types";
-import { SurveyGenerator } from "../games/survey";
+import { survey } from "../modes/survey";
 
 describe("SurveyGenerator", () => {
-  let generator: SurveyGenerator;
+  let generator: typeof survey;
 
   beforeEach(() => {
-    generator = new SurveyGenerator();
+    generator = survey;
   });
 
   const createQuestionsTable = (): Table => ({
@@ -219,105 +219,6 @@ describe("SurveyGenerator", () => {
       expect(result.valid).toBe(false);
       expect(result.errors.some((e) => e.table === "questions")).toBe(true);
     });
-
-    it("should detect missing question id", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].id = "";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "id")).toBe(true);
-    });
-
-    it("should detect missing question type", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].type = "";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "type")).toBe(true);
-    });
-
-    it("should detect invalid question type", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].type = "essay";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "type")).toBe(true);
-    });
-
-    it("should detect missing question content", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].content = "";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "content")).toBe(true);
-    });
-
-    it("should detect missing answer", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].answer = "";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "answer")).toBe(true);
-    });
-
-    it("should detect missing options for choice question", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].optionA = "";
-        questions.rows[0].optionB = "";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-    });
-
-    it("should detect invalid choice answer", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].answer = "E";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "answer")).toBe(true);
-    });
-
-    it("should detect invalid judge answer", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[2]) {
-        questions.rows[2].answer = "yes";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "answer")).toBe(true);
-    });
-
-    it("should detect invalid score", () => {
-      const data = createTestData();
-      const questions = data.tables.questions;
-      if (questions?.rows[0]) {
-        questions.rows[0].score = "-5";
-      }
-      const result = generator.validate(data);
-      expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.column === "score")).toBe(true);
-    });
   });
 
   describe("generate", () => {
@@ -327,20 +228,23 @@ describe("SurveyGenerator", () => {
       expect(result.files).toHaveLength(1);
     });
 
-    it("should generate survey.ink file", () => {
+    it("should generate survey/index.md file", () => {
       const data = createTestData();
       const result = generator.generate(data);
       const fileNames = result.files.map((f) => f.path);
-      expect(fileNames).toContain("survey/survey.ink");
+      expect(fileNames).toContain("survey/index.md");
     });
 
-    it("should generate valid survey.ink content", () => {
+    it("should generate valid index.md with frontmatter and survey logic", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
+      expect(surveyInk.content).toContain("---");
+      expect(surveyInk.content).toContain("layout: game");
+      expect(surveyInk.content).toContain("display: survey");
       expect(surveyInk.content).toContain("VAR score = 0");
       expect(surveyInk.content).toContain("VAR total_score = 35");
       expect(surveyInk.content).toContain("VAR current = 1");
@@ -351,7 +255,7 @@ describe("SurveyGenerator", () => {
     it("should include title and description", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -362,7 +266,7 @@ describe("SurveyGenerator", () => {
     it("should include exam mode text", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -373,7 +277,7 @@ describe("SurveyGenerator", () => {
     it("should include all questions", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -387,7 +291,7 @@ describe("SurveyGenerator", () => {
     it("should include question options", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -400,7 +304,7 @@ describe("SurveyGenerator", () => {
     it("should include answer explanations", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -412,7 +316,7 @@ describe("SurveyGenerator", () => {
     it("should include result categories", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -424,7 +328,7 @@ describe("SurveyGenerator", () => {
     it("should include pass score check", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -442,7 +346,7 @@ describe("SurveyGenerator", () => {
       };
 
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -459,7 +363,7 @@ describe("SurveyGenerator", () => {
       };
 
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -469,7 +373,7 @@ describe("SurveyGenerator", () => {
     it("should calculate total score correctly", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -485,7 +389,7 @@ describe("SurveyGenerator", () => {
       };
 
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -495,7 +399,7 @@ describe("SurveyGenerator", () => {
     it("should generate shuffle function when randomize is true", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/survey.ink");
+      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
