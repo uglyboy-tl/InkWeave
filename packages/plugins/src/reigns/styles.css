@@ -1,5 +1,56 @@
 /* Reigns Card Plugin Styles */
 
+:root {
+  --reigns-card-width: 300px;
+  --reigns-card-height: 420px;
+  --reigns-card-padding: 40px 24px;
+  --reigns-card-offset-x-1: 12px;
+  --reigns-card-offset-y-1: -14px;
+  --reigns-card-offset-x-2: 22px;
+  --reigns-card-offset-y-2: -26px;
+  --reigns-card-scale-1: 0.96;
+  --reigns-card-scale-2: 0.93;
+  --reigns-font-size: 17px;
+  --reigns-choice-font-size: 22px;
+  --reigns-choice-padding: 0 16px;
+}
+
+/* 小屏竖屏适配 (iPhone 13 mini 等) */
+@media screen and (max-width: 375px) and (orientation: portrait) {
+  :root {
+    --reigns-card-width: clamp(260px, 85vw, 300px);
+    --reigns-card-height: clamp(340px, 55vh, 420px);
+    --reigns-card-padding: 24px 16px;
+    --reigns-card-offset-x-1: 8px;
+    --reigns-card-offset-y-1: -10px;
+    --reigns-card-offset-x-2: 14px;
+    --reigns-card-offset-y-2: -18px;
+    --reigns-card-scale-1: 0.94;
+    --reigns-card-scale-2: 0.89;
+    --reigns-font-size: 15px;
+    --reigns-choice-font-size: 18px;
+    --reigns-choice-padding: 0 8px;
+  }
+}
+
+/* 超小屏适配 */
+@media screen and (max-width: 320px) and (orientation: portrait) {
+  :root {
+    --reigns-card-width: clamp(240px, 80vw, 280px);
+    --reigns-card-height: clamp(300px, 50vh, 380px);
+    --reigns-card-padding: 20px 12px;
+    --reigns-card-offset-x-1: 6px;
+    --reigns-card-offset-y-1: -8px;
+    --reigns-card-offset-x-2: 10px;
+    --reigns-card-offset-y-2: -14px;
+    --reigns-card-scale-1: 0.92;
+    --reigns-card-scale-2: 0.86;
+    --reigns-font-size: 14px;
+    --reigns-choice-font-size: 16px;
+    --reigns-choice-padding: 0 4px;
+  }
+}
+
 .reigns-mode {
   display: flex;
   flex-direction: column;
@@ -16,13 +67,14 @@
 .reigns-mode::before {
   content: "";
   position: absolute;
-  width: 300px;
-  height: 420px;
+  width: var(--reigns-card-width);
+  height: var(--reigns-card-height);
   box-sizing: border-box;
   border: 3px solid #d8d8d8;
   border-radius: 16px;
   background: #f2f2f2;
-  transform: translateX(12px) translateY(-14px) scale(0.96);
+  transform: translateX(var(--reigns-card-offset-x-1)) translateY(var(--reigns-card-offset-y-1))
+    scale(var(--reigns-card-scale-1));
   transform-origin: center center;
   z-index: 1;
   pointer-events: none;
@@ -31,13 +83,14 @@
 .reigns-mode::after {
   content: "";
   position: absolute;
-  width: 300px;
-  height: 420px;
+  width: var(--reigns-card-width);
+  height: var(--reigns-card-height);
   box-sizing: border-box;
   border: 3px solid #d0d0d0;
   border-radius: 16px;
   background: #eee;
-  transform: translateX(22px) translateY(-26px) scale(0.93);
+  transform: translateX(var(--reigns-card-offset-x-2)) translateY(var(--reigns-card-offset-y-2))
+    scale(var(--reigns-card-scale-2));
   transform-origin: center center;
   z-index: 0;
   pointer-events: none;
@@ -48,9 +101,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 300px;
-  height: 420px;
-  padding: 40px 24px;
+  width: var(--reigns-card-width);
+  height: var(--reigns-card-height);
+  padding: var(--reigns-card-padding);
   background: #fff;
   border: 3px solid #e0e0e0;
   border-radius: 16px;
@@ -84,7 +137,7 @@
   display: block;
   width: 100%;
   text-align: center;
-  font-size: 17px;
+  font-size: var(--reigns-font-size);
   line-height: 1.7;
   color: #333;
   margin: 0;
@@ -97,14 +150,16 @@
 
 .reigns-mode .inkweave-choices {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
   right: 0;
-  bottom: 0;
+  height: var(--reigns-card-height);
+  transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 16px;
+  align-items: flex-end;
+  padding: var(--reigns-choice-padding);
+  padding-bottom: 48px;
   list-style: none;
   margin: 0;
   pointer-events: none;
@@ -112,7 +167,7 @@
 }
 
 .reigns-mode .inkweave-choices li {
-  font-size: 22px;
+  font-size: var(--reigns-choice-font-size);
   font-weight: bold;
   opacity: 0;
   transition: opacity 0.15s ease;
