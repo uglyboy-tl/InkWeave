@@ -225,37 +225,34 @@ describe("SurveyGenerator", () => {
     it("should generate correct number of files", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      expect(result.files).toHaveLength(1);
+      expect(result.files).toHaveLength(2);
     });
 
     it("should generate survey/index.md file", () => {
       const data = createTestData();
       const result = generator.generate(data);
       const fileNames = result.files.map((f) => f.path);
-      expect(fileNames).toContain("survey/index.md");
+      expect(fileNames).toContain("index.md");
+      expect(fileNames).toContain("questions.ink");
     });
 
     it("should generate valid index.md with frontmatter and survey logic", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
       expect(surveyInk.content).toContain("---");
       expect(surveyInk.content).toContain("layout: game");
       expect(surveyInk.content).toContain("display: survey");
-      expect(surveyInk.content).toContain("VAR score = 0");
-      expect(surveyInk.content).toContain("VAR total_score = 35");
-      expect(surveyInk.content).toContain("VAR current = 1");
-      expect(surveyInk.content).toContain("VAR total = 5");
-      expect(surveyInk.content).toContain("VAR correct_count = 0");
+      expect(surveyInk.content).toContain("INCLUDE questions.ink");
     });
 
     it("should include title and description", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -266,7 +263,7 @@ describe("SurveyGenerator", () => {
     it("should include exam mode text", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -277,46 +274,46 @@ describe("SurveyGenerator", () => {
     it("should include all questions", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
-      expect(surveyInk).toBeDefined();
-      if (!surveyInk) return;
+      const questionsInk = result.files.find((f) => f.path === "questions.ink");
+      expect(questionsInk).toBeDefined();
+      if (!questionsInk) return;
 
-      expect(surveyInk.content).toContain("世界第一的公主殿下是？");
-      expect(surveyInk.content).toContain("以下哪个是 VOCALOID 软件？");
-      expect(surveyInk.content).toContain("太阳从东方升起。");
-      expect(surveyInk.content).toContain("水的化学式是 H2O。");
-      expect(surveyInk.content).toContain("1 + 1 = ?");
+      expect(questionsInk.content).toContain("世界第一的公主殿下是？");
+      expect(questionsInk.content).toContain("以下哪个是 VOCALOID 软件？");
+      expect(questionsInk.content).toContain("太阳从东方升起。");
+      expect(questionsInk.content).toContain("水的化学式是 H2O。");
+      expect(questionsInk.content).toContain("1 + 1 = ?");
     });
 
     it("should include question options", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
-      expect(surveyInk).toBeDefined();
-      if (!surveyInk) return;
+      const questionsInk = result.files.find((f) => f.path === "questions.ink");
+      expect(questionsInk).toBeDefined();
+      if (!questionsInk) return;
 
-      expect(surveyInk.content).toContain("cona");
-      expect(surveyInk.content).toContain("miku");
-      expect(surveyInk.content).toContain("pazu");
-      expect(surveyInk.content).toContain("lbxx");
+      expect(questionsInk.content).toContain("cona");
+      expect(questionsInk.content).toContain("miku");
+      expect(questionsInk.content).toContain("pazu");
+      expect(questionsInk.content).toContain("lbxx");
     });
 
     it("should include answer explanations", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
-      expect(surveyInk).toBeDefined();
-      if (!surveyInk) return;
+      const questionsInk = result.files.find((f) => f.path === "questions.ink");
+      expect(questionsInk).toBeDefined();
+      if (!questionsInk) return;
 
-      expect(surveyInk.content).toContain("初音未来是世界第一的公主殿下");
-      expect(surveyInk.content).toContain("这是基本的天文知识");
-      expect(surveyInk.content).toContain("基础数学");
+      expect(questionsInk.content).toContain("初音未来是世界第一的公主殿下");
+      expect(questionsInk.content).toContain("这是基本的天文知识");
+      expect(questionsInk.content).toContain("基础数学");
     });
 
     it("should include result categories", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -328,13 +325,12 @@ describe("SurveyGenerator", () => {
     it("should include pass score check", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
       expect(surveyInk.content).toContain("score >= 60");
-      expect(surveyInk.content).toContain("恭喜通过");
-      expect(surveyInk.content).toContain("未通过");
+      expect(surveyInk.content).toContain("放榜");
     });
 
     it("should use survey mode when isExam is false", () => {
@@ -346,7 +342,7 @@ describe("SurveyGenerator", () => {
       };
 
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -363,7 +359,7 @@ describe("SurveyGenerator", () => {
       };
 
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
@@ -373,11 +369,11 @@ describe("SurveyGenerator", () => {
     it("should calculate total score correctly", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
-      expect(surveyInk.content).toContain("VAR total_score = 35");
+      expect(surveyInk.content).toContain("VAR max = 5");
     });
 
     it("should use custom max questions", () => {
@@ -389,21 +385,22 @@ describe("SurveyGenerator", () => {
       };
 
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
-      expect(surveyInk.content).toContain("VAR total = 3");
+      expect(surveyInk.content).toContain("VAR max = 3");
     });
 
     it("should generate shuffle function when randomize is true", () => {
       const data = createTestData();
       const result = generator.generate(data);
-      const surveyInk = result.files.find((f) => f.path === "survey/index.md");
+      const surveyInk = result.files.find((f) => f.path === "index.md");
       expect(surveyInk).toBeDefined();
       if (!surveyInk) return;
 
-      expect(surveyInk.content).toContain("next_question");
+      expect(surveyInk.content).toContain("get_next_question");
+      expect(surveyInk.content).toContain("LIST_RANDOM");
     });
   });
 });

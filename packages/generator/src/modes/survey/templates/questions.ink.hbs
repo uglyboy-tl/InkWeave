@@ -1,0 +1,102 @@
+LIST QUESTION_LIST = start,{{#each questions}} (q_{{this.id}}){{#unless @last}},{{/unless}}{{/each}}
+
+== function get_content(question)
+{ question:
+{{#each questions}}
+- q_{{this.id}}:
+	~ return "{{{escapeQuotes this.content}}}"
+{{/each}}
+}
+
+== function get_option_A(question)
+{ question:
+{{#each questions}}
+{{#if (eq this.type "choice")}}
+- q_{{this.id}}:
+	~ return "{{{escapeQuotes this.optionA}}}"
+{{/if}}
+{{/each}}
+}
+
+== function get_option_B(question)
+{ question:
+{{#each questions}}
+{{#if (eq this.type "choice")}}
+- q_{{this.id}}:
+	~ return "{{{escapeQuotes this.optionB}}}"
+{{/if}}
+{{/each}}
+}
+
+== function get_option_C(question)
+{ question:
+{{#each questions}}
+{{#if (eq this.type "choice")}}
+{{#if this.optionC}}
+- q_{{this.id}}:
+	~ return "{{{escapeQuotes this.optionC}}}"
+{{/if}}
+{{/if}}
+{{/each}}
+}
+
+== function get_option_D(question)
+{ question:
+{{#each questions}}
+{{#if (eq this.type "choice")}}
+{{#if this.optionD}}
+- q_{{this.id}}:
+	~ return "{{{escapeQuotes this.optionD}}}"
+{{/if}}
+{{/if}}
+{{/each}}
+}
+
+== function get_question_score(question)
+{ question:
+{{#each questions}}
+- q_{{this.id}}:
+	~ return {{this.score}}
+{{/each}}
+}
+
+== function get_question_explanation(question)
+{ question:
+{{#each questions}}
+- q_{{this.id}}:
+	~ return "{{{escapeQuotes this.explanation}}}"
+{{/each}}
+}
+
+== function get_answer(question)
+{ question:
+{{#each questions}}
+- q_{{this.id}}:
+{{#if (eq this.answer "A")}}
+	~ return 1
+{{/if}}
+{{#if (eq this.answer "B")}}
+	~ return 2
+{{/if}}
+{{#if (eq this.answer "C")}}
+	~ return 3
+{{/if}}
+{{#if (eq this.answer "D")}}
+	~ return 4
+{{/if}}
+{{#if (eq this.answer "true")}}
+	~ return 1
+{{/if}}
+{{#if (eq this.answer "false")}}
+	~ return 2
+{{/if}}
+{{/each}}
+}
+
+== function get_question_type(question)
+{ question:
+{{#each questions}}
+- q_{{this.id}}:
+	~ return "{{this.type}}"
+{{/each}}
+}
