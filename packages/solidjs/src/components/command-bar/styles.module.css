@@ -1,4 +1,4 @@
-:global(.modal) {
+.modal {
   display: none;
   position: fixed;
   inset: 0;
@@ -15,13 +15,13 @@
   overflow: hidden;
 }
 
-:global(.modal[open]) {
+.modal[open] {
   display: flex;
   flex-direction: column;
   animation: slide-in 0.2s ease-out;
 }
 
-:global(.modal::backdrop) {
+.modal::backdrop {
   background-color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }

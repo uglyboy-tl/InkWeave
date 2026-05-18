@@ -121,7 +121,7 @@ const CommandBar = (props: CommandBarProps) => {
         onclose={closeModal}
         onClick={handleBackdropClick}
         onKeyUp={handleKeyUp}
-        class={props.modalClass}
+        class={`${style.modal} ${props.modalClass ?? ""}`}
       >
         <div id="inkweave-modal-header" class={`inkweave-modal-header ${style.header}`}>
           <span id="inkweave-modal-title" class={`inkweave-modal-title ${style.title}`}>
