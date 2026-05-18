@@ -66,17 +66,18 @@
     },
     "packages/obsidian": {
       "name": "ink-player",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "dependencies": {
-        "@inkweave/core": "^2.0.4",
-        "@inkweave/plugins": "^2.0.4",
-        "@inkweave/solidjs": "^2.0.4",
+        "@inkweave/core": "^2.3.1",
+        "@inkweave/plugins": "^2.3.1",
+        "@inkweave/solidjs": "^2.3.1",
         "mustache": "^4.2.0",
         "zustand": "^5.0.0",
       },
       "devDependencies": {
         "@tsconfig/bun": "^1.0.0",
         "@types/mustache": "^4.2.0",
+        "bun-types": "^1.3.14",
         "esbuild": "^0.28.0",
         "solid-js": "^1.9.12",
         "vite": "^8.0.0",
@@ -100,7 +101,7 @@
       "peerDependencies": {
         "@inkweave/core": "^2.0.0",
         "@inkweave/react": "^2.0.0",
-        "@inkweave/solidjs": "workspace:*",
+        "@inkweave/solidjs": "^2.3.0",
         "@inkweave/svelte": "^2.0.0",
         "react": "catalog:",
         "react-dom": "catalog:",
@@ -820,6 +821,8 @@
     "@vue/language-core/minimatch": ["minimatch@9.0.9", "https://mirrors.cloud.tencent.com/npm/minimatch/-/minimatch-9.0.9.tgz", { "dependencies": { "brace-expansion": "^2.0.2" } }, "sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg=="],
 
     "babel-plugin-jsx-dom-expressions/@babel/helper-module-imports": ["@babel/helper-module-imports@7.18.6", "https://mirrors.cloud.tencent.com/npm/@babel/helper-module-imports/-/helper-module-imports-7.18.6.tgz", { "dependencies": { "@babel/types": "^7.18.6" } }, "sha512-0NFvs3VkuSYbFi1x2Vd6tKrywq+z/cLeYC/RJNFrIX/30Bf5aiGYbtvGXolEktzJH8o5E5KJ3tT+nkxuuZFVlA=="],
+
+    "ink-player/bun-types": ["bun-types@1.3.14", "https://mirrors.cloud.tencent.com/npm/bun-types/-/bun-types-1.3.14.tgz", { "dependencies": { "@types/node": "*" } }, "sha512-4N0ig0fEomHt5R0KCFWjovxow98rIoRwKolrYdCcknNwMekCXRnWEUvgu5soYV8QXtVsrUD8B95MBOZGPvr6KQ=="],
 
     "mlly/pkg-types": ["pkg-types@1.3.1", "https://mirrors.cloud.tencent.com/npm/pkg-types/-/pkg-types-1.3.1.tgz", { "dependencies": { "confbox": "^0.1.8", "mlly": "^1.7.4", "pathe": "^2.0.1" } }, "sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ=="],
 
