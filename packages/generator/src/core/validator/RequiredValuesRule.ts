@@ -3,11 +3,13 @@ import type { CheckResult } from "./types";
 import { ValidationRule } from "./types";
 
 export class RequiredValuesRule extends ValidationRule {
-  constructor(
-    private table: string,
-    private columns: string[],
-  ) {
+  table: string;
+  columns: string[];
+
+  constructor(table: string, columns: string[]) {
     super();
+    this.table = table;
+    this.columns = columns;
   }
 
   check(tables: Record<string, Table>): CheckResult {
