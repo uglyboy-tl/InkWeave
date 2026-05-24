@@ -5,6 +5,6 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "types": ["bun-types"]
   },
-  "include": ["src", "package.json"],
+  "include": ["src", "package.json", "scripts"],
   "exclude": ["dist"]
 }
