@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.4.2 (2026-05-24)
+
+### Features
+- **reigns**: use CSS custom properties for responsive card layout
+
+### Bug Fixes
+- **solidjs**: preserve existing content opacity after choice
+
+### Refactoring
+- **generator**: split survey template and add validation rules
+- **generator**: use explicit property declarations in RequiredValuesRule
+- **command-bar**: use CSS modules for modal styling
+- **generator**: restructure modes using defineGameType factory
+- **generator**: overhaul core architecture with pipeline and validator
+- **reigns**: use existing choice elements for swipe hints
+
+### Documentation
+- **ink**: add syntax testing guide
+- **core**: add command registry and event system documentation
+- **calico**: add plugins analysis
+- **reigns**: add Langya Bang game design analysis
+
+### Styles
+- **e2e**: add missing semicolon in framework spec
+
+### Tests
+- **generator**: update tests for pipeline and mode API changes
+
+### Chores
+- **core**: include scripts directory in TypeScript config
+- **generator**: add bilibili exam survey example
+- **deps**: update bun.lock with obsidian 2.3.1 and bun-types
+- **obsidian**: update submodule to v2.3.1
+- **generator**: reorganize examples and update documentation
+
+**Full Changelog**: https://github.com/uglyboy-tl/InkWeave/compare/v2.4.1...v2.4.2
+
 ## v2.4.1 (2026-05-12)
 
 ### Features

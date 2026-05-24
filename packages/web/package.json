@@ -1,6 +1,6 @@
 {
   "name": "@inkweave/web",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Pre-built web bundle for InkWeave - ready to use in browsers via CDN or as an npm module",
   "type": "module",
   "main": "./dist/inkweave.min.js",
